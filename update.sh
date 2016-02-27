@@ -27,15 +27,15 @@ pushd "$HOME/lnxdiagd"
     echo " $fname "
     f7l4="${fname:0:7}${fname:${#fname}-4}"
     f6l4="${fname:0:6}${fname:${#fname}-4}"
-    if [[ "$f7l4" == "lnxdiagd.py" ]]
+    if [[ "$f7l4" == "lnxdiagd.py" ]]; then
       echo "- Diagnostic daemon changed"
       eval "./"$fname" restart"
     fi
-    if [[ "$f6l4" == "lnxsvc.py" ]]
+    if [[ "$f6l4" == "lnxsvc.py" ]]; then
       echo "- Diagnostic service daemons changed"
       eval "./"$fname" restart"
     fi
-    if [[ "$fname" == "libdaemon.py" ]]
+    if [[ "$fname" == "libdaemon.py" ]]; then
       echo "- Diagnostic library changed"
       echo "  Restarting all diagnostic daemons"
       for $daemon in $diaglist; do
