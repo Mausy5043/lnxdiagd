@@ -104,6 +104,7 @@ MOUNTPOINT=/mnt/share1
 MOUNTDRIVE=boson.lan:/srv/array1/dataspool
 if grep -qs $MOUNTPOINT /proc/mounts; then
     # It's mounted.
+    echo "Mountpoint OK"
 else
     # Mount the share containing the data
     mount $MOUNTDRIVE $MOUNTPOINT
