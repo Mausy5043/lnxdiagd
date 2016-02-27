@@ -105,15 +105,16 @@ def syslog_trace(trace):
       syslog.syslog(syslog.LOG_ALERT,line)
 
 if __name__ == "__main__":
+
+  if not os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
+    print "Hardware missing!"
+    syslog.syslog(syslog.LOG_ALERT,"Hardware missing!")
+    sys.exit(2)
+
   daemon = MyDaemon('/tmp/' + leaf + '/11.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
-      if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
-        daemon.start()
-      else:
-        print "Hardware missing!"
-        syslog.syslog(syslog.LOG_ALERT,"Hardware missing!")
-        sys.exit(2)
+      daemon.start()
     elif 'stop' == sys.argv[1]:
       daemon.stop()
     elif 'restart' == sys.argv[1]:
@@ -125,13 +126,7 @@ if __name__ == "__main__":
       if DEBUG:
         logtext = "Daemon logging is ON"
         syslog.syslog(syslog.LOG_DEBUG, logtext)
-
-      if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
-        daemon.run()
-      else:
-        print "Hardware missing!"
-        syslog.syslog(syslog.LOG_ALERT,"Hardware missing!")
-        sys.exit(2)
+      daemon.run()
     else:
       print "Unknown command"
       sys.exit(2)
