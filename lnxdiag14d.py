@@ -24,8 +24,9 @@ class MyDaemon(Daemon):
     inisection = "14"
     home = os.path.expanduser('~')
     s = iniconf.read(home + '/' + leaf + '/config.ini')
-    if DEBUG: print "config file : ", s
-    if DEBUG: print iniconf.items(inisection)
+    if DEBUG: 
+      print "config file : {0}".format(s)
+      print iniconf.items(inisection)
     reportTime = iniconf.getint(inisection, "reporttime")
     cycles = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
@@ -47,7 +48,7 @@ class MyDaemon(Daemon):
 
         # report sample average
         if (startTime % reportTime < sampleTime):
-          if DEBUG:print data
+          if DEBUG: print data
           averages = data
           #averages = sum(data[:]) / len(data)
           #if DEBUG:print averages
@@ -55,7 +56,7 @@ class MyDaemon(Daemon):
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
-          if DEBUG:print "Waiting {0} s".format(waitTime)
+          if DEBUG: print "Waiting {0} s".format(waitTime)
           time.sleep(waitTime)
       except Exception as e:
         if DEBUG:

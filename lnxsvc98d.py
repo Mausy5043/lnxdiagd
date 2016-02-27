@@ -23,8 +23,9 @@ class MyDaemon(Daemon):
     inisection = "98"
     home = os.path.expanduser('~')
     s = iniconf.read(home + '/' + leaf + '/config.ini')
-    if DEBUG: print "config file : ", s
-    if DEBUG: print iniconf.items(inisection)
+    if DEBUG: 
+      print "config file : {0}".format(s)
+      print iniconf.items(inisection)
     reportTime = iniconf.getint(inisection, "reporttime")
     cycles = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
@@ -47,7 +48,7 @@ class MyDaemon(Daemon):
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
-          if DEBUG:print "Waiting {0} s".format(waitTime)
+          if DEBUG: print "Waiting {0} s".format(waitTime)
           time.sleep(waitTime)
       except Exception as e:
         if DEBUG:
@@ -66,7 +67,7 @@ def do_mv_data(rpath):
   time.sleep(5)
 
   while os.path.isfile(hostlock):
-    if DEBUG:print "hostlock exists"
+    if DEBUG: print "hostlock exists"
     # wait while the server has locked the directory
     time.sleep(1)
 
@@ -75,7 +76,7 @@ def do_mv_data(rpath):
 
   # prevent race conditions
   while os.path.isfile(hostlock):
-    if DEBUG:print "hostlock exists. WTF?"
+    if DEBUG: print "hostlock exists. WTF?"
     # wait while the server has locked the directory
     time.sleep(1)
 
@@ -84,11 +85,11 @@ def do_mv_data(rpath):
     count_internal_locks=0
     for fname in glob.glob(r'/tmp/' + leaf + '/*.lock'):
       count_internal_locks += 1
-    if DEBUG:print "{0} internal locks exist".format(count_internal_locks)
+    if DEBUG: print "{0} internal locks exist".format(count_internal_locks)
 
   for fname in glob.glob(r'/tmp/' + leaf + '/*.csv'):
     if os.path.isfile(clientlock) and not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
-        if DEBUG:print "moving data " + fname
+        if DEBUG: print "moving data {0}".format(fname)
         shutil.move(fname, rpath)
 
   for fname in glob.glob(r'/tmp/' + leaf + '/*.png'):
@@ -96,7 +97,7 @@ def do_mv_data(rpath):
         shutil.move(fname, rpath)
 
   unlock(clientlock)
-  if DEBUG:print "unlocked..."
+  if DEBUG: print "unlocked..."
 
 def lock(fname):
   open(fname, 'a').close()

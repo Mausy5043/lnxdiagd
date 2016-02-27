@@ -36,7 +36,7 @@ class MyDaemon(Daemon):
         print "Unexpected MySQL error"
         print "Error {0:d}: {1!s}".format(e.args[0], e.args[1])
       if consql.open:    # attempt to close connection to MySQLdb
-        if DEBUG:print "Closing MySQL connection"
+        if DEBUG: print "Closing MySQL connection"
         consql.close()
         syslog.syslog(syslog.LOG_ALERT," ** Closed MySQL connection in run() **")
       syslog.syslog(syslog.LOG_ALERT,e.__doc__)
@@ -47,8 +47,9 @@ class MyDaemon(Daemon):
     inisection = "97"
     home = os.path.expanduser('~')
     s = iniconf.read(home + '/' + leaf + '/config.ini')
-    if DEBUG: print "config file : ", s
-    if DEBUG: print iniconf.items(inisection)
+    if DEBUG: 
+      print "config file : {0}".format(s)
+      print iniconf.items(inisection)
     reportTime = iniconf.getint(inisection, "reporttime")
     cycles = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
@@ -76,7 +77,7 @@ class MyDaemon(Daemon):
           print e.message
         # attempt to close connection to MySQLdb
         if consql:
-          if DEBUG:print "Closing MySQL connection"
+          if DEBUG: print "Closing MySQL connection"
           consql.close()
           syslog.syslog(syslog.LOG_ALERT," *** Closed MySQL connection in run() ***")
         syslog.syslog(syslog.LOG_ALERT,e.__doc__)
@@ -95,15 +96,15 @@ def do_writesample(cnsql, cmd, sample):
   dat = (sample.split(', '))
   try:
     cursql = cnsql.cursor()
-    if DEBUG:print "      ",dat
+    if DEBUG: print "      {0}".format(dat)
     cursql.execute(cmd, dat)
     cnsql.commit()
     cursql.close()
   except mdb.IntegrityError as e:
-    if DEBUG:print e.args
+    if DEBUG: print e.args
     syslog.syslog(syslog.LOG_ALERT,e.__doc__)
     if cursql:
-      if DEBUG:print " ** Closing MySQL connection"
+      if DEBUG: print " ** Closing MySQL connection"
       cursql.close()
       syslog.syslog(syslog.LOG_ALERT," ** Closed MySQL connection in do_writesample **")
       syslog.syslog(syslog.LOG_DEBUG,dat)
@@ -126,19 +127,19 @@ def do_sql_data(flock, inicnfg, cnsql):
     count_internal_locks=0
     for fname in glob.glob(r'/tmp/' + leaf + '/*.lock'):
       count_internal_locks += 1
-    if DEBUG:print "{0} internal locks exist".format(count_internal_locks)
+    if DEBUG: print "{0} internal locks exist".format(count_internal_locks)
   #endwhile
 
   for inisect in inicnfg.sections(): # Check each section of the config.ini file
     errsql = False
     try:
       ifile = inicnfg.get(inisect,"resultfile")
-      if DEBUG:print " < ",ifile
+      if DEBUG: print " < {0}".format(ifile)
 
       try:
         sqlcmd = []
         sqlcmd = inicnfg.get(inisect,"sqlcmd")
-        if DEBUG:print "   ",sqlcmd
+        if DEBUG:print "   {0}".format(sqlcmd)
 
         data = cat(ifile).splitlines()
         if data:
@@ -148,21 +149,21 @@ def do_sql_data(flock, inicnfg, cnsql):
         #endif
       except ConfigParser.NoOptionError as e:  #no sqlcmd
         if DEBUG:
-          print "** ", e.message
+          print "** {0}".format(e.message)
     except ConfigParser.NoOptionError as e:  #no ifile
       if DEBUG:
-        print "** ", e.message
+        print "** {0}".format(e.message)
 
     try:
       ofile = inicnfg.get(inisect,"rawfile")
-      if DEBUG:print " > ",ofile
+      if DEBUG: print " > {0}".format(ofile)
       if not errsql:                    # SQL-job was successful or non-existing
         if os.path.isfile(ifile):       # IF resultfile exists
           if not os.path.isfile(ofile): # AND rawfile does not exist
             shutil.move(ifile, ofile)   # THEN move the file over
     except ConfigParser.NoOptionError as e:  #no ofile
       if DEBUG:
-        print "** ", e.message
+        print "** {0}".format(e.message)
 
   #endfor
   unlock(flock)

@@ -31,37 +31,36 @@ class MyDaemon(Daemon):
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock = iniconf.get(inisection, "lockfile")
     fdata = iniconf.get(inisection, "resultfile")
-
+    
     samples = samplesperCycle * cycles              # total number of samples averaged
     sampleTime = reportTime/samplesperCycle         # time [s] between samples
     cycleTime = samples * sampleTime                # time [s] per cycle
-
+    
     data = []                                       # array for holding sampledata
-
+    
     while True:
       try:
         startTime = time.time()
-
+        
         result = do_work().split(',')
-        if DEBUG:print "result    :",result
+        if DEBUG: print "result    : {0}".format(result)
         data.append(map(float, result))
         if (len(data) > samples):data.pop(0)
-
+        
         # report sample average
         if (startTime % reportTime < sampleTime):
-          if DEBUG:print "data   :",data
+          if DEBUG: print "data   : {0}".format(data)
           somma = map(sum,zip(*data))
           # not all entries should be float
           # 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
           averages = [format(s / len(data), '.3f') for s in somma]
-          if DEBUG:print "average :", averages
           # Report the last measurement for these parameters:
           averages[3]=int(data[-1][3])
           averages[4]=int(data[-1][4])
           averages[5]=int(data[-1][5])
-          if DEBUG:print "average:", averages
+          if DEBUG: print "average: {0}".format(averages)
           do_report(averages, flock, fdata)
-
+        
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
           if DEBUG:print "Waiting {0} s".format(waitTime)
@@ -86,7 +85,7 @@ def do_work():
   fi   = "/proc/loadavg"
   with open(fi,'r') as f:
     outHistLoad = f.read().strip('\n').replace(" ",", ").replace("/",", ")
-
+  
   # 5 #datapoints gathered here
   outCpu = commands.getoutput("vmstat 1 2").splitlines()[3].split()
   outCpuUS = outCpu[12]
@@ -94,7 +93,7 @@ def do_work():
   outCpuID = outCpu[14]
   outCpuWA = outCpu[15]
   outCpuST = 0
-
+  
   return '{0}, {1}, {2}, {3}, {4}, {5}'.format(outHistLoad, outCpuUS, outCpuSY, outCpuID, outCpuWA, outCpuST)
 
 def do_report(result, flock, fdata):

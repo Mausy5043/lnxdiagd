@@ -23,8 +23,9 @@ class MyDaemon(Daemon):
     inisection = "99"
     home = os.path.expanduser('~')
     s = iniconf.read(home + '/' + leaf + '/config.ini')
-    if DEBUG: print "config file : ", s
-    if DEBUG: print iniconf.items(inisection)
+    if DEBUG: 
+      print "config file : {0}".format(s)
+      print iniconf.items(inisection)
     reportTime = iniconf.getint(inisection, "reporttime")
     cycles = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
@@ -49,7 +50,7 @@ class MyDaemon(Daemon):
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
-          if DEBUG:print "Waiting {0} s".format(waitTime)
+          if DEBUG: print "Waiting {0} s".format(waitTime)
           time.sleep(waitTime)
       except Exception as e:
         if DEBUG:
