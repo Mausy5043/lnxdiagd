@@ -125,7 +125,13 @@ if __name__ == "__main__":
       if DEBUG:
         logtext = "Daemon logging is ON"
         syslog.syslog(syslog.LOG_DEBUG, logtext)
-      daemon.run()
+
+      if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
+        daemon.run()
+      else:
+        print "Hardware missing!"
+        syslog.syslog(syslog.LOG_ALERT,"Hardware missing!")
+        sys.exit(2)
     else:
       print "Unknown command"
       sys.exit(2)
