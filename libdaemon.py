@@ -4,7 +4,6 @@
 # Charles Menguy (see: http://stackoverflow.com/questions/10217067/implementing-a-full-python-unix-style-daemon-process)
 # and Sander Marechal (see: http://www.jejik.com/articles/2007/02/a_simple_unix_linux_daemon_in_python/)
 
-
 # Adapted by M.Hendrix [2015]
 
 import sys, os, time, atexit, syslog
@@ -87,7 +86,7 @@ class Daemon:
       sys.exit(1)
 
     # Start the daemon
-    message = "Started process \n"
+    message = "Started process. \n"
     sys.stderr.write(message)
     syslog.syslog(syslog.LOG_INFO,message)
     self.daemonize()
