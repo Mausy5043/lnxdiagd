@@ -81,9 +81,9 @@ def do_xml(wpath):
     lnxdiagdbranch = f.read().strip('\n')
 
 
-  fi = home + "/.boneboot.branch"
-  with open(fi,'r') as f:
-    bonebootbranch  = f.read().strip('\n')
+  #fi = home + "/.boneboot.branch"
+  #with open(fi,'r') as f:
+  #  bonebootbranch  = f.read().strip('\n')
 
 
   uptime          = commands.getoutput("uptime")
@@ -123,7 +123,7 @@ def do_xml(wpath):
     f.write(uptime + '\n')
     f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform() +'\n')
     f.write(' - lnxdiagd   on: '+ lnxdiagdbranch +'\n')
-    f.write(' - boneboot    on: '+ bonebootbranch +'\n')
+    #f.write(' - boneboot    on: '+ bonebootbranch +'\n')
     f.write('\nTop 10 processes:\n' + psout +'\n')
     f.write('</uptime>\n')
 
