@@ -35,7 +35,7 @@ class MyDaemon(Daemon):
       if DEBUG:
         print "Unexpected MySQL error"
         print "Error {0:d}: {1!s}".format(e.args[0], e.args[1])
-      if consql:    # attempt to close connection to MySQLdb
+      if consql.open:    # attempt to close connection to MySQLdb
         if DEBUG:print "Closing MySQL connection"
         consql.close()
         syslog.syslog(syslog.LOG_ALERT," ** Closed MySQL connection in run() **")
