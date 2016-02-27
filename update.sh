@@ -38,16 +38,16 @@ pushd "$HOME/lnxdiagd"
     if [[ "$fname" == "libdaemon.py" ]]; then
       echo "- Diagnostic library changed"
       echo "  Restarting all diagnostic daemons"
-      for $daemon in $diaglist; do
+      for daemon in $diaglist; do
         eval "./lnxdiag"$daemon"d.py restart"
       done
       echo "  Restarting all service daemons"
-      for $daemon in $srvclist; do
+      for daemon in $srvclist; do
         eval "./lnxsvc"$daemon"d.py restart"
       done
     fi
   done
-  for $daemon in $diaglist; do
+  for daemon in $diaglist; do
     if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
       if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
         logger -p user.err -t lnxdiagd "* Stale daemon $daemon pid-file found."
