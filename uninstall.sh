@@ -16,12 +16,14 @@ pushd "$HOME/lnxdiagd"
   sudo rm /etc/cron.d/lnxdiagd
 
   echo "  Stopping all diagnostic daemons"
-  for $daemon in $diaglist; do
-    eval "./lnxdiag"$daemon"d.py stop"
+  for $d in $diaglist; do
+    echo "Stopping "$d
+    eval "./lnxdiag"$d"d.py stop"
   done
   echo "  Stopping all service daemons"
-  for $daemon in $srvclist; do
-    eval "./lnxsvc"$daemon"d.py stop"
+  for $d in $srvclist; do
+    echo "Stopping "$d
+    eval "./lnxsvc"$d"d.py stop"
   done
 popd
 
