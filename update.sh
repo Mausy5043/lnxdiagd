@@ -24,7 +24,7 @@ pushd "$HOME/lnxdiagd"
   chmod -R 744 ./*
 
   for fname in $DIFFLIST; do
-    echo " $fname "
+    echo " $fname was updated from GIT"
     f7l4="${fname:0:7}${fname:${#fname}-4}"
     f6l4="${fname:0:6}${fname:${#fname}-4}"
     if [[ "$f7l4" == "lnxdiagd.py" ]]; then
@@ -32,7 +32,7 @@ pushd "$HOME/lnxdiagd"
       eval "./"$fname" restart"
     fi
     if [[ "$f6l4" == "lnxsvc.py" ]]; then
-      echo "- Diagnostic service daemons changed"
+      echo "- Diagnostic service daemon changed"
       eval "./"$fname" restart"
     fi
     if [[ "$fname" == "libdaemon.py" ]]; then

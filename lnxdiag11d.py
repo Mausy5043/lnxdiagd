@@ -112,6 +112,7 @@ if __name__ == "__main__":
         daemon.start()
       else:
         print "Hardware missing!"
+        syslog.syslog(syslog.LOG_ALERT,"Hardware missing!")
         sys.exit(2)
     elif 'stop' == sys.argv[1]:
       daemon.stop()
