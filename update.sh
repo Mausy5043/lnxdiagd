@@ -39,10 +39,12 @@ pushd "$HOME/lnxdiagd"
       echo "- Diagnostic library changed"
       echo "  Restarting all diagnostic daemons"
       for daemon in $diaglist; do
+        echo "Restart DIAG "$daemon
         eval "./lnxdiag"$daemon"d.py restart"
       done
       echo "  Restarting all service daemons"
       for daemon in $srvclist; do
+        echo "Restart SVC "$daemon
         eval "./lnxsvc"$daemon"d.py restart"
       done
     fi
@@ -52,11 +54,27 @@ pushd "$HOME/lnxdiagd"
       if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
         logger -p user.err -t lnxdiagd "* Stale daemon $daemon pid-file found."
         rm "/tmp/lnxdiagd/$daemon.pid"
+          echo "Start DIAG "$daemon
         eval "./lnxdiag"$daemon"d.py start"
       fi
     else
       logger -p user.warn -t raspdiagd "Found daemon $daemon not running."
+        echo "Start DIAG "$daemon
       eval "./lnxdiag"$daemon"d.py start"
+    fi
+  done
+  for daemon in $srvclist; do
+    if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
+      if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
+        logger -p user.err -t lnxdiagd "* Stale daemon $daemon pid-file found."
+        rm "/tmp/lnxdiagd/$daemon.pid"
+          echo "Start SVC "$daemon
+        eval "./lnxsvc"$daemon"d.py start"
+      fi
+    else
+      logger -p user.warn -t raspdiagd "Found daemon $daemon not running."
+        echo "Start SVC "$daemon
+      eval "./lnxsvc"$daemon"d.py start"
     fi
   done
 
