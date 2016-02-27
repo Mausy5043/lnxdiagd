@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
   if not os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
     print "Hardware missing!"
-    syslog.syslog(syslog.LOG_ALERT,"Hardware missing!")
+    syslog.syslog(syslog.LOG_INFO,"Hardware missing!")
     sys.exit(2)
 
   daemon = MyDaemon('/tmp/' + leaf + '/11.pid')
