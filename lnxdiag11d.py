@@ -35,7 +35,7 @@ class MyDaemon(Daemon):
 
     data = []                                       # array for holding sampledata
 
-    try:
+    try
       hwdevice = iniconf.get(inisection, liblnx.NODE+".hwdevice")
     except ConfigParser.NoOptionError as e:  #no hwdevice
       syslog_trace("** {0}".format(e.message), False, DEBUG)
