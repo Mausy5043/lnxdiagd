@@ -10,7 +10,7 @@
 # uses moving averages
 
 import syslog, traceback
-import os, sys, time, math, ConfigParser
+import os, sys, time, math, ConfigParser, platform
 from libdaemon import Daemon
 
 DEBUG = False
@@ -37,11 +37,13 @@ class MyDaemon(Daemon):
 
     data = []                                       # array for holding sampledata
 
+    hwdevice = iniconf.get(inisection, platform.node()+".hwdevice")
+
     while True:
       try:
         startTime = time.time()
 
-        result = do_work()
+        result = do_work(hwdevice)
         syslog_trace("Result   : {0}".format(result), False, DEBUG)
 
         data.append(float(result))
@@ -67,17 +69,15 @@ class MyDaemon(Daemon):
         syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
-def do_work():
+def do_work(fdev):
   Tcpu = "NaN"
   # Read the CPU temperature
-  fi = "/sys/class/hwmon/hwmon0/device/temp1_input"
-  with open(fi,'r') as f:
+  with open(fdev,'r') as f:
     Tcpu = float(f.read().strip('\n'))/1000
   if Tcpu > 75.000:
     # can't believe my sensors. Probably a glitch. Wait a while then measure again
     time.sleep(7)
-    fi = "/sys/class/hwmon/hwmon0/device/temp1_input"
-    with open(fi,'r') as f:
+    with open(fdev,'r') as f:
       Tcpu = float(f.read().strip('\n'))/1000
       Tcpu = float(Tcpu) + 0.1
 
