@@ -43,29 +43,29 @@ class MyDaemon(Daemon):
         startTime = time.time()
 
         result = do_work()
-        if DEBUG: print result
+        syslog_trace("Result   : {0}".format(result), False, DEBUG)
 
         data.append(float(result))
-        if (len(data) > samples):data.pop(0)
+        if (len(data) > samples):
+          data.pop(0)
+        syslog_trace("Data     : {0}".format(data),   False, DEBUG)
 
         # report sample average
         if (startTime % reportTime < sampleTime):
           averages = sum(data[:]) / len(data)
-          if DEBUG: 
-            print data
-            print averages
+          syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
-          if DEBUG: print "Waiting {0} s".format(waitTime)
+          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
+          syslog_trace("................................", False, DEBUG)
           time.sleep(waitTime)
       except Exception as e:
-        if DEBUG:
-          print "Unexpected error:"
-          print e.message
-        syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-        syslog_trace(traceback.format_exc())
+        syslog_trace("Unexpected error in run()", syslog.LOG_ALERT, DEBUG)
+        syslog_trace(e.message, syslog.LOG_ALERT, DEBUG)
+        syslog_trace(e.__doc__, syslog.LOG_ALERT, DEBUG)
+        syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
 def do_work():
@@ -99,12 +99,14 @@ def unlock(fname):
   if os.path.isfile(fname):
     os.remove(fname)
 
-def syslog_trace(trace):
+def syslog_trace(trace, logerr, out2console):
   # Log a python stack trace to syslog
   log_lines = trace.split('\n')
   for line in log_lines:
-    if line:
-      syslog.syslog(syslog.LOG_ALERT,line)
+    if line and logerr:
+      syslog.syslog(logerr,line)
+    if line and out2console:
+      print line
 
 if __name__ == "__main__":
 
