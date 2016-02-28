@@ -23,9 +23,8 @@ class MyDaemon(Daemon):
     inisection = "98"
     home = os.path.expanduser('~')
     s = iniconf.read(home + '/' + leaf + '/config.ini')
-    if DEBUG: 
-      print "config file : {0}".format(s)
-      print iniconf.items(inisection)
+    syslog_trace("Config file   : {0}".format(s), False, DEBUG)
+    syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
     cycles = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
@@ -48,14 +47,14 @@ class MyDaemon(Daemon):
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
-          if DEBUG: print "Waiting {0} s".format(waitTime)
+          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
+          syslog_trace("................................", False, DEBUG)
           time.sleep(waitTime)
       except Exception as e:
-        if DEBUG:
-          print "Unexpected error:"
-          print e.message
-        syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-        syslog_trace(traceback.format_exc())
+        syslog_trace("Unexpected error in run()", syslog.LOG_ALERT, DEBUG)
+        syslog_trace("e.message : {0}".format(e.message), syslog.LOG_ALERT, DEBUG)
+        syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_ALERT, DEBUG)
+        syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
 def do_mv_data(rpath):
@@ -67,16 +66,17 @@ def do_mv_data(rpath):
   time.sleep(5)
 
   while os.path.isfile(hostlock):
-    if DEBUG: print "hostlock exists"
+    syslog_trace("...hostlock exists", syslog.LOG_DEBUG, DEBUG)
     # wait while the server has locked the directory
     time.sleep(1)
 
   # server already sets the client.lock. Do it anyway.
   lock(clientlock)
+  syslog_trace("!..LOCK", False, DEBUG)
 
   # prevent race conditions
   while os.path.isfile(hostlock):
-    if DEBUG: print "hostlock exists. WTF?"
+    syslog_trace("...hostlock exists (again???) !!", syslog.LOG_DEBUG, DEBUG)
     # wait while the server has locked the directory
     time.sleep(1)
 
@@ -85,19 +85,20 @@ def do_mv_data(rpath):
     count_internal_locks=0
     for fname in glob.glob(r'/tmp/' + leaf + '/*.lock'):
       count_internal_locks += 1
-    if DEBUG: print "{0} internal locks exist".format(count_internal_locks)
+    syslog_trace("...{0} internal locks exist".format(count_internal_locks), False, DEBUG)
 
   for fname in glob.glob(r'/tmp/' + leaf + '/*.csv'):
     if os.path.isfile(clientlock) and not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
-        if DEBUG: print "moving data {0}".format(fname)
-        shutil.move(fname, rpath)
+      syslog_trace("...moving data {0}".format(fname), False, DEBUG)
+      shutil.move(fname, rpath)
 
   for fname in glob.glob(r'/tmp/' + leaf + '/*.png'):
     if os.path.isfile(clientlock) and not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
-        shutil.move(fname, rpath)
+      syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
+      shutil.move(fname, rpath)
 
   unlock(clientlock)
-  if DEBUG: print "unlocked..."
+  syslog_trace("!..UNLOCK", False, DEBUG)
 
 def lock(fname):
   open(fname, 'a').close()
@@ -106,13 +107,15 @@ def unlock(fname):
   if os.path.isfile(fname):
     os.remove(fname)
 
-def syslog_trace(trace):
+def syslog_trace(trace, logerr, out2console):
   # Log a python stack trace to syslog
   log_lines = trace.split('\n')
   for line in log_lines:
-    if line:
-      syslog.syslog(syslog.LOG_ALERT,line)
-
+    if line and logerr:
+      syslog.syslog(logerr,line)
+    if line and out2console:
+      print line
+      
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + leaf + '/98.pid')
   if len(sys.argv) == 2:
@@ -126,9 +129,7 @@ if __name__ == "__main__":
       # assist with debugging.
       print "Debug-mode started. Use <Ctrl>+C to stop."
       DEBUG = True
-      if DEBUG:
-        logtext = "Daemon logging is ON"
-        syslog.syslog(syslog.LOG_DEBUG, logtext)
+      syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
       daemon.run()
     else:
       print "Unknown command"

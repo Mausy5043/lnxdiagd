@@ -26,9 +26,8 @@ class MyDaemon(Daemon):
     inisection = "15"
     home = os.path.expanduser('~')
     s = iniconf.read(home + '/' + leaf + '/config.ini')
-    if DEBUG: 
-      print "config file : {0}".format(s)
-      print iniconf.items(inisection)
+    syslog_trace("Config file   : {0}".format(s), False, DEBUG)
+    syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
     cycles = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
@@ -46,34 +45,28 @@ class MyDaemon(Daemon):
         startTime = time.time()
 
         result = do_work().split(',')
+        
         data = map(int, result)
+        syslog_trace("Data     : {0}".format(data),   False, DEBUG)
 
         # report sample average
         if (startTime % reportTime < sampleTime):
-          if DEBUG: print data
           averages = data
           #averages = sum(data[:]) / len(data)
-          #if DEBUG:print averages
+          syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
-          if DEBUG: print "Waiting {0} s".format(waitTime)
+          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
+          syslog_trace("................................", False, DEBUG)
           time.sleep(waitTime)
       except Exception as e:
-        if DEBUG:
-          print "Unexpected error:"
-          print e.message
-        syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-        syslog_trace(traceback.format_exc())
+        syslog_trace("Unexpected error in run()", syslog.LOG_ALERT, DEBUG)
+        syslog_trace("e.message : {0}".format(e.message), syslog.LOG_ALERT, DEBUG)
+        syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_ALERT, DEBUG)
+        syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
-
-def syslog_trace(trace):
-  # Log a python stack trace to syslog
-  log_lines = trace.split('\n')
-  for line in log_lines:
-    if line:
-      syslog.syslog(syslog.LOG_ALERT,line)
 
 def wc(filename):
     return int(check_output(["wc", "-l", filename]).split()[0])
@@ -116,6 +109,15 @@ def unlock(fname):
   if os.path.isfile(fname):
     os.remove(fname)
 
+def syslog_trace(trace, logerr, out2console):
+  # Log a python stack trace to syslog
+  log_lines = trace.split('\n')
+  for line in log_lines:
+    if line and logerr:
+      syslog.syslog(logerr,line)
+    if line and out2console:
+      print line
+      
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + leaf + '/15.pid')
   if len(sys.argv) == 2:
@@ -129,9 +131,7 @@ if __name__ == "__main__":
       # assist with debugging.
       print "Debug-mode started. Use <Ctrl>+C to stop."
       DEBUG = True
-      if DEBUG:
-        logtext = "Daemon logging is ON"
-        syslog.syslog(syslog.LOG_DEBUG, logtext)
+      syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
       daemon.run()
     else:
       print "Unknown command"

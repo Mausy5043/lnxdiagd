@@ -70,8 +70,8 @@ class MyDaemon(Daemon):
           time.sleep(waitTime)
       except Exception as e:
         syslog_trace("Unexpected error in run()", syslog.LOG_ALERT, DEBUG)
-        syslog_trace(e.message, syslog.LOG_ALERT, DEBUG)
-        syslog_trace(e.__doc__, syslog.LOG_ALERT, DEBUG)
+        syslog_trace("e.message : {0}".format(e.message), syslog.LOG_ALERT, DEBUG)
+        syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_ALERT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
@@ -132,9 +132,7 @@ if __name__ == "__main__":
       # assist with debugging.
       print "Debug-mode started. Use <Ctrl>+C to stop."
       DEBUG = True
-      if DEBUG:
-        logtext = "Daemon logging is ON"
-        syslog.syslog(syslog.LOG_DEBUG, logtext)
+      syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
       daemon.run()
     else:
       print "Unknown command"
