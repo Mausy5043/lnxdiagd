@@ -49,7 +49,6 @@ class MyDaemon(Daemon):
 
         # report sample average
         if (startTime % reportTime < sampleTime):
-          if DEBUG: print data
           averages = data
           #averages = sum(data[:]) / len(data)
           #if DEBUG: print averages

@@ -30,11 +30,10 @@ class MyDaemon(Daemon):
         cursql.close()
         logtext = "{0} : {1}".format("Attached to MySQL server", versql)
         syslog.syslog(syslog.LOG_INFO, logtext)
-    except mdb.Error, e:
-      syslog_trace("Unexpected MySQL error in run()", syslog.LOG_ALERT, DEBUG)
+    except mdb.Error as e:
+      syslog_trace("Unexpected MySQL error in run(init)", syslog.LOG_ALERT, DEBUG)
       syslog_trace("e.message : {0}".format(e.message), syslog.LOG_ALERT, DEBUG)
       syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_ALERT, DEBUG)
-      syslog_trace("Args [0:1]: {0:d}: {1!s}".format(e.args[0], e.args[1]), syslog.LOG_ALERT, DEBUG)
       syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
       if consql.open:    # attempt to close connection to MySQLdb
         consql.close()
@@ -98,7 +97,6 @@ def do_writesample(cnsql, cmd, sample):
   except mdb.IntegrityError as e:
     syslog_trace("e.message : {0}".format(e.message), syslog.LOG_ALERT, DEBUG)
     syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_INFO,  DEBUG)
-    syslog_trace("e.args    : {0}".format(e.args),    syslog.LOG_DEBUG, DEBUG)
     if cursql.open:
       cursql.close()
       syslog_trace(" *** Closed MySQL connection in do_writesample() ***", syslog.LOG_ALERT, DEBUG)
