@@ -109,7 +109,7 @@ def unlock(fname):
   if os.path.isfile(fname):
     os.remove(fname)
 
-def syslog_trace(trace, errlog, out2console):
+def syslog_trace(trace, logerr, out2console):
   # Log a python stack trace to syslog
   log_lines = trace.split('\n')
   for line in log_lines:
