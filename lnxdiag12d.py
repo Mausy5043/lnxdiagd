@@ -11,7 +11,6 @@
 
 import syslog, traceback
 import os, sys, time, math, commands
-from pprint import pformat
 from libdaemon import Daemon
 import ConfigParser
 
@@ -26,8 +25,7 @@ class MyDaemon(Daemon):
     home = os.path.expanduser('~')
     s = iniconf.read(home + '/' + leaf + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
-    syslog_trace("Options       :", False, DEBUG)
-    syslog_trace(pformat(iniconf.items(inisection)), False, DEBUG)
+    syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
     cycles = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
@@ -45,11 +43,10 @@ class MyDaemon(Daemon):
         startTime = time.time()
         
         result = do_work().split(',')
-        syslog_trace("Result   :" + pformat(result), False, DEBUG)
+        syslog_trace("Result   : {0}".format(result), False, DEBUG)
         if (len(data) > samples):
           data.pop(0)
-        syslog_trace("Data     : ",   False, DEBUG)
-        syslog_trace(pformat(data),   False, DEBUG)
+        syslog_trace("Data     : {0}".format(data),   False, DEBUG)
         
         # report sample average
         if (startTime % reportTime < sampleTime):
@@ -116,7 +113,7 @@ def syslog_trace(trace, logerr, out2console):
   log_lines = trace.split('\n')
   for line in log_lines:
     if line and logerr:
-      syslog.syslog(syslog.logerr,line)
+      syslog.syslog(logerr,line)
     if line and out2console:
       print line
 
