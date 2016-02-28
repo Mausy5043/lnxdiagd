@@ -12,7 +12,7 @@
 import syslog, traceback
 import os, sys, time, math, ConfigParser
 from libdaemon import Daemon
-import liblnx as ll
+import liblnx
 
 
 class MyDaemon(Daemon):
@@ -20,9 +20,9 @@ class MyDaemon(Daemon):
     iniconf = ConfigParser.ConfigParser()
     inisection = "11"
     home = os.path.expanduser('~')
-    s = iniconf.read(home + '/' + ll.LEAF + '/config.ini')
-    ll.syslog_trace("Config file   : {0}".format(s), False, DEBUG)
-    ll.syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
+    s = iniconf.read(home + '/' + lblnx.LEAF + '/config.ini')
+    liblnx.syslog_trace("Config file   : {0}".format(s), False, DEBUG)
+    liblnx.syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
     cycles = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
@@ -36,12 +36,12 @@ class MyDaemon(Daemon):
     data = []                                       # array for holding sampledata
 
     try:
-      hwdevice = iniconf.get(inisection, ll.NODE+".hwdevice")
+      hwdevice = iniconf.get(inisection, liblnx.NODE+".hwdevice")
     except ConfigParser.NoOptionError as e:  #no hwdevice
-      ll.syslog_trace("** {0}".format(e.message), False, DEBUG)
+      liblnx.syslog_trace("** {0}".format(e.message), False, DEBUG)
       sys.exit(0)
     if not os.path.isfile(hwdevice):
-      ll.syslog_trace("** Device not found: {0}".format(hwdevice), syslog.LOG_INFO, DEBUG)
+      liblnx.syslog_trace("** Device not found: {0}".format(hwdevice), syslog.LOG_INFO, DEBUG)
       sys.exit(1)
 
     while True:
@@ -49,29 +49,29 @@ class MyDaemon(Daemon):
         startTime = time.time()
 
         result = do_work(hwdevice)
-        ll.syslog_trace("Result   : {0}".format(result), False, DEBUG)
+        liblnx.syslog_trace("Result   : {0}".format(result), False, DEBUG)
 
         data.append(float(result))
         if (len(data) > samples):
           data.pop(0)
-        ll.syslog_trace("Data     : {0}".format(data),   False, DEBUG)
+        liblnx.syslog_trace("Data     : {0}".format(data),   False, DEBUG)
 
         # report sample average
         if (startTime % reportTime < sampleTime):
           averages = sum(data[:]) / len(data)
-          ll.syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
+          liblnx.syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
-          ll.syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
-          ll.syslog_trace("................................", False, DEBUG)
+          liblnx.syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
+          liblnx.syslog_trace("................................", False, DEBUG)
           time.sleep(waitTime)
       except Exception as e:
-        ll.syslog_trace("Unexpected error in run()", syslog.LOG_ALERT, DEBUG)
-        ll.syslog_trace("e.message : {0}".format(e.message), syslog.LOG_ALERT, DEBUG)
-        ll.syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_ALERT, DEBUG)
-        ll.syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
+        liblnx.syslog_trace("Unexpected error in run()", syslog.LOG_ALERT, DEBUG)
+        liblnx.syslog_trace("e.message : {0}".format(e.message), syslog.LOG_ALERT, DEBUG)
+        liblnx.syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_ALERT, DEBUG)
+        liblnx.syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
 def do_work(fdev):
@@ -94,10 +94,10 @@ def do_report(result, flock, fdata):
   outEpoch = int(time.strftime('%s'))
   # round to current minute to ease database JOINs
   outEpoch = outEpoch - (outEpoch % 60)
-  ll.lock(flock)
+  lock(flock)
   with open(fdata, 'a') as f:
     f.write('{0}, {1}\n'.format(outDate, outEpoch, float(result)) )
-  ll.unlock(flock)
+  unlock(flock)
 
 if __name__ == "__main__":
 
@@ -106,7 +106,7 @@ if __name__ == "__main__":
   #  syslog.syslog(syslog.LOG_INFO,"Hardware missing!")
   #  sys.exit(2)
 
-  daemon = MyDaemon('/tmp/' + ll.LEAF + '/11.pid')
+  daemon = MyDaemon('/tmp/' + liblnx.LEAF + '/11.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()
@@ -118,7 +118,7 @@ if __name__ == "__main__":
       # assist with debugging.
       print "Debug-mode started. Use <Ctrl>+C to stop."
       DEBUG = True
-      ll.syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
+      liblnx.syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
       daemon.run()
     else:
       print "Unknown command"
