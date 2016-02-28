@@ -25,8 +25,9 @@ class MyDaemon(Daemon):
     inisection = "12"
     home = os.path.expanduser('~')
     s = iniconf.read(home + '/' + leaf + '/config.ini')
-    syslog_trace("Config file   : {0}".pformat(s), False, DEBUG)
-    syslog_trace("  : {0}".pformat(iniconf.items(inisection)), False, DEBUG)
+    syslog_trace("Config file   : {0}".format(s), False, DEBUG)
+    syslog_trace("Options       :", False, DEBUG)
+    syslog_trace(pformat(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
     cycles = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
@@ -44,11 +45,11 @@ class MyDaemon(Daemon):
         startTime = time.time()
         
         result = do_work().split(',')
-        syslog_trace("Result   : {0}".pformat(result), False, DEBUG)
-        data.append(map(float, result))
+        syslog_trace("Result   :" + pformat(result), False, DEBUG)
         if (len(data) > samples):
           data.pop(0)
-        syslog_trace("Data     : {0}".pformat(data),   False, DEBUG)
+        syslog_trace("Data     : ",   False, DEBUG)
+        syslog_trace(pformat(data),   False, DEBUG)
         
         # report sample average
         if (startTime % reportTime < sampleTime):
@@ -60,7 +61,7 @@ class MyDaemon(Daemon):
           averages[3]=int(data[-1][3])
           averages[4]=int(data[-1][4])
           averages[5]=int(data[-1][5])
-          syslog_trace("Averages : {0}".pformat(averages),  False, DEBUG)
+          syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
         
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
@@ -69,10 +70,10 @@ class MyDaemon(Daemon):
           syslog_trace("................................", False, DEBUG)
           time.sleep(waitTime)
       except Exception as e:
-        syslog_trace("Unexpected error in run()", LOG_ALERT, DEBUG)
-        syslog_trace(e.message, LOG_ALERT, DEBUG)
-        syslog_trace(e.__doc__, LOG_ALERT, DEBUG)
-        syslog_trace(traceback.format_exc(), LOG_ALERT, DEBUG)
+        syslog_trace("Unexpected error in run()", syslog.LOG_ALERT, DEBUG)
+        syslog_trace(e.message, syslog.LOG_ALERT, DEBUG)
+        syslog_trace(e.__doc__, syslog.LOG_ALERT, DEBUG)
+        syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
 def do_work():
