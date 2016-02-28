@@ -10,7 +10,7 @@
 # uses moving averages
 
 import syslog, traceback
-import os, sys, time, math, ConfigParser
+import os, sys, time, math, ConfigParser, platform
 from libdaemon import Daemon
 
 
@@ -39,7 +39,7 @@ class MyDaemon(Daemon):
 
     data = []                                       # array for holding sampledata
 
-    try
+    try:
       hwdevice = iniconf.get(inisection, NODE+".hwdevice")
     except ConfigParser.NoOptionError as e:  #no hwdevice
       syslog_trace("** {0}".format(e.message), False, DEBUG)
