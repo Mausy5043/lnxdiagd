@@ -10,19 +10,17 @@
 # uses moving averages
 
 import syslog, traceback
-import os, sys, time, math, ConfigParser, platform
+import os, sys, time, math, ConfigParser
 from libdaemon import Daemon
+import liblnx
 
-DEBUG = False
-IS_JOURNALD = os.path.isfile('/bin/journalctl')
-leaf = os.path.realpath(__file__).split('/')[-2]
 
 class MyDaemon(Daemon):
   def run(self):
     iniconf = ConfigParser.ConfigParser()
     inisection = "11"
     home = os.path.expanduser('~')
-    s = iniconf.read(home + '/' + leaf + '/config.ini')
+    s = iniconf.read(home + '/' + LEAF + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
@@ -37,7 +35,14 @@ class MyDaemon(Daemon):
 
     data = []                                       # array for holding sampledata
 
-    hwdevice = iniconf.get(inisection, platform.node()+".hwdevice")
+    try
+      hwdevice = iniconf.get(inisection, NODE+".hwdevice")
+    except ConfigParser.NoOptionError as e:  #no hwdevice
+      syslog_trace("** {0}".format(e.message), False, DEBUG)
+      sys.exit(0)
+    if not os.path.isfile(hwdevice):
+      syslog_trace("** Device not found: {0}".format(hwdevice), syslog.LOG_INFO, DEBUG)
+      sys.exit(1)
 
     while True:
       try:
@@ -85,36 +90,23 @@ def do_work(fdev):
 
 def do_report(result, flock, fdata):
   # Get the time and date in human-readable form and UN*X-epoch...
-  outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
+  outDate = time.strftime('%Y-%m-%dT%H:%M:%S')
+  outEpoch = int(time.strftime('%s'))
+  # round to current minute to ease database JOINs
+  outEpoch = outEpoch - (outEpoch % 60)
   lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}\n'.format(outDate, float(result)) )
+    f.write('{0}, {1}\n'.format(outDate, outEpoch, float(result)) )
   unlock(flock)
-
-def lock(fname):
-  open(fname, 'a').close()
-
-def unlock(fname):
-  if os.path.isfile(fname):
-    os.remove(fname)
-
-def syslog_trace(trace, logerr, out2console):
-  # Log a python stack trace to syslog
-  log_lines = trace.split('\n')
-  for line in log_lines:
-    if line and logerr:
-      syslog.syslog(logerr,line)
-    if line and out2console:
-      print line
 
 if __name__ == "__main__":
 
-  if not os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
-    print "Hardware missing!"
-    syslog.syslog(syslog.LOG_INFO,"Hardware missing!")
-    sys.exit(2)
+  #if not os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
+  #  print "Hardware missing!"
+  #  syslog.syslog(syslog.LOG_INFO,"Hardware missing!")
+  #  sys.exit(2)
 
-  daemon = MyDaemon('/tmp/' + leaf + '/11.pid')
+  daemon = MyDaemon('/tmp/' + LEAF + '/11.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()

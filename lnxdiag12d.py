@@ -10,9 +10,8 @@
 # uses moving averages
 
 import syslog, traceback
-import os, sys, time, math, commands
+import os, sys, time, math, commands, ConfigParser, platform
 from libdaemon import Daemon
-import ConfigParser
 
 DEBUG = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
@@ -31,25 +30,25 @@ class MyDaemon(Daemon):
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock = iniconf.get(inisection, "lockfile")
     fdata = iniconf.get(inisection, "resultfile")
-    
+
     samples = samplesperCycle * cycles              # total number of samples averaged
     sampleTime = reportTime/samplesperCycle         # time [s] between samples
     cycleTime = samples * sampleTime                # time [s] per cycle
-    
+
     data = []                                       # array for holding sampledata
-    
+
     while True:
       try:
         startTime = time.time()
-        
+
         result = do_work().split(',')
         syslog_trace("Result   : {0}".format(result), False, DEBUG)
-        
+
         data.append(map(float, result))
         if (len(data) > samples):
           data.pop(0)
         syslog_trace("Data     : {0}".format(data),   False, DEBUG)
-        
+
         # report sample average
         if (startTime % reportTime < sampleTime):
           somma = map(sum,zip(*data))
@@ -62,7 +61,7 @@ class MyDaemon(Daemon):
           averages[5]=int(data[-1][5])
           syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
-        
+
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
@@ -80,7 +79,7 @@ def do_work():
   fi   = "/proc/loadavg"
   with open(fi,'r') as f:
     outHistLoad = f.read().strip('\n').replace(" ",", ").replace("/",", ")
-  
+
   # 5 #datapoints gathered here
   outCpu = commands.getoutput("vmstat 1 2").splitlines()[3].split()
   outCpuUS = outCpu[12]
@@ -88,19 +87,21 @@ def do_work():
   outCpuID = outCpu[14]
   outCpuWA = outCpu[15]
   outCpuST = 0
-  
+
   return '{0}, {1}, {2}, {3}, {4}, {5}'.format(outHistLoad, outCpuUS, outCpuSY, outCpuID, outCpuWA, outCpuST)
 
 def do_report(result, flock, fdata):
   # Get the time and date in human-readable form and UN*X-epoch...
-  outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
-  #outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
+  outDate = time.strftime('%Y-%m-%dT%H:%M:%S')
+  outEpoch = int(time.strftime('%s'))
+  # round to current minute to ease database JOINs
+  outEpoch = outEpoch - (outEpoch % 60)
   result = ', '.join(map(str, result))
   #flock = '/tmp/' + leaf + '/12.lock'
   lock(flock)
   #f = open('/tmp/' + leaf + '/12-load-cpu.csv', 'a')
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}\n'.format(outDate, result) )
+    f.write('{0}, {1}\n'.format(outDate, outEpoch, result) )
   unlock(flock)
 
 def lock(fname):

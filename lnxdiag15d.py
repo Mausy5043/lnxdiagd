@@ -10,10 +10,9 @@
 # These are all counters, therefore no averaging is needed.
 
 import syslog, traceback
-import os, sys, time, math, commands
+import os, sys, time, math, commands, ConfigParser, platform
 from subprocess import check_output
 from libdaemon import Daemon
-import ConfigParser
 
 DEBUG = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
@@ -45,7 +44,7 @@ class MyDaemon(Daemon):
         startTime = time.time()
 
         result = do_work().split(',')
-        
+
         data = map(int, result)
         syslog_trace("Data     : {0}".format(data),   False, DEBUG)
 
@@ -95,11 +94,14 @@ def do_work():
 
 def do_report(result, flock, fdata):
   # Get the time and date in human-readable form and UN*X-epoch...
-  outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
+  outDate = time.strftime('%Y-%m-%dT%H:%M:%S')
+  outEpoch = int(time.strftime('%s'))
+  # round to current minute to ease database JOINs
+  outEpoch = outEpoch - (outEpoch % 60)
   result = ', '.join(map(str, result))
   lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}\n'.format(outDate, result) )
+    f.write('{0}, {1}\n'.format(outDate, outEpoch, result) )
   unlock(flock)
 
 def lock(fname):
@@ -117,7 +119,7 @@ def syslog_trace(trace, logerr, out2console):
       syslog.syslog(logerr,line)
     if line and out2console:
       print line
-      
+
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + leaf + '/15.pid')
   if len(sys.argv) == 2:
