@@ -11,6 +11,7 @@
 
 import syslog, traceback
 import os, sys, time, math, commands
+from pprint import pformat
 from libdaemon import Daemon
 import ConfigParser
 
@@ -24,8 +25,8 @@ class MyDaemon(Daemon):
     inisection = "12"
     home = os.path.expanduser('~')
     s = iniconf.read(home + '/' + leaf + '/config.ini')
-    syslog_trace("Config file   : {0}".format(s), False, DEBUG)
-    syslog_trace("  : {0}".format(iniconf.items(inisection)), False, DEBUG)
+    syslog_trace("Config file   : {0}".pformat(s), False, DEBUG)
+    syslog_trace("  : {0}".pformat(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
     cycles = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
@@ -43,11 +44,11 @@ class MyDaemon(Daemon):
         startTime = time.time()
         
         result = do_work().split(',')
-        syslog_trace("Result   : {0}".format(result), False, DEBUG)
+        syslog_trace("Result   : {0}".pformat(result), False, DEBUG)
         data.append(map(float, result))
         if (len(data) > samples):
           data.pop(0)
-        syslog_trace("Data     : {0}".format(data),   False, DEBUG)
+        syslog_trace("Data     : {0}".pformat(data),   False, DEBUG)
         
         # report sample average
         if (startTime % reportTime < sampleTime):
@@ -59,7 +60,7 @@ class MyDaemon(Daemon):
           averages[3]=int(data[-1][3])
           averages[4]=int(data[-1][4])
           averages[5]=int(data[-1][5])
-          syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
+          syslog_trace("Averages : {0}".pformat(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
         
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
