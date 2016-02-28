@@ -44,6 +44,8 @@ class MyDaemon(Daemon):
         
         result = do_work().split(',')
         syslog_trace("Result   : {0}".format(result), False, DEBUG)
+        
+        data.append(map(float, result))
         if (len(data) > samples):
           data.pop(0)
         syslog_trace("Data     : {0}".format(data),   False, DEBUG)
