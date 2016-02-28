@@ -115,7 +115,7 @@ def syslog_trace(trace, errlog, out2console):
   for line in log_lines:
     if line and logerr:
       syslog.syslog(syslog.logerr,line)
-    if line and out2console):
+    if line and out2console:
       print line
 
 if __name__ == "__main__":
