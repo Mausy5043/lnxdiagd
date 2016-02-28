@@ -90,12 +90,14 @@ def do_mv_data(rpath):
   for fname in glob.glob(r'/tmp/' + leaf + '/*.csv'):
     if os.path.isfile(clientlock) and not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
       syslog_trace("...moving data {0}".format(fname), False, DEBUG)
-      shutil.move(fname, rpath)
+      #shutil.move(fname, rpath)
+      shutil.move(fname, "/dev/null")
 
   for fname in glob.glob(r'/tmp/' + leaf + '/*.png'):
     if os.path.isfile(clientlock) and not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
       syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
-      shutil.move(fname, rpath)
+      #shutil.move(fname, rpath)
+      shutil.move(fname, "/dev/null")
 
   unlock(clientlock)
   syslog_trace("!..UNLOCK", False, DEBUG)
