@@ -21,8 +21,8 @@ class MyDaemon(Daemon):
     inisection = "11"
     home = os.path.expanduser('~')
     s = iniconf.read(home + '/' + lblnx.LEAF + '/config.ini')
-    syslog_trace("Config file   : {0}".format(s), False, DEBUG)
-    syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
+    liblnx.syslog_trace("Config file   : {0}".format(s), False, DEBUG)
+    liblnx.syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
     cycles = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
@@ -38,10 +38,10 @@ class MyDaemon(Daemon):
     try:
       hwdevice = iniconf.get(inisection, liblnx.NODE+".hwdevice")
     except ConfigParser.NoOptionError as e:  #no hwdevice
-      syslog_trace("** {0}".format(e.message), False, DEBUG)
+      liblnx.syslog_trace("** {0}".format(e.message), False, DEBUG)
       sys.exit(0)
     if not os.path.isfile(hwdevice):
-      syslog_trace("** Device not found: {0}".format(hwdevice), syslog.LOG_INFO, DEBUG)
+      liblnx.syslog_trace("** Device not found: {0}".format(hwdevice), syslog.LOG_INFO, DEBUG)
       sys.exit(1)
 
     while True:
@@ -49,29 +49,29 @@ class MyDaemon(Daemon):
         startTime = time.time()
 
         result = do_work(hwdevice)
-        syslog_trace("Result   : {0}".format(result), False, DEBUG)
+        liblnx.syslog_trace("Result   : {0}".format(result), False, DEBUG)
 
         data.append(float(result))
         if (len(data) > samples):
           data.pop(0)
-        syslog_trace("Data     : {0}".format(data),   False, DEBUG)
+        liblnx.syslog_trace("Data     : {0}".format(data),   False, DEBUG)
 
         # report sample average
         if (startTime % reportTime < sampleTime):
           averages = sum(data[:]) / len(data)
-          syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
+          liblnx.syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
-          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
-          syslog_trace("................................", False, DEBUG)
+          liblnx.syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
+          liblnx.syslog_trace("................................", False, DEBUG)
           time.sleep(waitTime)
       except Exception as e:
-        syslog_trace("Unexpected error in run()", syslog.LOG_ALERT, DEBUG)
-        syslog_trace("e.message : {0}".format(e.message), syslog.LOG_ALERT, DEBUG)
-        syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_ALERT, DEBUG)
-        syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
+        liblnx.syslog_trace("Unexpected error in run()", syslog.LOG_ALERT, DEBUG)
+        liblnx.syslog_trace("e.message : {0}".format(e.message), syslog.LOG_ALERT, DEBUG)
+        liblnx.syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_ALERT, DEBUG)
+        liblnx.syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
 def do_work(fdev):
@@ -118,7 +118,7 @@ if __name__ == "__main__":
       # assist with debugging.
       print "Debug-mode started. Use <Ctrl>+C to stop."
       DEBUG = True
-      syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
+      liblnx.syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
       daemon.run()
     else:
       print "Unknown command"
