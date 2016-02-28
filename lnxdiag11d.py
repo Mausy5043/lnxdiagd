@@ -20,7 +20,7 @@ class MyDaemon(Daemon):
     iniconf = ConfigParser.ConfigParser()
     inisection = "11"
     home = os.path.expanduser('~')
-    s = iniconf.read(home + '/' + lblnx.LEAF + '/config.ini')
+    s = iniconf.read(home + '/' + LEAF + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
@@ -36,7 +36,7 @@ class MyDaemon(Daemon):
     data = []                                       # array for holding sampledata
 
     try
-      hwdevice = iniconf.get(inisection, liblnx.NODE+".hwdevice")
+      hwdevice = iniconf.get(inisection, NODE+".hwdevice")
     except ConfigParser.NoOptionError as e:  #no hwdevice
       syslog_trace("** {0}".format(e.message), False, DEBUG)
       sys.exit(0)
@@ -106,7 +106,7 @@ if __name__ == "__main__":
   #  syslog.syslog(syslog.LOG_INFO,"Hardware missing!")
   #  sys.exit(2)
 
-  daemon = MyDaemon('/tmp/' + liblnx.LEAF + '/11.pid')
+  daemon = MyDaemon('/tmp/' + LEAF + '/11.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()
