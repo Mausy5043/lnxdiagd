@@ -24,8 +24,8 @@ class MyDaemon(Daemon):
     inisection = "12"
     home = os.path.expanduser('~')
     s = iniconf.read(home + '/' + leaf + '/config.ini')
-    if DEBUG: print "config file : ", s
-    if DEBUG: print iniconf.items(inisection)
+    syslog_trace("Config file   : {0}".format(s), False, DEBUG)
+    syslog_trace("  : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
     cycles = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
@@ -43,13 +43,14 @@ class MyDaemon(Daemon):
         startTime = time.time()
         
         result = do_work().split(',')
-        if DEBUG: print "result    : {0}".format(result)
+        syslog_trace("Result   : {0}".format(result), False, DEBUG)
         data.append(map(float, result))
-        if (len(data) > samples):data.pop(0)
+        if (len(data) > samples):
+          data.pop(0)
+        syslog_trace("Data     : {0}".format(data),   False, DEBUG)
         
         # report sample average
         if (startTime % reportTime < sampleTime):
-          if DEBUG: print "data   : {0}".format(data)
           somma = map(sum,zip(*data))
           # not all entries should be float
           # 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
@@ -58,27 +59,20 @@ class MyDaemon(Daemon):
           averages[3]=int(data[-1][3])
           averages[4]=int(data[-1][4])
           averages[5]=int(data[-1][5])
-          if DEBUG: print "average: {0}".format(averages)
+          syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
         
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
-          if DEBUG:print "Waiting {0} s".format(waitTime)
+          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
+          syslog_trace("................................", False, DEBUG)
           time.sleep(waitTime)
       except Exception as e:
-        if DEBUG:
-          print "Unexpected error:"
-          print e.message
-        syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-        syslog_trace(traceback.format_exc())
+        syslog_trace("Unexpected error in run()", LOG_ALERT, DEBUG)
+        syslog_trace(e.message, LOG_ALERT, DEBUG)
+        syslog_trace(e.__doc__, LOG_ALERT, DEBUG)
+        syslog_trace(traceback.format_exc(), LOG_ALERT, DEBUG)
         raise
-
-def syslog_trace(trace):
-  # Log a python stack trace to syslog
-  log_lines = trace.split('\n')
-  for line in log_lines:
-    if line:
-      syslog.syslog(syslog.LOG_ALERT,line)
 
 def do_work():
   # 6 #datapoints gathered here
@@ -114,6 +108,15 @@ def lock(fname):
 def unlock(fname):
   if os.path.isfile(fname):
     os.remove(fname)
+
+def syslog_trace(trace, errlog, out2console):
+  # Log a python stack trace to syslog
+  log_lines = trace.split('\n')
+  for line in log_lines:
+    if line and logerr:
+      syslog.syslog(syslog.logerr,line)
+    if line and out2console):
+      print line
 
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + leaf + '/12.pid')
