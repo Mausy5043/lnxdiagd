@@ -10,7 +10,7 @@
 # daemon23 support
 
 import syslog, traceback
-import os, sys, shutil, glob, time, subprocess
+import os, sys, shutil, glob, time, subprocess, platform
 from libdaemon import Daemon
 import ConfigParser
 import MySQLdb as mdb
