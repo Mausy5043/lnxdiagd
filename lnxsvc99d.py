@@ -13,16 +13,19 @@ import os, sys, platform, time, commands, subprocess
 from libdaemon import Daemon
 import ConfigParser
 
-DEBUG = False
+# constants
+DEBUG       = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
-LEAF = os.path.realpath(__file__).split('/')[-2]
+MYID        = filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])
+MYAPP       = os.path.realpath(__file__).split('/')[-2]
+NODE        = platform.node()
 
 class MyDaemon(Daemon):
   def run(self):
     iniconf = ConfigParser.ConfigParser()
-    inisection = "99"
+    inisection = MYID
     home = os.path.expanduser('~')
-    s = iniconf.read(home + '/' + LEAF + '/config.ini')
+    s = iniconf.read(home + '/' + MYAPP + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
@@ -144,9 +147,9 @@ def syslog_trace(trace, logerr, out2console):
       syslog.syslog(logerr,line)
     if line and out2console:
       print line
-      
+
 if __name__ == "__main__":
-  daemon = MyDaemon('/tmp/' + LEAF + '/99.pid')
+  daemon = MyDaemon('/tmp/' + MYAPP + '/' + MYID + '.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()
