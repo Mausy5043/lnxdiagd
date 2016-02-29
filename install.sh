@@ -26,7 +26,7 @@ pushd "$HOME/lnxdiagd"
   # @reboot we allow for 120s for the WiFi to come up:
   echo "@reboot           $ME    sleep 120; $HOME/lnxdiagd/update.sh 2>&1 | logger -p info -t lnxdiagd" | sudo tee --append /etc/cron.d/lnxdiagd
 
-  ./update.sh
+  #./update.sh
 popd
 
 # make sure all mountpoints exist
