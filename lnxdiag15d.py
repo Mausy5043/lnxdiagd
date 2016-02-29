@@ -105,7 +105,7 @@ def do_report(result, flock, fdata):
   result = ', '.join(map(str, result))
   lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}\n'.format(outDate, outEpoch, result) )
+    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, result) )
   unlock(flock)
 
 def lock(fname):

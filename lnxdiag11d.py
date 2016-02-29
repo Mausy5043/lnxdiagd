@@ -101,7 +101,7 @@ def do_report(result, flock, fdata):
   outEpoch = outEpoch - (outEpoch % 60)
   lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}\n'.format(outDate, outEpoch, float(result)) )
+    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, float(result)) )
   unlock(flock)
 
 def lock(fname):
