@@ -9,7 +9,7 @@
 # daemon99.py creates an XML-file on the server.
 
 import syslog, traceback
-import os, sys, platform, time, commands, subprocess, platform
+import os, sys, platform, time, commands, subprocess
 from libdaemon import Daemon
 import ConfigParser
 
@@ -18,39 +18,38 @@ DEBUG       = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
 MYID        = filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
-NODE        = platform.node()
+NODE        = os.uname()[1]
 
 class MyDaemon(Daemon):
   def run(self):
-    iniconf = ConfigParser.ConfigParser()
-    inisection = MYID
-    home = os.path.expanduser('~')
-    s = iniconf.read(home + '/' + MYAPP + '/config.ini')
+    iniconf         = ConfigParser.ConfigParser()
+    inisection      = MYID
+    home            = os.path.expanduser('~')
+    s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
-    reportTime = iniconf.getint(inisection, "reporttime")
-    cycles = iniconf.getint(inisection, "cycles")
+    reportTime      = iniconf.getint(inisection, "reporttime")
+    cycles          = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
-    flock = iniconf.get(inisection, "lockfile")
+    flock           = iniconf.get(inisection, "lockfile")
 
-    samples = samplesperCycle * cycles              # total number of samples averaged
-    sampleTime = reportTime/samplesperCycle         # time [s] between samples
-    cycleTime = samples * sampleTime                # time [s] per cycle
+    samples         = samplesperCycle * cycles          # total number of samples averaged
+    sampleTime      = reportTime/samplesperCycle        # time [s] between samples
+    cycleTime       = samples * sampleTime              # time [s] per cycle
 
-    myname = os.uname()[1]
-    mount_path = '/mnt/share1/'
-    remote_path = mount_path + myname
-    remote_lock = remote_path + '/client.lock'
+    mount_path      = '/mnt/share1/'
+    remote_path     = mount_path + NODE
+    remote_lock     = remote_path + '/client.lock'
 
     while True:
       try:
-        startTime=time.time()
+        startTime   = time.time()
 
         if os.path.ismount(mount_path):
           # print 'dataspool is mounted'
           do_xml(remote_path)
 
-        waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
@@ -63,51 +62,41 @@ class MyDaemon(Daemon):
         raise
 
 def do_xml(wpath):
-  home						= os.path.expanduser('~')
-  #usr							= commands.getoutput("whoami")
-  uname           = os.uname()
-
-  Tcpu = "(no T-sensor)"
+  home						  = os.path.expanduser('~')
+  uname             = os.uname()
+  Tcpu              = "(no T-sensor)"
   if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
     fi = "/sys/class/hwmon/hwmon0/device/temp1_input"
     with open(fi,'r') as f:
-      Tcpu = float(f.read().strip('\n'))/1000
-
+      Tcpu          = float(f.read().strip('\n'))/1000
 
   fi = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
   with open(fi,'r') as f:
-    fcpu						= float(f.read().strip('\n'))/1000
-
+    fcpu				    = float(f.read().strip('\n'))/1000
 
   fi = home + "/.lnxdiagd.branch"
   with open(fi,'r') as f:
-    lnxdiagdbranch = f.read().strip('\n')
+    lnxdiagdbranch  = f.read().strip('\n')
 
-
-  #fi = home + "/.boneboot.branch"
-  #with open(fi,'r') as f:
-  #  bonebootbranch  = f.read().strip('\n')
-
-
-  uptime          = commands.getoutput("uptime")
-  dfh             = commands.getoutput("df -h")
-  freeh           = commands.getoutput("free -h")
-  p1              = subprocess.Popen(["ps", "-e", "-o", "pcpu,args"], stdout=subprocess.PIPE)
-  p2              = subprocess.Popen(["cut", "-c", "-132"], stdin=p1.stdout, stdout=subprocess.PIPE)
-  p3              = subprocess.Popen(["awk", "NR>2"], stdin=p2.stdout, stdout=subprocess.PIPE)
-  p4              = subprocess.Popen(["sort", "-nr"], stdin=p3.stdout, stdout=subprocess.PIPE)
-  p5              = subprocess.Popen(["head", "-10"], stdin=p4.stdout, stdout=subprocess.PIPE)
-  p6              = subprocess.Popen(["sed", "s/&/\&amp;/g"], stdin=p5.stdout, stdout=subprocess.PIPE)
-  p7              = subprocess.Popen(["sed", "s/>/\&gt;/g"], stdin=p6.stdout, stdout=subprocess.PIPE)
-  p8              = subprocess.Popen(["sed", "s/</\&lt;/g"], stdin=p7.stdout, stdout=subprocess.PIPE)
-  psout           = p8.stdout.read()
+  uptime            = commands.getoutput("uptime")
+  dfh               = commands.getoutput("df -h")
+  freeh             = commands.getoutput("free -h")
+  p1                = subprocess.Popen(["ps", "-e", "-o", "pcpu,args"],           stdout=subprocess.PIPE)
+  p2                = subprocess.Popen(["cut", "-c", "-132"],   stdin=p1.stdout,  stdout=subprocess.PIPE)
+  p3                = subprocess.Popen(["awk", "NR>2"],         stdin=p2.stdout,  stdout=subprocess.PIPE)
+  p4                = subprocess.Popen(["sort", "-nr"],         stdin=p3.stdout,  stdout=subprocess.PIPE)
+  p5                = subprocess.Popen(["head", "-10"],         stdin=p4.stdout,  stdout=subprocess.PIPE)
+  p6                = subprocess.Popen(["sed", "s/&/\&amp;/g"], stdin=p5.stdout,  stdout=subprocess.PIPE)
+  p7                = subprocess.Popen(["sed", "s/>/\&gt;/g"],  stdin=p6.stdout,  stdout=subprocess.PIPE)
+  p8                = subprocess.Popen(["sed", "s/</\&lt;/g"],  stdin=p7.stdout,  stdout=subprocess.PIPE)
+  psout             = p8.stdout.read()
   #
   with open(wpath + '/status.xml', 'w') as f:
 
     f.write('<server>\n')
 
     f.write('<name>\n')
-    f.write(uname[1] + '\n')
+    f.write(NODE + '\n')
     f.write('</name>\n')
 
     f.write('<df>\n')
@@ -124,10 +113,9 @@ def do_xml(wpath):
 
     f.write(' <uptime>\n')
     f.write(uptime + '\n')
-    f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform() +'\n')
-    f.write(' - lnxdiagd   on: '+ lnxdiagdbranch +'\n')
-    #f.write(' - boneboot    on: '+ bonebootbranch +'\n')
-    f.write('\nTop 10 processes:\n' + psout +'\n')
+    f.write(uname[0] + ' ' + uname[1] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '\n')
+    f.write(' - lnxdiagd   on: ' + lnxdiagdbranch + '\n')
+    f.write('\nTop 10 processes:\n' + psout + '\n')
     f.write('</uptime>\n')
 
     f.write('</server>\n')

@@ -9,7 +9,7 @@
 # daemon98.py uploads data to the server.
 
 import syslog, traceback
-import os, sys, shutil, glob, time, commands, subprocess, platform
+import os, sys, shutil, glob, time, commands, subprocess
 from libdaemon import Daemon
 import ConfigParser
 
@@ -18,37 +18,36 @@ DEBUG       = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
 MYID        = filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
-NODE        = platform.node()
+NODE        = os.uname()[1]
 
 class MyDaemon(Daemon):
   def run(self):
-    iniconf = ConfigParser.ConfigParser()
-    inisection = MYID
-    home = os.path.expanduser('~')
-    s = iniconf.read(home + '/' + MYAPP + '/config.ini')
+    iniconf         = ConfigParser.ConfigParser()
+    inisection      = MYID
+    home            = os.path.expanduser('~')
+    s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
-    reportTime = iniconf.getint(inisection, "reporttime")
-    cycles = iniconf.getint(inisection, "cycles")
+    reportTime      = iniconf.getint(inisection, "reporttime")
+    cycles          = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
-    flock = iniconf.get(inisection, "lockfile")
+    flock           = iniconf.get(inisection, "lockfile")
 
-    samples = samplesperCycle * cycles              # total number of samples averaged
-    sampleTime = reportTime/samplesperCycle         # time [s] between samples
-    cycleTime = samples * sampleTime                # time [s] per cycle
+    samples         = samplesperCycle * cycles           # total number of samples averaged
+    sampleTime      = reportTime/samplesperCycle         # time [s] between samples
+    cycleTime       = samples * sampleTime               # time [s] per cycle
 
-    myname = os.uname()[1]
-    mount_path = '/mnt/share1/'
-    remote_path = mount_path + myname
-    remote_lock = remote_path + '/client.lock'
+    mount_path      = '/mnt/share1/'
+    remote_path     = mount_path + NODE
+    remote_lock     = remote_path + '/client.lock'
     while True:
       try:
-        startTime=time.time()
+        startTime   = time.time()
 
         if os.path.ismount(mount_path):
           do_mv_data(remote_path)
 
-        waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
@@ -61,9 +60,9 @@ class MyDaemon(Daemon):
         raise
 
 def do_mv_data(rpath):
-  hostlock = rpath + '/host.lock'
-  clientlock = rpath + '/client.lock'
-  count_internal_locks=1
+  hostlock              = rpath + '/host.lock'
+  clientlock            = rpath + '/client.lock'
+  count_internal_locks  = 1
 
   # wait 5 seconds for processes to finish
   time.sleep(5)
@@ -85,7 +84,7 @@ def do_mv_data(rpath):
 
   while (count_internal_locks > 0):
     time.sleep(1)
-    count_internal_locks=0
+    count_internal_locks = 0
     for fname in glob.glob(r'/tmp/' + MYAPP + '/*.lock'):
       count_internal_locks += 1
     syslog_trace("...{0} internal locks exist".format(count_internal_locks), False, DEBUG)

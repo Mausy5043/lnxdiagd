@@ -10,7 +10,7 @@
 # daemon23 support
 
 import syslog, traceback
-import os, sys, shutil, glob, time, subprocess, platform
+import os, sys, shutil, glob, time, subprocess
 from libdaemon import Daemon
 import ConfigParser
 import MySQLdb as mdb
@@ -20,16 +20,16 @@ DEBUG       = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
 MYID        = filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
-NODE        = platform.node()
+NODE        = os.uname()[1]
 
 class MyDaemon(Daemon):
   def run(self):
     try:              # Initialise MySQLdb
-      consql = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
+      consql    = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
       if consql.open: # dB initialised succesfully -> get a cursor on the dB.
-        cursql = consql.cursor()
+        cursql  = consql.cursor()
         cursql.execute("SELECT VERSION()")
-        versql = cursql.fetchone()
+        versql  = cursql.fetchone()
         cursql.close()
         logtext = "{0} : {1}".format("Attached to MySQL server", versql)
         syslog.syslog(syslog.LOG_INFO, logtext)
@@ -43,29 +43,28 @@ class MyDaemon(Daemon):
         syslog_trace(" ** Closed MySQL connection in run() **", syslog.LOG_ALERT, DEBUG)
       raise
 
-    iniconf = ConfigParser.ConfigParser()
-    inisection = MYID
-    home = os.path.expanduser('~')
-    s = iniconf.read(home + '/' + MYAPP + '/config.ini')
+    iniconf         = ConfigParser.ConfigParser()
+    inisection      = MYID
+    home            = os.path.expanduser('~')
+    s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
-    reportTime = iniconf.getint(inisection, "reporttime")
-    cycles = iniconf.getint(inisection, "cycles")
+    reportTime      = iniconf.getint(inisection, "reporttime")
+    cycles          = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
-    flock = iniconf.get(inisection, "lockfile")
+    flock           = iniconf.get(inisection, "lockfile")
 
-    samples = samplesperCycle * cycles              # total number of samples averaged
-    sampleTime = reportTime/samplesperCycle         # time [s] between samples
-    cycleTime = samples * sampleTime                # time [s] per cycle
+    samples         = samplesperCycle * cycles              # total number of samples averaged
+    sampleTime      = reportTime/samplesperCycle         # time [s] between samples
+    cycleTime       = samples * sampleTime                # time [s] per cycle
 
-    myname = os.uname()[1]
     while True:
       try:
-        startTime=time.time()
+        startTime   = time.time()
 
         do_sql_data(flock, iniconf, consql)
 
-        waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
@@ -89,10 +88,10 @@ def cat(filename):
   return ret
 
 def do_writesample(cnsql, cmd, sample):
-  fail2write = False
-  dat = (sample.split(', '))
+  fail2write  = False
+  dat         = (sample.split(', '))
   try:
-    cursql = cnsql.cursor()
+    cursql    = cnsql.cursor()
     syslog_trace("   Data: {0}".format(dat), False, DEBUG)
     cursql.execute(cmd, dat)
     cnsql.commit()
@@ -116,10 +115,10 @@ def do_sql_data(flock, inicnfg, cnsql):
   lock(flock)
   time.sleep(2)
   # wait for all other processes to release their locks.
-  count_internal_locks=2
+  count_internal_locks = 2
   while (count_internal_locks > 1):
     time.sleep(1)
-    count_internal_locks=0
+    count_internal_locks = 0
     for fname in glob.glob(r'/tmp/' + MYAPP + '/*.lock'):
       count_internal_locks += 1
     syslog_trace("{0} internal locks exist".format(count_internal_locks), False, DEBUG)

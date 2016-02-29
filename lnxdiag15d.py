@@ -10,7 +10,7 @@
 # These are all counters, therefore no averaging is needed.
 
 import syslog, traceback
-import os, sys, time, math, commands, ConfigParser, platform
+import os, sys, time, math, commands, ConfigParser
 from subprocess import check_output
 from libdaemon import Daemon
 
@@ -19,47 +19,47 @@ DEBUG       = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
 MYID        = filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
-NODE        = platform.node()
+NODE        = os.uname()[1]
 
 os.nice(15)
 
 class MyDaemon(Daemon):
   def run(self):
-    iniconf = ConfigParser.ConfigParser()
-    inisection = MYID
-    home = os.path.expanduser('~')
-    s = iniconf.read(home + '/' + MYAPP + '/config.ini')
+    iniconf         = ConfigParser.ConfigParser()
+    inisection      = MYID
+    home            = os.path.expanduser('~')
+    s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
-    reportTime = iniconf.getint(inisection, "reporttime")
-    cycles = iniconf.getint(inisection, "cycles")
+    reportTime      = iniconf.getint(inisection, "reporttime")
+    cycles          = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
-    flock = iniconf.get(inisection, "lockfile")
-    fdata = iniconf.get(inisection, "resultfile")
+    flock           = iniconf.get(inisection, "lockfile")
+    fdata           = iniconf.get(inisection, "resultfile")
 
-    samples = samplesperCycle * cycles              # total number of samples averaged
-    sampleTime = reportTime/samplesperCycle         # time [s] between samples
-    cycleTime = samples * sampleTime                # time [s] per cycle
+    samples         = samplesperCycle * cycles          # total number of samples averaged
+    sampleTime      = reportTime/samplesperCycle        # time [s] between samples
+    cycleTime       = samples * sampleTime              # time [s] per cycle
 
-    data = []                                       # array for holding sampledata
+    data            = []                                # array for holding sampledata
 
     while True:
       try:
-        startTime = time.time()
+        startTime   = time.time()
 
-        result = do_work().split(',')
+        result      = do_work().split(',')
 
-        data = map(int, result)
+        data        = map(int, result)
         syslog_trace("Data     : {0}".format(data),   False, DEBUG)
 
         # report sample average
         if (startTime % reportTime < sampleTime):
-          averages = data
+          averages  = data
           #averages = sum(data[:]) / len(data)
           syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
 
-        waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
@@ -76,7 +76,7 @@ def wc(filename):
 
 def do_work():
   # 3 #datapoints gathered here
-  kernlog=messlog=syslog=0
+  kernlog = messlog = syslog = 0
 
   if IS_JOURNALD:
     # -p, --priority=
@@ -98,11 +98,11 @@ def do_work():
 
 def do_report(result, flock, fdata):
   # Get the time and date in human-readable form and UN*X-epoch...
-  outDate = time.strftime('%Y-%m-%dT%H:%M:%S')
-  outEpoch = int(time.strftime('%s'))
+  outDate   = time.strftime('%Y-%m-%dT%H:%M:%S')
+  outEpoch  = int(time.strftime('%s'))
   # round to current minute to ease database JOINs
-  outEpoch = outEpoch - (outEpoch % 60)
-  result = ', '.join(map(str, result))
+  outEpoch  = outEpoch - (outEpoch % 60)
+  result    = ', '.join(map(str, result))
   lock(flock)
   with open(fdata, 'a') as f:
     f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, result) )
