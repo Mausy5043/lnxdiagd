@@ -15,6 +15,7 @@ from libdaemon import Daemon
 import ConfigParser
 import MySQLdb as mdb
 
+
 # constants
 DEBUG       = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')

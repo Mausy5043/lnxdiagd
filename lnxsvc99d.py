@@ -13,6 +13,7 @@ import os, sys, platform, time, commands, subprocess
 from libdaemon import Daemon
 import ConfigParser
 
+
 # constants
 DEBUG       = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
