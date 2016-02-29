@@ -35,7 +35,7 @@ pushd "$HOME/lnxdiagd"
     fi
 
     # Detect SVC changes
-    if [[ "$f6l4" == "lnxsvc.py" ]]; then
+    if [[ "$f6l4" == "lnxsvcd.py" ]]; then
       echo "  ! Service daemon changed"
       eval "./"$fname" restart"
     fi
