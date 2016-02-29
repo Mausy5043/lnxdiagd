@@ -27,20 +27,20 @@ pushd "$HOME/lnxdiagd"
     echo ">   $fname was updated from GIT"
     f7l4="${fname:0:7}${fname:${#fname}-4}"
     f6l4="${fname:0:6}${fname:${#fname}-4}"
-		
-		# Detect DIAG changes
+
+    # Detect DIAG changes
     if [[ "$f7l4" == "lnxdiagd.py" ]]; then
       echo "  ! Diagnostic daemon changed"
       eval "./"$fname" restart"
     fi
-		
-		# Detect SVC changes
+
+    # Detect SVC changes
     if [[ "$f6l4" == "lnxsvc.py" ]]; then
-      echo "  ! Diagnostic service daemon changed"
+      echo "  ! Service daemon changed"
       eval "./"$fname" restart"
     fi
-		
-		# LIBDAEMON.PY changed
+
+    # LIBDAEMON.PY changed
     if [[ "$fname" == "libdaemon.py" ]]; then
       echo "  ! Diagnostic library changed"
       echo "  o Restarting all diagnostic daemons"
@@ -54,8 +54,8 @@ pushd "$HOME/lnxdiagd"
         eval "./lnxsvc"$daemon"d.py restart"
       done
     fi
-		
-		#CONFIG.INI changed
+
+    #CONFIG.INI changed
     if [[ "$fname" == "config.ini" ]]; then
       echo "  ! Configuration file changed"
       echo "  o Restarting all diagnostic daemons"
@@ -70,8 +70,8 @@ pushd "$HOME/lnxdiagd"
       done
     fi
   done
-	
-	# Check if DIAG daemons are running
+
+  # Check if DIAG daemons are running
   for daemon in $diaglist; do
     if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
       if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
@@ -86,8 +86,8 @@ pushd "$HOME/lnxdiagd"
       eval "./lnxdiag"$daemon"d.py start"
     fi
   done
-	
-	# Check if SVC daemons are running
+
+  # Check if SVC daemons are running
   for daemon in $srvclist; do
     if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
       if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
@@ -103,7 +103,7 @@ pushd "$HOME/lnxdiagd"
     fi
   done
 
-	# Do some host specific stuff
+  # Do some host specific stuff
   case "$HOSTNAME" in
     bbone )   echo "BeagleBone Black"
               ;;
