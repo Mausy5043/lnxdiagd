@@ -15,14 +15,14 @@ import ConfigParser
 
 DEBUG = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
-leaf = os.path.realpath(__file__).split('/')[-2]
+LEAF = os.path.realpath(__file__).split('/')[-2]
 
 class MyDaemon(Daemon):
   def run(self):
     iniconf = ConfigParser.ConfigParser()
     inisection = "98"
     home = os.path.expanduser('~')
-    s = iniconf.read(home + '/' + leaf + '/config.ini')
+    s = iniconf.read(home + '/' + LEAF + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
@@ -83,17 +83,17 @@ def do_mv_data(rpath):
   while (count_internal_locks > 0):
     time.sleep(1)
     count_internal_locks=0
-    for fname in glob.glob(r'/tmp/' + leaf + '/*.lock'):
+    for fname in glob.glob(r'/tmp/' + LEAF + '/*.lock'):
       count_internal_locks += 1
     syslog_trace("...{0} internal locks exist".format(count_internal_locks), False, DEBUG)
 
-  for fname in glob.glob(r'/tmp/' + leaf + '/*.csv'):
+  for fname in glob.glob(r'/tmp/' + LEAF + '/*.csv'):
     if os.path.isfile(clientlock) and not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
       syslog_trace("...moving data {0}".format(fname), False, DEBUG)
       #shutil.move(fname, rpath)
       shutil.move(fname, fname+".DEAD")
 
-  for fname in glob.glob(r'/tmp/' + leaf + '/*.png'):
+  for fname in glob.glob(r'/tmp/' + LEAF + '/*.png'):
     if os.path.isfile(clientlock) and not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
       syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
       #shutil.move(fname, rpath)
@@ -119,7 +119,7 @@ def syslog_trace(trace, logerr, out2console):
       print line
       
 if __name__ == "__main__":
-  daemon = MyDaemon('/tmp/' + leaf + '/98.pid')
+  daemon = MyDaemon('/tmp/' + LEAF + '/98.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()

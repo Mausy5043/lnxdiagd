@@ -15,14 +15,14 @@ import ConfigParser
 
 DEBUG = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
-leaf = os.path.realpath(__file__).split('/')[-2]
+LEAF = os.path.realpath(__file__).split('/')[-2]
 
 class MyDaemon(Daemon):
   def run(self):
     iniconf = ConfigParser.ConfigParser()
     inisection = "99"
     home = os.path.expanduser('~')
-    s = iniconf.read(home + '/' + leaf + '/config.ini')
+    s = iniconf.read(home + '/' + LEAF + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
@@ -146,7 +146,7 @@ def syslog_trace(trace, logerr, out2console):
       print line
       
 if __name__ == "__main__":
-  daemon = MyDaemon('/tmp/' + leaf + '/99.pid')
+  daemon = MyDaemon('/tmp/' + LEAF + '/99.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()

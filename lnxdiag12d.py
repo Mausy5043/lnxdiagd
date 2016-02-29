@@ -15,14 +15,15 @@ from libdaemon import Daemon
 
 DEBUG = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
-leaf = os.path.realpath(__file__).split('/')[-2]
+LEAF = os.path.realpath(__file__).split('/')[-2]
+NODE = platform.node()
 
 class MyDaemon(Daemon):
   def run(self):
     iniconf = ConfigParser.ConfigParser()
     inisection = "12"
     home = os.path.expanduser('~')
-    s = iniconf.read(home + '/' + leaf + '/config.ini')
+    s = iniconf.read(home + '/' + LEAF + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime = iniconf.getint(inisection, "reporttime")
@@ -97,11 +98,9 @@ def do_report(result, flock, fdata):
   # round to current minute to ease database JOINs
   outEpoch = outEpoch - (outEpoch % 60)
   result = ', '.join(map(str, result))
-  #flock = '/tmp/' + leaf + '/12.lock'
   lock(flock)
-  #f = open('/tmp/' + leaf + '/12-load-cpu.csv', 'a')
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}\n'.format(outDate, outEpoch, result) )
+    f.write('{0}, {1}\n'.format(outDate, outEpoch, NODE, result) )
   unlock(flock)
 
 def lock(fname):
@@ -121,7 +120,7 @@ def syslog_trace(trace, logerr, out2console):
       print line
 
 if __name__ == "__main__":
-  daemon = MyDaemon('/tmp/' + leaf + '/12.pid')
+  daemon = MyDaemon('/tmp/' + LEAF + '/12.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()
