@@ -10,7 +10,7 @@
 # uses moving averages
 
 import syslog, traceback
-import os, sys, time, math, commands, ConfigParser
+import os, sys, time, math, ConfigParser
 from libdaemon import Daemon
 
 # constants
@@ -84,7 +84,7 @@ def do_work():
     outHistLoad = f.read().strip('\n').replace(" ",", ").replace("/",", ")
 
   # 5 #datapoints gathered here
-  outCpu        = commands.getoutput("vmstat 1 2").splitlines()[3].split()
+  outCpu        = subprocess.Popen(["vmstat", "1", "2"], stdout=subprocess.PIPE).stdout.read().splitlines()[3].split()
   outCpuUS      = outCpu[12]
   outCpuSY      = outCpu[13]
   outCpuID      = outCpu[14]
