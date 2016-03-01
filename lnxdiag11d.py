@@ -86,10 +86,10 @@ def do_work(fdev):
     Tcpu    = float(f.read().strip('\n'))/1000
   if Tcpu > 75.000:
     # can't believe my sensors. Probably a glitch. Wait a while then measure again
+    syslog_trace("Tcpu (HIGH): {0}".format(Tcpu), syslog.LOG_WARN, DEBUG)
     time.sleep(7)
     with open(fdev,'r') as f:
       Tcpu  = float(f.read().strip('\n'))/1000
-      Tcpu  = float(Tcpu) + 0.1
   return Tcpu
 
 def do_report(result, flock, fdata):
