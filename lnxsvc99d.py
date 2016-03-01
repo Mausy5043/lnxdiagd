@@ -9,7 +9,7 @@
 # daemon99.py creates an XML-file on the server.
 
 import syslog, traceback
-import os, sys, platform, time, commands, subprocess
+import os, sys, platform, time, subprocess
 from libdaemon import Daemon
 import ConfigParser
 
@@ -78,9 +78,9 @@ def do_xml(wpath):
   with open(fi,'r') as f:
     lnxdiagdbranch  = f.read().strip('\n')
 
-  uptime            = commands.getoutput("uptime")
-  dfh               = commands.getoutput("df -h")
-  freeh             = commands.getoutput("free -h")
+  uptime            = subprocess.Popen(["uptime"],      stdout=subprocess.PIPE).stdout.read()
+  dfh               = subprocess.Popen(["df", "-h"],    stdout=subprocess.PIPE).stdout.read()
+  freeh             = subprocess.Popen(["free", "-h"],  stdout=subprocess.PIPE).stdout.read()
   p1                = subprocess.Popen(["ps", "-e", "-o", "pcpu,args"],           stdout=subprocess.PIPE)
   p2                = subprocess.Popen(["cut", "-c", "-132"],   stdin=p1.stdout,  stdout=subprocess.PIPE)
   p3                = subprocess.Popen(["awk", "NR>2"],         stdin=p2.stdout,  stdout=subprocess.PIPE)
