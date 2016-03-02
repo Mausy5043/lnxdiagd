@@ -10,7 +10,7 @@
 # uses moving averages
 
 import syslog, traceback
-import os, sys, time, math, ConfigParser
+import os, sys, time, math, ConfigParser, subprocess
 from libdaemon import Daemon
 
 # constants
