@@ -8,7 +8,7 @@
 
 USE domotica;
 
-DROP TABLE IF EXISTS sysload;
+DROP TABLE IF EXISTS systemp;
 
 CREATE TABLE `systemp` (
   `sample_time`   datetime,
