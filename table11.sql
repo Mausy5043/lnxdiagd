@@ -11,10 +11,10 @@ USE domotica;
 DROP TABLE IF EXISTS sysload;
 
 CREATE TABLE `systemp` (
-  `sample_time`  datetime,
-  `sample_epoch` int(11) unsigned,
-  `host`         varchar(24),
-  `temperature`  decimal(6,3),
+  `sample_time`   datetime,
+  `sample_epoch`  int(11) unsigned,
+  `host`          varchar(24),
+  `temperature`   decimal(6,3),
   PRIMARY KEY (`sample_time`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
