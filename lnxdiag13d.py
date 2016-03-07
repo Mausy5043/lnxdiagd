@@ -3,8 +3,14 @@
 # daemon13.py measures the network traffic.
 # These are all counters, therefore no averaging is needed.
 
-import syslog, traceback
-import os, sys, time, math, ConfigParser
+import ConfigParser
+import math
+import os
+import sys
+import syslog
+import time
+import traceback
+
 from libdaemon import Daemon
 
 # constants
@@ -41,17 +47,17 @@ class MyDaemon(Daemon):
         result      = do_work().split(',')
 
         data        = map(int, result)
-        syslog_trace("Data     : {0}".format(data),   False, DEBUG)
+        syslog_trace("Data     : {0}".format(data), False, DEBUG)
 
         # report sample average
         if (startTime % reportTime < sampleTime):
           averages  = data
-          #averages = sum(data[:]) / len(data)
-          #if DEBUG: print averages
-          syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
+          # averages = sum(data[:]) / len(data)
+          # if DEBUG: print averages
+          syslog_trace("Averages : {0}".format(averages), False, DEBUG)
           do_report(averages, flock, fdata)
 
-        waitTime    = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
@@ -66,7 +72,7 @@ class MyDaemon(Daemon):
 def cat(filename):
   ret = ""
   if os.path.isfile(filename):
-    with open(filename,'r') as f:
+    with open(filename, 'r') as f:
       ret = f.read().strip('\n')
   return ret
 
@@ -80,8 +86,8 @@ def do_work():
   loIn  = 0
   loOut = 0
 
-  list  = cat("/proc/net/dev").replace(":"," ").splitlines()
-  for line in range(2,len(list)):
+  list  = cat("/proc/net/dev").replace(":", " ").splitlines()
+  for line in range(2, len(list)):
     device = list[line].split()[0]
     if device == "lo":
       loIn    = int(list[line].split()[1])
@@ -107,7 +113,7 @@ def do_report(result, flock, fdata):
   result    = ', '.join(map(str, result))
   lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, result) )
+    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, result))
   unlock(flock)
 
 def lock(fname):
@@ -122,7 +128,7 @@ def syslog_trace(trace, logerr, out2console):
   log_lines = trace.split('\n')
   for line in log_lines:
     if line and logerr:
-      syslog.syslog(logerr,line)
+      syslog.syslog(logerr, line)
     if line and out2console:
       print line
 
