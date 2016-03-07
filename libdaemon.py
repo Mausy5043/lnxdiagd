@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
-import sys, os, time, atexit, syslog
+import sys
+import os
+import time
+import atexit
+import syslog
 from signal import SIGTERM
 
 class Daemon:
@@ -9,7 +13,10 @@ class Daemon:
 
   Usage: subclass the Daemon class and override the run() method
   """
-  def __init__(self, pidfile, stdin='/dev/null', stdout='/dev/null', stderr='/dev/null'):
+  def __init__(self, pidfile,
+               stdin='/dev/null',
+               stdout='/dev/null',
+               stderr='/dev/null'):
     self.stdin = stdin
     self.stdout = stdout
     self.stderr = stderr
@@ -58,7 +65,7 @@ class Daemon:
     # write pidfile
     atexit.register(self.delpid)
     pid = str(os.getpid())
-    open(self.pidfile,'w+').write("{0!s}\n".format(pid))
+    open(self.pidfile, 'w+').write("{0!s}\n".format(pid))
 
   def delpid(self):
     os.remove(self.pidfile)
@@ -69,7 +76,7 @@ class Daemon:
     """
     # Check for a pidfile to see if the daemon already runs
     try:
-      with open(self.pidfile,'r') as pf:
+      with open(self.pidfile, 'r') as pf:
         pid = int(pf.read().strip())
     except IOError:
       pid = None
@@ -82,7 +89,7 @@ class Daemon:
     # Start the daemon
     message = "Started process. \n"
     sys.stderr.write(message)
-    syslog.syslog(syslog.LOG_INFO,message)
+    syslog.syslog(syslog.LOG_INFO, message)
     self.daemonize()
     self.run()
 
@@ -92,7 +99,7 @@ class Daemon:
     """
     # Get the pid from the pidfile
     try:
-      with open(self.pidfile,'r') as pf:
+      with open(self.pidfile, 'r') as pf:
         pid = int(pf.read().strip())
     except IOError:
       pid = None
@@ -100,12 +107,12 @@ class Daemon:
     if not pid:
       message = "pidfile %s does not exist. Daemon not running?\n"
       sys.stderr.write(message % self.pidfile)
-      return # not an error in a restart
+      return  # not an error in a restart
 
     # Try killing the daemon process
     try:
       message = "Stopped process. \n"
-      syslog.syslog(syslog.LOG_INFO,message)
+      syslog.syslog(syslog.LOG_INFO, message)
       sys.stderr.write(message)
 
       while 1:
@@ -129,6 +136,7 @@ class Daemon:
 
   def run(self):
     """
-    You should override this method when you subclass Daemon. It will be called after the process has been
+    You should override this method when you subclass Daemon.
+    It will be called after the process has been
     daemonized by start() or restart().
     """
