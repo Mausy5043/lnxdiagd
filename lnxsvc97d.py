@@ -1,11 +1,5 @@
 #!/usr/bin/env python
 
-# Based on previous work by
-# Charles Menguy (see: http://stackoverflow.com/questions/10217067/implementing-a-full-python-unix-style-daemon-process)
-# and Sander Marechal (see: http://www.jejik.com/articles/2007/02/a_simple_unix_linux_daemon_in_python/)
-
-# Adapted by M.Hendrix [2015,2016]
-
 # daemon97.py pushes data to the MySQL-server.
 # daemon23 support
 
