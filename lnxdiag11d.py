@@ -3,8 +3,14 @@
 # daemon11.py measures the CPU temperature.
 # uses moving averages
 
-import syslog, traceback
-import os, sys, time, math, ConfigParser
+import ConfigParser
+import math
+import os
+import sys
+import syslog
+import time
+import traceback
+
 from libdaemon import Daemon
 
 # constants
@@ -36,7 +42,7 @@ class MyDaemon(Daemon):
 
     try:
       hwdevice      = iniconf.get(inisection, NODE+".hwdevice")
-    except ConfigParser.NoOptionError as e:  #no hwdevice
+    except ConfigParser.NoOptionError as e:  # no hwdevice
       syslog_trace("** {0}".format(e.message), False, DEBUG)
       sys.exit(0)
     if not os.path.isfile(hwdevice):
@@ -61,7 +67,7 @@ class MyDaemon(Daemon):
           syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
 
-        waitTime    = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
@@ -76,13 +82,13 @@ class MyDaemon(Daemon):
 def do_work(fdev):
   Tcpu      = "NaN"
   # Read the CPU temperature
-  with open(fdev,'r') as f:
+  with open(fdev, 'r') as f:
     Tcpu    = float(f.read().strip('\n'))/1000
   if Tcpu > 75.000:
     # can't believe my sensors. Probably a glitch. Wait a while then measure again
     syslog_trace("Tcpu (HIGH): {0}".format(Tcpu), syslog.LOG_WARN, DEBUG)
     time.sleep(7)
-    with open(fdev,'r') as f:
+    with open(fdev, 'r') as f:
       Tcpu  = float(f.read().strip('\n'))/1000
   return Tcpu
 
@@ -94,7 +100,7 @@ def do_report(result, flock, fdata):
   outEpoch  = outEpoch - (outEpoch % 60)
   lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, float(result)) )
+    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, float(result)))
   unlock(flock)
 
 def lock(fname):
@@ -109,7 +115,7 @@ def syslog_trace(trace, logerr, out2console):
   log_lines = trace.split('\n')
   for line in log_lines:
     if line and logerr:
-      syslog.syslog(logerr,line)
+      syslog.syslog(logerr, line)
     if line and out2console:
       print line
 
