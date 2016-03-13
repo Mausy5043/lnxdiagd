@@ -93,7 +93,7 @@ def do_writesample(cnsql, cmd, sample):
   except mdb.IntegrityError as e:
     syslog_trace("e.message : {0}".format(e.message), syslog.LOG_ALERT, DEBUG)
     syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_INFO,  DEBUG)
-    if cursql.open:
+    if cursql:
       cursql.close()
       syslog_trace(" *** Closed MySQL connection in do_writesample() ***", syslog.LOG_ALERT, DEBUG)
       syslog_trace(" Not added to MySQLdb: {0}".format(dat), syslog.LOG_DEBUG, DEBUG)
