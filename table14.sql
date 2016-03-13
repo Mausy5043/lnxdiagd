@@ -8,20 +8,20 @@
 
 USE domotica;
 
-DROP TABLE IF EXISTS sysnet;
+DROP TABLE IF EXISTS sysmem;
 
-CREATE TABLE `sysnet` (
+CREATE TABLE `sysmem` (
   `sample_time`   datetime,
   `sample_epoch`  int(11) unsigned,
   `host`          varchar(24),
-  outMemTotal, outMemUsed, outMemBuf, outMemCache, outMemFree, outMemSwapTotal, outMemSwapFree, outMemSwapUsed)
-
-  `loIn`          int(11),
-  `loOut`         int(11),
-  `etIn`          int(11),
-  `etOut`         int(11),
-  `wlIn`          int(11),
-  `wlOut`         int(11),
+  `total`         int(11) unsigned,
+  `used`          int(11) unsigned,
+  `buffers`       int(11) unsigned,
+  `cached`        int(11) unsigned,
+  `free`          int(11) unsigned,
+  `swaptotal`     int(11) unsigned,
+  `swapfree`      int(11) unsigned,
+  `swapused`      int(11) unsigned,
   PRIMARY KEY (`sample_time`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 

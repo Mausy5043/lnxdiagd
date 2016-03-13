@@ -3,8 +3,14 @@
 # daemon14.py measures the memory usage.
 # These are all counters, therefore no averaging is needed.
 
-import syslog, traceback
-import os, sys, time, math, ConfigParser
+import ConfigParser
+# import math
+import os
+import sys
+import syslog
+import time
+import traceback
+
 from libdaemon import Daemon
 
 # constants
@@ -28,9 +34,9 @@ class MyDaemon(Daemon):
     flock           = iniconf.get(inisection, "lockfile")
     fdata           = iniconf.get(inisection, "resultfile")
 
-    samples         = samplesperCycle * cycles          # total number of samples averaged
+    # samples         = samplesperCycle * cycles          # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle        # time [s] between samples
-    cycleTime       = samples * sampleTime              # time [s] per cycle
+    # cycleTime       = samples * sampleTime              # time [s] per cycle
 
     data            = []                                # array for holding sampledata
 
@@ -46,11 +52,11 @@ class MyDaemon(Daemon):
         # report sample average
         if (startTime % reportTime < sampleTime):
           averages  = data
-          #averages = sum(data[:]) / len(data)
+          # averages = sum(data[:]) / len(data)
           syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
 
-        waitTime    = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
@@ -65,7 +71,7 @@ class MyDaemon(Daemon):
 def cat(filename):
   ret = ""
   if os.path.isfile(filename):
-    with open(filename,'r') as f:
+    with open(filename, 'r') as f:
       ret = f.read().strip('\n')
   return ret
 
@@ -81,7 +87,7 @@ def do_work():
   # ref: http://serverfault.com/questions/85470/meaning-of-the-buffers-cache-line-in-the-output-of-free
 
   out = cat("/proc/meminfo").splitlines()
-  for line in range(0,len(out)-1):
+  for line in range(0, len(out)-1):
     mem = out[line].split()
     if mem[0] == 'MemFree:':
       outMemFree = int(mem[1])
@@ -110,7 +116,7 @@ def do_report(result, flock, fdata):
   result      = ', '.join(map(str, result))
   lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, result) )
+    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, result))
   unlock(flock)
 
 def lock(fname):
@@ -125,7 +131,7 @@ def syslog_trace(trace, logerr, out2console):
   log_lines = trace.split('\n')
   for line in log_lines:
     if line and logerr:
-      syslog.syslog(logerr,line)
+      syslog.syslog(logerr, line)
     if line and out2console:
       print line
 
