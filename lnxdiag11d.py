@@ -4,7 +4,7 @@
 # uses moving averages
 
 import ConfigParser
-import math
+# import math
 import os
 import sys
 import syslog
@@ -36,7 +36,7 @@ class MyDaemon(Daemon):
 
     samples         = samplesperCycle * cycles      # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle    # time [s] between samples
-    cycleTime       = samples * sampleTime          # time [s] per cycle
+    # cycleTime       = samples * sampleTime          # time [s] per cycle
 
     data            = []                            # array for holding sampledata
 

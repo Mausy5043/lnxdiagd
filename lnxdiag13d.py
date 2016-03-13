@@ -4,7 +4,7 @@
 # These are all counters, therefore no averaging is needed.
 
 import ConfigParser
-import math
+# import math
 import os
 import sys
 import syslog
@@ -29,14 +29,14 @@ class MyDaemon(Daemon):
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime      = iniconf.getint(inisection, "reporttime")
-    cycles          = iniconf.getint(inisection, "cycles")
+    # cycles          = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
     fdata           = iniconf.get(inisection, "resultfile")
 
-    samples         = samplesperCycle * cycles          # total number of samples averaged
+    # samples         = samplesperCycle * cycles          # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle        # time [s] between samples
-    cycleTime       = samples * sampleTime              # time [s] per cycle
+    # cycleTime       = samples * sampleTime              # time [s] per cycle
 
     data            = []                                # array for holding sampledata
 

@@ -3,8 +3,15 @@
 # daemon12.py measures the CPU load.
 # uses moving averages
 
-import syslog, traceback
-import os, sys, time, math, ConfigParser, subprocess
+import ConfigParser
+# import math
+import os
+import subprocess
+import sys
+import syslog
+import time
+import traceback
+
 from libdaemon import Daemon
 
 # constants
@@ -30,7 +37,7 @@ class MyDaemon(Daemon):
 
     samples         = samplesperCycle * cycles           # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle         # time [s] between samples
-    cycleTime       = samples * sampleTime               # time [s] per cycle
+    # cycleTime       = samples * sampleTime               # time [s] per cycle
 
     data            = []                                 # array for holding sampledata
 
@@ -48,10 +55,10 @@ class MyDaemon(Daemon):
 
         # report sample average
         if (startTime % reportTime < sampleTime):
-          somma       = map(sum,zip(*data))
+          somma       = map(sum, zip(*data))
           # not all entries should be float
           # 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
-          averages    = [format(s / len(data), '.3f') for s in somma]
+          averages    = [format(sm / len(data), '.3f') for sm in somma]
           # Report the last measurement for these parameters:
           averages[3] = int(data[-1][3])
           averages[4] = int(data[-1][4])
@@ -59,7 +66,7 @@ class MyDaemon(Daemon):
           syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
 
-        waitTime      = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime      = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
@@ -74,8 +81,8 @@ class MyDaemon(Daemon):
 def do_work():
   # 6 #datapoints gathered here
   fi            = "/proc/loadavg"
-  with open(fi,'r') as f:
-    outHistLoad = f.read().strip('\n').replace(" ",", ").replace("/",", ")
+  with open(fi, 'r') as f:
+    outHistLoad = f.read().strip('\n').replace(" ", ", ").replace("/", ", ")
 
   # 5 #datapoints gathered here
   outCpu        = subprocess.Popen(["vmstat", "1", "2"], stdout=subprocess.PIPE).stdout.read().splitlines()[3].split()
@@ -96,7 +103,7 @@ def do_report(result, flock, fdata):
   result        = ', '.join(map(str, result))
   lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, result) )
+    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, result))
   unlock(flock)
 
 def lock(fname):
@@ -111,7 +118,7 @@ def syslog_trace(trace, logerr, out2console):
   log_lines = trace.split('\n')
   for line in log_lines:
     if line and logerr:
-      syslog.syslog(logerr,line)
+      syslog.syslog(logerr, line)
     if line and out2console:
       print line
 

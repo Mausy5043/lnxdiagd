@@ -11,11 +11,15 @@ USE domotica;
 DROP TABLE IF EXISTS sysload;
 
 CREATE TABLE `sysnet` (
-  `sample_time`  datetime,
-  `sample_epoch` int(11) unsigned,
-  `host`         varchar(24),
-  # loIn, loOut, etIn, etOut, wlIn, wlOut
-  `loIn`         decimal(6,3),
+  `sample_time`   datetime,
+  `sample_epoch`  int(11) unsigned,
+  `host`          varchar(24),
+  `loIn`          decimal(6,3),
+  `loOut`         decimal(6,3),
+  `etIn`          decimal(6,3),
+  `etOut`         decimal(6,3),
+  `wlIn`          decimal(6,3),
+  `wlOut`         decimal(6,3),
   PRIMARY KEY (`sample_time`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
