@@ -14,12 +14,12 @@ CREATE TABLE `sysnet` (
   `sample_time`   datetime,
   `sample_epoch`  int(11) unsigned,
   `host`          varchar(24),
-  `loIn`          decimal(6,3),
-  `loOut`         decimal(6,3),
-  `etIn`          decimal(6,3),
-  `etOut`         decimal(6,3),
-  `wlIn`          decimal(6,3),
-  `wlOut`         decimal(6,3),
+  `loIn`          int(11),
+  `loOut`         int(11),
+  `etIn`          int(11),
+  `etOut`         int(11),
+  `wlIn`          int(11),
+  `wlOut`         int(11),
   PRIMARY KEY (`sample_time`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
