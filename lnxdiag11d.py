@@ -63,7 +63,7 @@ class MyDaemon(Daemon):
 
         # report sample average
         if (startTime % reportTime < sampleTime):
-          averages  = sum(data[:]) / len(data)
+          averages  = format(sum(data[:]) / len(data), '.3f')
           syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
 
