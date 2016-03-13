@@ -2,9 +2,9 @@
 # create table for system network traffic
 # [ ] systemp = create table for system CPU temperatures
 # [ ] sysload = create table for system CPU load
-# [x] sysnet  = create table for system networkload
+# [ ] sysnet  = create table for system networkload
 # [ ] sysdskt = create table for system disk temperatures
-# [ ] sysmem  = create table for system memory usage
+# [x] sysmem  = create table for system memory usage
 
 USE domotica;
 
@@ -14,12 +14,14 @@ CREATE TABLE `sysnet` (
   `sample_time`   datetime,
   `sample_epoch`  int(11) unsigned,
   `host`          varchar(24),
-  `loIn`          int(11) unsigned,
-  `loOut`         int(11) unsigned,
-  `etIn`          int(11) unsigned,
-  `etOut`         int(11) unsigned,
-  `wlIn`          int(11) unsigned,
-  `wlOut`         int(11) unsigned,
+  outMemTotal, outMemUsed, outMemBuf, outMemCache, outMemFree, outMemSwapTotal, outMemSwapFree, outMemSwapUsed)
+
+  `loIn`          int(11),
+  `loOut`         int(11),
+  `etIn`          int(11),
+  `etOut`         int(11),
+  `wlIn`          int(11),
+  `wlOut`         int(11),
   PRIMARY KEY (`sample_time`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
