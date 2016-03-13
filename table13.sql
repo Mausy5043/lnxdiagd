@@ -8,7 +8,7 @@
 
 USE domotica;
 
-DROP TABLE IF EXISTS sysload;
+DROP TABLE IF EXISTS sysnet;
 
 CREATE TABLE `sysnet` (
   `sample_time`   datetime,
