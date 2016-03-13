@@ -3,9 +3,15 @@
 # daemon15.py measures the size of selected logfiles.
 # These are all counters, therefore no averaging is needed.
 
-import syslog, traceback
-import os, sys, time, math, commands, ConfigParser
-from subprocess import check_output
+import ConfigParser
+# import math
+import os
+import sys
+import syslog
+import time
+import traceback
+import subprocess
+
 from libdaemon import Daemon
 
 # constants
@@ -26,14 +32,14 @@ class MyDaemon(Daemon):
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime      = iniconf.getint(inisection, "reporttime")
-    cycles          = iniconf.getint(inisection, "cycles")
+    # cycles          = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
     fdata           = iniconf.get(inisection, "resultfile")
 
-    samples         = samplesperCycle * cycles          # total number of samples averaged
+    # samples         = samplesperCycle * cycles          # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle        # time [s] between samples
-    cycleTime       = samples * sampleTime              # time [s] per cycle
+    # cycleTime       = samples * sampleTime              # time [s] per cycle
 
     data            = []                                # array for holding sampledata
 
@@ -49,11 +55,11 @@ class MyDaemon(Daemon):
         # report sample average
         if (startTime % reportTime < sampleTime):
           averages  = data
-          #averages = sum(data[:]) / len(data)
+          # averages = sum(data[:]) / len(data)
           syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
 
-        waitTime    = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
@@ -66,11 +72,11 @@ class MyDaemon(Daemon):
         raise
 
 def wc(filename):
-    return int(check_output(["wc", "-l", filename]).split()[0])
+    return int(subprocess.check_output(["wc", "-l", filename]).split()[0])
 
 def do_work():
-  # 3 #datapoints gathered here
-  kernlog = messlog = syslog = 0
+  # 8 #datapoints gathered here
+  p0 = p1 = p2 = p3 = p4 = p5 = p6 = p7 = 0
 
   if IS_JOURNALD:
     # -p, --priority=
@@ -81,14 +87,24 @@ def do_work():
     #       level or a lower (hence more important) log level are shown. If a range is specified, all messages within the range
     #       are shown, including both the start and the end value of the range. This will add "PRIORITY=" matches for the
     #       specified priorities.
-    critlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 0..3 |wc -l").split()[0]
-    warnlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 4 |wc -l").split()[0]
-    syslog  = commands.getoutput("journalctl --since=00:00:00 --no-pager |wc -l").split()[0]
+    p0 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "0..0"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p1 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "1..1"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p2 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "2..2"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p3 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "3..3"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p4 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "4..4"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p5 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "5..5"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p6 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "6..6"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p7 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "7..7"], stdout=subprocess.PIPE).stdout.read().splitlines())
   else:
-    critlog = wc("/var/log/0emerg.log") + wc("/var/log/1alert.log") + wc("/var/log/2critical.log") + wc("/var/log/3err.log")
-    warnlog = wc("/var/log/4warn.log")
-    syslog  = wc("/var/log/syslog")
-  return '{0}, {1}, {2}'.format(critlog, warnlog, syslog)
+    p0 = wc("/var/log/0emerg.log")
+    p1 = wc("/var/log/1alert.log")
+    p2 = wc("/var/log/2critical.log")
+    p3 = wc("/var/log/3err.log")
+    p4 = wc("/var/log/4warn.log")
+    p5 = wc("/var/log/5notice.log")
+    p6 = wc("/var/log/6info.log")
+    p7 = wc("/var/log/7debug.log")
+  return '{0}, {1}, {2}'.format(p0, p1, p2, p3, p4, p5, p6, p7)
 
 def do_report(result, flock, fdata):
   # Get the time and date in human-readable form and UN*X-epoch...
@@ -99,7 +115,7 @@ def do_report(result, flock, fdata):
   result    = ', '.join(map(str, result))
   lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, result) )
+    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, result))
   unlock(flock)
 
 def lock(fname):
@@ -114,7 +130,7 @@ def syslog_trace(trace, logerr, out2console):
   log_lines = trace.split('\n')
   for line in log_lines:
     if line and logerr:
-      syslog.syslog(logerr,line)
+      syslog.syslog(logerr, line)
     if line and out2console:
       print line
 
