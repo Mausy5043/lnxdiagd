@@ -12,7 +12,7 @@ if [[ ! -d /tmp/lnxdiagd ]]; then
   mkdir -p /tmp/lnxdiagd
 fi
 pushd "$HOME/lnxdiagd"
-  source ./includes.sh
+  source ./includes
   git fetch origin
   # Check which files have changed
   DIFFLIST=$(git --no-pager diff --name-only "$branch..origin/$branch")

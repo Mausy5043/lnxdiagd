@@ -10,7 +10,7 @@ HOSTNAME=$(cat /etc/hostname)
 echo -n "Started UNinstalling LNXDIAGD on "; date
 
 pushd "$HOME/lnxdiagd"
- source ./includes.sh
+ source ./includes
 
 
   sudo rm /etc/cron.d/lnxdiagd
