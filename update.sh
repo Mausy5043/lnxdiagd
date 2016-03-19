@@ -81,7 +81,7 @@ pushd "$HOME/lnxdiagd"
         eval "./lnxdiag"$daemon"d.py start"
       fi
     else
-      logger -p user.warn -t raspdiagd "Found daemon $daemon not running."
+      logger -p user.warn -t lnxdiagd "Found daemon $daemon not running."
         echo "  * Start DIAG "$daemon
       eval "./lnxdiag"$daemon"d.py start"
     fi
@@ -97,7 +97,7 @@ pushd "$HOME/lnxdiagd"
         eval "./lnxsvc"$daemon"d.py start"
       fi
     else
-      logger -p user.warn -t raspdiagd "Found daemon $daemon not running."
+      logger -p user.warn -t lnxdiagd "Found daemon $daemon not running."
         echo "  * Start SVC "$daemon
       eval "./lnxsvc"$daemon"d.py start"
     fi
