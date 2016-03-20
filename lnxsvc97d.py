@@ -3,11 +3,20 @@
 # daemon97.py pushes data to the MySQL-server.
 # daemon23 support
 
-import syslog, traceback
-import os, sys, shutil, glob, time, subprocess
-from libdaemon import Daemon
+
 import ConfigParser
+import glob
+# import math
 import MySQLdb as mdb
+import os
+import shutil
+# import subprocess
+import sys
+import syslog
+import time
+import traceback
+
+from libdaemon import Daemon
 
 # constants
 DEBUG       = False
@@ -18,9 +27,9 @@ NODE        = os.uname()[1]
 
 class MyDaemon(Daemon):
   def run(self):
-    try:              # Initialise MySQLdb
+    try:                 # Initialise MySQLdb
       consql    = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
-      if consql.open: # dB initialised succesfully -> get a cursor on the dB.
+      if consql.open:    # dB initialised succesfully -> get a cursor on the dB.
         cursql  = consql.cursor()
         cursql.execute("SELECT VERSION()")
         versql  = cursql.fetchone()
@@ -44,13 +53,13 @@ class MyDaemon(Daemon):
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime      = iniconf.getint(inisection, "reporttime")
-    cycles          = iniconf.getint(inisection, "cycles")
+    # cycles          = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
 
-    samples         = samplesperCycle * cycles              # total number of samples averaged
+    # samples         = samplesperCycle * cycles              # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle         # time [s] between samples
-    cycleTime       = samples * sampleTime                # time [s] per cycle
+    # cycleTime       = samples * sampleTime                # time [s] per cycle
 
     while True:
       try:
@@ -58,7 +67,7 @@ class MyDaemon(Daemon):
 
         do_sql_data(flock, iniconf, consql)
 
-        waitTime    = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
@@ -77,7 +86,7 @@ class MyDaemon(Daemon):
 def cat(filename):
   ret = ""
   if os.path.isfile(filename):
-    with open(filename,'r') as f:
+    with open(filename, 'r') as f:
       ret = f.read().strip('\n')
   return ret
 
@@ -116,41 +125,41 @@ def do_sql_data(flock, inicnfg, cnsql):
     for fname in glob.glob(r'/tmp/' + MYAPP + '/*.lock'):
       count_internal_locks += 1
     syslog_trace("{0} internal locks exist".format(count_internal_locks), False, DEBUG)
-  #endwhile
+  # endwhile
 
-  for inisect in inicnfg.sections(): # Check each section of the config.ini file
+  for inisect in inicnfg.sections():  # Check each section of the config.ini file
     errsql = False
     try:
-      ifile = inicnfg.get(inisect,"resultfile")
+      ifile = inicnfg.get(inisect, "resultfile")
       syslog_trace(" < {0}".format(ifile), False, DEBUG)
 
       try:
         sqlcmd = []
-        sqlcmd = inicnfg.get(inisect,"sqlcmd")
+        sqlcmd = inicnfg.get(inisect, "sqlcmd")
         syslog_trace("   {0}".format(sqlcmd), False, DEBUG)
 
         data = cat(ifile).splitlines()
         if data:
           for entry in range(0, len(data)):
             errsql = do_writesample(cnsql, sqlcmd, data[entry])
-          #endfor
-        #endif
-      except ConfigParser.NoOptionError as e:  #no sqlcmd
+          # endfor
+        # endif
+      except ConfigParser.NoOptionError as e:  # no sqlcmd
         syslog_trace("** {0}".format(e.message), False, DEBUG)
-    except ConfigParser.NoOptionError as e:  #no ifile
+    except ConfigParser.NoOptionError as e:  # no ifile
       syslog_trace("** {0}".format(e.message), False, DEBUG)
 
     try:
-      ofile = inicnfg.get(inisect,"rawfile")
+      ofile = inicnfg.get(inisect, "rawfile")
       syslog_trace(" > {0}".format(ofile), False, DEBUG)
-      if not errsql:                    # SQL-job was successful or non-existing
-        if os.path.isfile(ifile):       # IF resultfile exists
-          if not os.path.isfile(ofile): # AND rawfile does not exist
-            shutil.move(ifile, ofile)   # THEN move the file over
-    except ConfigParser.NoOptionError as e:  #no ofile
+      if not errsql:                     # SQL-job was successful or non-existing
+        if os.path.isfile(ifile):        # IF resultfile exists
+          if not os.path.isfile(ofile):  # AND rawfile does not exist
+            shutil.move(ifile, ofile)    # THEN move the file over
+    except ConfigParser.NoOptionError as e:  # no ofile
       syslog_trace("** {0}".format(e.message), False, DEBUG)
 
-  #endfor
+  # endfor
   unlock(flock)
 
 def lock(fname):
@@ -165,7 +174,7 @@ def syslog_trace(trace, logerr, out2console):
   log_lines = trace.split('\n')
   for line in log_lines:
     if line and logerr:
-      syslog.syslog(logerr,line)
+      syslog.syslog(logerr, line)
     if line and out2console:
       print line
 
