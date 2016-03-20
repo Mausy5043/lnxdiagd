@@ -14,8 +14,7 @@ CREATE TABLE `systemp` (
   `sample_time`   datetime,
   `sample_epoch`  int(11) unsigned,
   `host`          varchar(24),
-  `temperature`   decimal(6,3),
-  PRIMARY KEY (`sample_time`)
+  `temperature`   decimal(6,3)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
 # example to retrieve data:

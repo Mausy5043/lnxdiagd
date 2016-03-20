@@ -21,8 +21,7 @@ CREATE TABLE `sysmem` (
   `free`          int(11) unsigned,
   `swaptotal`     int(11) unsigned,
   `swapfree`      int(11) unsigned,
-  `swapused`      int(11) unsigned,
-  PRIMARY KEY (`sample_time`)
+  `swapused`      int(11) unsigned
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
 # example to retrieve data:

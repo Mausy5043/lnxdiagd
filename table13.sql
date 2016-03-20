@@ -19,8 +19,7 @@ CREATE TABLE `sysnet` (
   `etIn`          int(11) unsigned,
   `etOut`         int(11) unsigned,
   `wlIn`          int(11) unsigned,
-  `wlOut`         int(11) unsigned,
-  PRIMARY KEY (`sample_time`)
+  `wlOut`         int(11) unsigned
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
 # example to retrieve data:

@@ -24,8 +24,7 @@ CREATE TABLE `sysload` (
   `system`        decimal(6,3),
   `idle`          decimal(6,3),
   `waiting`       decimal(6,3),
-  `stolen`        decimal(6,3),
-  PRIMARY KEY (`sample_time`)
+  `stolen`        decimal(6,3)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
 # example to retrieve data:
