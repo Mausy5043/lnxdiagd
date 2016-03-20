@@ -3,7 +3,6 @@
 # daemon97.py pushes data to the MySQL-server.
 # daemon23 support
 
-
 import ConfigParser
 import glob
 # import math

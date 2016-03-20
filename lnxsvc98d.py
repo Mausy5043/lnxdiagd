@@ -2,10 +2,16 @@
 
 # daemon98.py uploads data to the server.
 
-import syslog, traceback
-import os, sys, shutil, glob, time, commands, subprocess
-from libdaemon import Daemon
 import ConfigParser
+import glob
+import os
+import shutil
+import sys
+import syslog
+import time
+import traceback
+
+from libdaemon import Daemon
 
 # constants
 DEBUG       = False
@@ -23,17 +29,17 @@ class MyDaemon(Daemon):
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime      = iniconf.getint(inisection, "reporttime")
-    cycles          = iniconf.getint(inisection, "cycles")
+    # cycles          = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
-    flock           = iniconf.get(inisection, "lockfile")
+    # flock           = iniconf.get(inisection, "lockfile")
 
-    samples         = samplesperCycle * cycles           # total number of samples averaged
+    # samples         = samplesperCycle * cycles           # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle         # time [s] between samples
-    cycleTime       = samples * sampleTime               # time [s] per cycle
+    # cycleTime       = samples * sampleTime               # time [s] per cycle
 
     mount_path      = '/mnt/share1/'
     remote_path     = mount_path + NODE
-    remote_lock     = remote_path + '/client.lock'
+    # remote_lock     = remote_path + '/client.lock'
     while True:
       try:
         startTime   = time.time()
@@ -41,7 +47,7 @@ class MyDaemon(Daemon):
         if os.path.ismount(mount_path):
           do_mv_data(remote_path)
 
-        waitTime    = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
@@ -86,13 +92,11 @@ def do_mv_data(rpath):
   for fname in glob.glob(r'/tmp/' + MYAPP + '/*.csv'):
     if os.path.isfile(clientlock) and not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
       syslog_trace("...moving data {0}".format(fname), False, DEBUG)
-      #shutil.move(fname, rpath)
       shutil.move(fname, fname+".DEAD")
 
   for fname in glob.glob(r'/tmp/' + MYAPP + '/*.png'):
     if os.path.isfile(clientlock) and not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
       syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
-      #shutil.move(fname, rpath)
       shutil.move(fname, fname+".DEAD")
 
   unlock(clientlock)
@@ -110,7 +114,7 @@ def syslog_trace(trace, logerr, out2console):
   log_lines = trace.split('\n')
   for line in log_lines:
     if line and logerr:
-      syslog.syslog(logerr,line)
+      syslog.syslog(logerr, line)
     if line and out2console:
       print line
 

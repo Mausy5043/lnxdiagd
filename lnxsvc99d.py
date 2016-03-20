@@ -2,10 +2,16 @@
 
 # daemon99.py creates an XML-file on the server.
 
-import syslog, traceback
-import os, sys, platform, time, subprocess
-from libdaemon import Daemon
 import ConfigParser
+import os
+import platform
+import subprocess
+import sys
+import syslog
+import time
+import traceback
+
+from libdaemon import Daemon
 
 # constants
 DEBUG       = False
@@ -23,17 +29,17 @@ class MyDaemon(Daemon):
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reportTime      = iniconf.getint(inisection, "reporttime")
-    cycles          = iniconf.getint(inisection, "cycles")
+    # cycles          = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
-    flock           = iniconf.get(inisection, "lockfile")
+    # flock           = iniconf.get(inisection, "lockfile")
 
-    samples         = samplesperCycle * cycles          # total number of samples averaged
+    # samples         = samplesperCycle * cycles          # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle        # time [s] between samples
-    cycleTime       = samples * sampleTime              # time [s] per cycle
+    # cycleTime       = samples * sampleTime              # time [s] per cycle
 
     mount_path      = '/mnt/share1/'
     remote_path     = mount_path + NODE
-    remote_lock     = remote_path + '/client.lock'
+    # remote_lock     = remote_path + '/client.lock'
 
     while True:
       try:
@@ -43,7 +49,7 @@ class MyDaemon(Daemon):
           # print 'dataspool is mounted'
           do_xml(remote_path)
 
-        waitTime    = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
           syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
@@ -56,20 +62,20 @@ class MyDaemon(Daemon):
         raise
 
 def do_xml(wpath):
-  home						  = os.path.expanduser('~')
+  home              = os.path.expanduser('~')
   uname             = os.uname()
   Tcpu              = "(no T-sensor)"
   if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
     fi = "/sys/class/hwmon/hwmon0/device/temp1_input"
-    with open(fi,'r') as f:
+    with open(fi, 'r') as f:
       Tcpu          = float(f.read().strip('\n'))/1000
 
   fi = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
-  with open(fi,'r') as f:
-    fcpu				    = float(f.read().strip('\n'))/1000
+  with open(fi, 'r') as f:
+    fcpu            = float(f.read().strip('\n'))/1000
 
   fi = home + "/.lnxdiagd.branch"
-  with open(fi,'r') as f:
+  with open(fi, 'r') as f:
     lnxdiagdbranch  = f.read().strip('\n')
 
   uptime            = subprocess.Popen(["uptime"],      stdout=subprocess.PIPE).stdout.read()
@@ -98,7 +104,7 @@ def do_xml(wpath):
     f.write('</df>\n')
 
     f.write('<temperature>\n')
-    f.write(str(Tcpu) + ' degC @ '+ str(fcpu) +' MHz\n')
+    f.write(str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz\n')
     f.write('</temperature>\n')
 
     f.write('<memusage>\n')
@@ -126,7 +132,7 @@ def syslog_trace(trace, logerr, out2console):
   log_lines = trace.split('\n')
   for line in log_lines:
     if line and logerr:
-      syslog.syslog(logerr,line)
+      syslog.syslog(logerr, line)
     if line and out2console:
       print line
 
