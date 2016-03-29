@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 # daemon81.py creates an XML-file.
 
@@ -42,11 +42,17 @@ class MyDaemon(Daemon):
     # remote_path     = mount_path + NODE
     # remote_lock     = remote_path + '/client.lock'
 
+    try:
+      hwdevice      = iniconf.get("11", NODE+".hwdevice")
+    except ConfigParser.NoOptionError as e:  # no hwdevice
+      hwdevice      = "nohwdevice"
+      pass
+
     while True:
       try:
         startTime   = time.time()
 
-        do_xml(flock, fdata)
+        do_xml(flock, fdata, hwdevice)
 
         waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
@@ -60,18 +66,17 @@ class MyDaemon(Daemon):
         syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
-def do_xml(flock, fdata):
+def do_xml(flock, fdata, hwdevice):
   home              = os.path.expanduser('~')
   uname             = os.uname()
   Tcpu              = "(no T-sensor)"
-  fcpu              = "(no T-sensor)"
+  fcpu              = "(no f-sensor)"
   # FIXME: read HW paths from .ini
-  if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
-    fi = "/sys/class/hwmon/hwmon0/device/temp1_input"
+  if os.path.isfile(hwdevice):
+    fi = hwdevice
     with open(fi, 'r') as f:
       Tcpu          = float(f.read().strip('\n'))/1000
 
-  # FIXME: read HW paths from .ini
   if os.path.isfile('/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq'):
     fi = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
     with open(fi, 'r') as f:

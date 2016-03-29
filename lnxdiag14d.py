@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 # daemon14.py measures the memory usage.
 # These are all counters, therefore no averaging is needed.

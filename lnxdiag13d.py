@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 # daemon13.py measures the network traffic.
 # These are all counters, therefore no averaging is needed.

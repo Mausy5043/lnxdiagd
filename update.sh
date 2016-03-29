@@ -8,9 +8,10 @@ HOSTNAME=$(cat /etc/hostname)
 branch=$(cat "$HOME/.lnxdiagd.branch")
 
 # make sure working directory exists
-if [[ ! -d /tmp/lnxdiagd ]]; then
+if [ ! -d /tmp/lnxdiagd ]; then
   mkdir -p /tmp/lnxdiagd
 fi
+
 pushd "$HOME/lnxdiagd"
   source ./includes
   git fetch origin
@@ -32,14 +33,14 @@ pushd "$HOME/lnxdiagd"
     #FIXME: starts daemons even if they are not in $diaglist
     if [[ "$f7l4" == "lnxdiagd.py" ]]; then
       echo "  ! Diagnostic daemon changed"
-      eval "./"$fname" restart"
+      eval "./$fname restart"
     fi
 
     # Detect SVC changes
     #FIXME: starts daemons even if they are not in $svclist
     if [[ "$f6l4" == "lnxsvcd.py" ]]; then
       echo "  ! Service daemon changed"
-      eval "./"$fname" restart"
+      eval "./$fname restart"
     fi
 
     # LIBDAEMON.PY changed
@@ -47,13 +48,13 @@ pushd "$HOME/lnxdiagd"
       echo "  ! Diagnostic library changed"
       echo "  o Restarting all diagnostic daemons"
       for daemon in $diaglist; do
-        echo "  +- Restart DIAG "$daemon
-        eval "./lnxdiag"$daemon"d.py restart"
+        echo "  +- Restart DIAG $daemon"
+        eval "./lnxdiag$daemon"d.py restart
       done
       echo "  o Restarting all service daemons"
       for daemon in $srvclist; do
-        echo "  +- Restart SVC "$daemon
-        eval "./lnxsvc"$daemon"d.py restart"
+        echo "  +- Restart SVC $daemon"
+        eval "./lnxsvc$daemon"d.py restart
       done
     fi
 
@@ -62,13 +63,13 @@ pushd "$HOME/lnxdiagd"
       echo "  ! Configuration file changed"
       echo "  o Restarting all diagnostic daemons"
       for daemon in $diaglist; do
-        echo "  +- Restart DIAG "$daemon
-        eval "./lnxdiag"$daemon"d.py restart"
+        echo "  +- Restart DIAG $daemon"
+        eval "./lnxdiag$daemon"d.py restart
       done
       echo "  o Restarting all service daemons"
       for daemon in $srvclist; do
-        echo "  +- Restart SVC "$daemon
-        eval "./lnxsvc"$daemon"d.py restart"
+        echo "  +- Restart SVC $daemon"
+        eval "./lnxsvc$daemon"d.py restart
       done
     fi
   done
@@ -79,13 +80,13 @@ pushd "$HOME/lnxdiagd"
       if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
         logger -p user.err -t lnxdiagd "  * Stale daemon $daemon pid-file found."
         rm "/tmp/lnxdiagd/$daemon.pid"
-          echo "  * Start DIAG "$daemon
-        eval "./lnxdiag"$daemon"d.py start"
+          echo "  * Start DIAG $daemon"
+        eval "./lnxdiag$daemon"d.py start
       fi
     else
       logger -p user.warn -t lnxdiagd "Found daemon $daemon not running."
-        echo "  * Start DIAG "$daemon
-      eval "./lnxdiag"$daemon"d.py start"
+        echo "  * Start DIAG $daemon"
+      eval "./lnxdiag$daemon"d.py start
     fi
   done
 
@@ -95,13 +96,13 @@ pushd "$HOME/lnxdiagd"
       if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
         logger -p user.err -t lnxdiagd "* Stale daemon $daemon pid-file found."
         rm "/tmp/lnxdiagd/$daemon.pid"
-          echo "  * Start SVC "$daemon
-        eval "./lnxsvc"$daemon"d.py start"
+          echo "  * Start SVC $daemon"
+        eval "./lnxsvc$daemon"d.py start
       fi
     else
       logger -p user.warn -t lnxdiagd "Found daemon $daemon not running."
-        echo "  * Start SVC "$daemon
-      eval "./lnxsvc"$daemon"d.py start"
+        echo "  * Start SVC $daemon"
+      eval "./lnxsvc$daemon"d.py start
     fi
   done
 

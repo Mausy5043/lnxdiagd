@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 # daemon97.py pushes data to the MySQL-server.
 # daemon23 support

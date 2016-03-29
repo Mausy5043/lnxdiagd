@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 # daemon15.py measures the size of selected logfiles.
 # These are all counters, therefore no averaging is needed.
