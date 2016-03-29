@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# daemon99.py creates an XML-file on the server.
+# daemon81.py creates an XML-file.
 
 import ConfigParser
 import os
@@ -31,7 +31,8 @@ class MyDaemon(Daemon):
     reportTime      = iniconf.getint(inisection, "reporttime")
     # cycles          = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
-    # flock           = iniconf.get(inisection, "lockfile")
+    flock           = iniconf.get(inisection, "lockfile")
+    fdata           = iniconf.get(inisection, "resultfile")
 
     # samples         = samplesperCycle * cycles          # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle        # time [s] between samples
@@ -45,9 +46,7 @@ class MyDaemon(Daemon):
       try:
         startTime   = time.time()
 
-        # if os.path.ismount(mount_path):
-        # print 'dataspool is mounted'
-        do_xml(remote_path)
+        do_xml(flock, fdata)
 
         waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
@@ -61,18 +60,22 @@ class MyDaemon(Daemon):
         syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
-def do_xml(wpath):
+def do_xml(flock, fdata):
   home              = os.path.expanduser('~')
   uname             = os.uname()
   Tcpu              = "(no T-sensor)"
+  fcpu              = "(no T-sensor)"
+  # FIXME: read HW paths from .ini
   if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
     fi = "/sys/class/hwmon/hwmon0/device/temp1_input"
     with open(fi, 'r') as f:
       Tcpu          = float(f.read().strip('\n'))/1000
 
-  fi = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
-  with open(fi, 'r') as f:
-    fcpu            = float(f.read().strip('\n'))/1000
+  # FIXME: read HW paths from .ini
+  if os.path.isfile('/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq'):
+    fi = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+    with open(fi, 'r') as f:
+      fcpu            = float(f.read().strip('\n'))/1000
 
   fi = home + "/.lnxdiagd.branch"
   with open(fi, 'r') as f:
@@ -90,8 +93,10 @@ def do_xml(wpath):
   p7                = subprocess.Popen(["sed", "s/>/\&gt;/g"],  stdin=p6.stdout,  stdout=subprocess.PIPE)
   p8                = subprocess.Popen(["sed", "s/</\&lt;/g"],  stdin=p7.stdout,  stdout=subprocess.PIPE)
   psout             = p8.stdout.read()
-  #
-  with open(wpath + '/status.xml', 'w') as f:
+
+  lock(flock)
+
+  with open(fdata, 'w') as f:
 
     f.write('<server>\n')
 
@@ -119,6 +124,8 @@ def do_xml(wpath):
     f.write('</uptime>\n')
 
     f.write('</server>\n')
+
+    unlock(flock)
 
 def lock(fname):
   open(fname, 'a').close()

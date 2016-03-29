@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# daemon98.py uploads data to the server.
+# daemon98.py file post-processor.
 
 import ConfigParser
 import glob
