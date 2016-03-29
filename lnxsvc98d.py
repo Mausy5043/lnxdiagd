@@ -31,7 +31,7 @@ class MyDaemon(Daemon):
     reportTime      = iniconf.getint(inisection, "reporttime")
     # cycles          = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
-    # flock           = iniconf.get(inisection, "lockfile")
+    flock           = iniconf.get(inisection, "lockfile")
 
     # samples         = samplesperCycle * cycles           # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle         # time [s] between samples
@@ -45,7 +45,7 @@ class MyDaemon(Daemon):
         startTime   = time.time()
 
         if os.path.ismount(mount_path):
-          do_mv_data(remote_path)
+          do_mv_data(flock)
 
         waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
@@ -59,47 +59,30 @@ class MyDaemon(Daemon):
         syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
-def do_mv_data(rpath):
-  hostlock              = rpath + '/host.lock'
-  clientlock            = rpath + '/client.lock'
-  count_internal_locks  = 1
-
+def do_mv_data(flock):
   # wait 5 seconds for processes to finish
   time.sleep(5)
-
-  while os.path.isfile(hostlock):
-    syslog_trace("...hostlock exists", syslog.LOG_DEBUG, DEBUG)
-    # wait while the server has locked the directory
-    time.sleep(1)
-
-  # server already sets the client.lock. Do it anyway.
-  lock(clientlock)
+  lock(flock)
   syslog_trace("!..LOCK", False, DEBUG)
-
-  # prevent race conditions
-  while os.path.isfile(hostlock):
-    syslog_trace("...hostlock exists (again???) !!", syslog.LOG_DEBUG, DEBUG)
-    # wait while the server has locked the directory
-    time.sleep(1)
-
+  # wait for all other processes to release their locks.
+  count_internal_locks = 1
   while (count_internal_locks > 0):
     time.sleep(1)
     count_internal_locks = 0
     for fname in glob.glob(r'/tmp/' + MYAPP + '/*.lock'):
       count_internal_locks += 1
-    syslog_trace("...{0} internal locks exist".format(count_internal_locks), False, DEBUG)
+    syslog_trace("{0} internal locks exist".format(count_internal_locks), False, DEBUG)
+  # endwhile
 
   for fname in glob.glob(r'/tmp/' + MYAPP + '/*.csv'):
-    if os.path.isfile(clientlock) and not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
-      syslog_trace("...moving data {0}".format(fname), False, DEBUG)
-      shutil.move(fname, fname+".DEAD")
+    syslog_trace("...moving data {0}".format(fname), False, DEBUG)
+    shutil.move(fname, fname+".DEAD")
 
   for fname in glob.glob(r'/tmp/' + MYAPP + '/*.png'):
-    if os.path.isfile(clientlock) and not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
-      syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
-      shutil.move(fname, fname+".DEAD")
+    syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
+    shutil.move(fname, fname+".DEAD")
 
-  unlock(clientlock)
+  unlock(flock)
   syslog_trace("!..UNLOCK", False, DEBUG)
 
 def lock(fname):
