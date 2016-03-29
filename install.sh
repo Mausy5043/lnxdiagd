@@ -30,7 +30,7 @@ pushd "$HOME/lnxdiagd"
 popd
 
 # make sure all mountpoints exist
-sudo mkdir -p /mnt/share1
-sudo mkdir -p /mnt/backup
+# sudo mkdir -p /mnt/share1
+# sudo mkdir -p /mnt/backup
 
 echo -n "Finished installation of LNXDIAGD on "; date

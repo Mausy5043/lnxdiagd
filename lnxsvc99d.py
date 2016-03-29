@@ -37,17 +37,17 @@ class MyDaemon(Daemon):
     sampleTime      = reportTime/samplesperCycle        # time [s] between samples
     # cycleTime       = samples * sampleTime              # time [s] per cycle
 
-    mount_path      = '/mnt/share1/'
-    remote_path     = mount_path + NODE
+    # mount_path      = '/mnt/share1/'
+    # remote_path     = mount_path + NODE
     # remote_lock     = remote_path + '/client.lock'
 
     while True:
       try:
         startTime   = time.time()
 
-        if os.path.ismount(mount_path):
-          # print 'dataspool is mounted'
-          do_xml(remote_path)
+        # if os.path.ismount(mount_path):
+        # print 'dataspool is mounted'
+        do_xml(remote_path)
 
         waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):

@@ -126,13 +126,13 @@ popd
 
 # the $MOUNTPOINT is in /etc/fstab
 # in the unlikely event that the mount was lost, remount it here.
-MOUNTPOINT=/mnt/share1
-MOUNTDRIVE=boson.lan:/srv/array1/dataspool
-if grep -qs $MOUNTPOINT /proc/mounts; then
+#MOUNTPOINT=/mnt/share1
+#MOUNTDRIVE=boson.lan:/srv/array1/dataspool
+#if grep -qs $MOUNTPOINT /proc/mounts; then
     # It's mounted.
-    echo "Mountpoint OK"
-else
+#    echo "Mountpoint OK"
+#else
     # Mount the share containing the data
-    mount $MOUNTDRIVE $MOUNTPOINT
-    echo $MOUNTPOINT "was re-mounted."
-fi
+#    mount $MOUNTDRIVE $MOUNTPOINT
+#    echo $MOUNTPOINT "was re-mounted."
+#fi
