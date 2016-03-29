@@ -60,12 +60,12 @@ class MyDaemon(Daemon):
 
 def do_mv_data(flock):
   # wait 5 seconds for processes to finish
-  time.sleep(5)
+  time.sleep(15)
   lock(flock)
   syslog_trace("!..LOCK", False, DEBUG)
   # wait for all other processes to release their locks.
-  count_internal_locks = 1
-  while (count_internal_locks > 0):
+  count_internal_locks = 2
+  while (count_internal_locks > 1):
     time.sleep(1)
     count_internal_locks = 0
     for fname in glob.glob(r'/tmp/' + MYAPP + '/*.lock'):
