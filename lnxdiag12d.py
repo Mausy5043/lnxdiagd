@@ -80,7 +80,7 @@ class MyDaemon(Daemon):
 
 def do_work(stat1):
   # /proc/loadavg supplies 6 numbers
-  with open('proc/loadavg', 'r') as f:
+  with open('/proc/loadavg', 'r') as f:
     outHistLoad = f.read().strip('\n').replace(" ", ", ").replace("/", ", ")
 
   with open('/proc/stat', 'r') as f:
