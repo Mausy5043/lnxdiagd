@@ -6,7 +6,6 @@
 import ConfigParser
 # import math
 import os
-import subprocess
 import sys
 import syslog
 import time
@@ -40,12 +39,13 @@ class MyDaemon(Daemon):
     # cycleTime       = samples * sampleTime               # time [s] per cycle
 
     data            = []                                 # array for holding sampledata
+    raw             = [0] * 16                           # array for holding previous /proc/stat data
 
     while True:
       try:
         startTime     = time.time()
 
-        result        = do_work().split(',')
+        result, raw   = do_work(raw).split(',')
         syslog_trace("Result   : {0}".format(result), False, DEBUG)
 
         data.append(map(float, result))
@@ -78,21 +78,38 @@ class MyDaemon(Daemon):
         syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
-def do_work():
-  # 6 #datapoints gathered here
-  fi            = "/proc/loadavg"
-  with open(fi, 'r') as f:
+def do_work(stat1):
+  # /proc/loadavg supplies 6 numbers
+  with open('proc/loadavg', 'r') as f:
     outHistLoad = f.read().strip('\n').replace(" ", ", ").replace("/", ", ")
 
-  # 5 #datapoints gathered here
-  outCpu        = subprocess.Popen(["vmstat", "1", "2"], stdout=subprocess.PIPE).stdout.read().splitlines()[3].split()
-  outCpuUS      = outCpu[12]
-  outCpuSY      = outCpu[13]
-  outCpuID      = outCpu[14]
-  outCpuWA      = outCpu[15]
-  outCpuST      = 0
+  with open('/proc/stat', 'r') as f:
+    stat2 = f.readlines()[0].split()
+    # ref: https://www.kernel.org/doc/Documentation/filesystems/proc.txt
+    # -1 "cpu"
+    #  0 user: normal processes executing in user mode    0
+    #  1 nice: niced processes executing in user mode     +0
+    #  2 system: processes executing in kernel mode       1
+    #  3 idle: twiddling thumbs                           2
+    #  4 iowait: waiting for I/O to complete              3
+    #  5 irq: servicing interrupts                        +3
+    #  6 softirq: servicing softirqs                      +3
+    #  7 steal: involuntary wait                          +3
+    #  8 guest: running a normal guest                    +1
+    #  9 guest_nice: running a niced guest                +1
 
-  return '{0}, {1}, {2}, {3}, {4}, {5}'.format(outHistLoad, outCpuUS, outCpuSY, outCpuID, outCpuWA, outCpuST)
+  stat2 = map(int, stat2[1:])
+  diff0 = [x - y for x, y in zip(stat2, stat1)]
+  sum0 = sum(diff0)
+  perc = [x / float(sum0) * 100. for x in diff0]
+
+  outCpuUS      = perc[0] + perc[1] + perc[8] + perc[9]
+  outCpuSY      = perc[2]
+  outCpuID      = perc[3]
+  outCpuWA      = perc[4] + perc[5] + perc[6] + perc[7]
+  outCpuST = 0   # with the above code this may be omitted.
+
+  return ('{0}, {1}, {2}, {3}, {4}, {5}'.format(outHistLoad, outCpuUS, outCpuSY, outCpuID, outCpuWA, outCpuST), stat2)
 
 def do_report(result, flock, fdata):
   # Get the time and date in human-readable form and UN*X-epoch...
