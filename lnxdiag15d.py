@@ -104,7 +104,7 @@ def do_work():
     p5 = wc("/var/log/5notice.log")
     p6 = wc("/var/log/6info.log")
     p7 = wc("/var/log/7debug.log")
-  return '{0}, {1}, {2}'.format(p0, p1, p2, p3, p4, p5, p6, p7)
+  return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(p0, p1, p2, p3, p4, p5, p6, p7)
 
 def do_report(result, flock, fdata):
   # Get the time and date in human-readable form and UN*X-epoch...

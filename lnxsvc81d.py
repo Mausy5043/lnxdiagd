@@ -130,7 +130,7 @@ def do_xml(flock, fdata, hwdevice):
 
     f.write('</server>\n')
 
-    unlock(flock)
+  unlock(flock)
 
 def lock(fname):
   open(fname, 'a').close()

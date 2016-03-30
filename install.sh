@@ -2,10 +2,8 @@
 
 # this repo gets installed either manually by the user or automatically by
 # a `*boot` repo.
-# The hostname is in /etc/hostname prior to running `install.sh` here!
 
 ME=$(whoami)
-HOSTNAME=$(cat /etc/hostname)
 
 echo -n "Started installing LNXDIAGD on "; date
 
