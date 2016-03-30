@@ -45,7 +45,8 @@ class MyDaemon(Daemon):
       try:
         startTime     = time.time()
 
-        result, raw   = do_work(raw).split(',')
+        result, raw   = do_work(raw)
+        result        = result.split(',')
         syslog_trace("Result   : {0}".format(result), False, DEBUG)
 
         data.append(map(float, result))
