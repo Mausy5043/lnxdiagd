@@ -1,6 +1,6 @@
 open hendrixnet.nl
 
 cd /public_html/grav/user/pages/
-mkdir 04.status
+mkdir -p 04.status
 cd 04.status
 put default.md
