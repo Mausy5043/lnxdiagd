@@ -1,4 +1,6 @@
 open hendrixnet.nl
-#mirror --reverse --delete --verbose=3 -c default.md /public_html/grav/user/pages/04.status/default.md
-cd /public_html/grav/user/pages/04.status
+
+cd /public_html/grav/user/pages/
+mkdir 04.status
+cd 04.status
 put default.md
