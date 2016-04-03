@@ -82,7 +82,7 @@ def do_mv_data(flock):
     syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
     shutil.move(fname, fname+".DEAD")
 
-  if os.path.isfile('/tmp/' + MYAPP + '/default.md'):
+  if os.path.isfile('/tmp/' + MYAPP + '/text.md'):
     script = os.path.expanduser('~') + '/' + MYAPP + '/push.lftp'
     syslog_trace("...executing  {0}.".format(script), False, DEBUG)
     # lftp -f $HOME/lnxdiagd/push.lftp 2>&1
