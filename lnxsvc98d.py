@@ -6,6 +6,7 @@ import ConfigParser
 import glob
 import os
 import shutil
+import subprocess
 import sys
 import syslog
 import time
@@ -81,6 +82,9 @@ def do_mv_data(flock):
     syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
     shutil.move(fname, fname+".DEAD")
 
+  if os.path.isfile('/tmp/' + MYAPP + '/default.md'):
+    script = os.path.expanduser('~') + '/' + MYAPP + '/push.sh'
+    subprocess.Popen([script])
   unlock(flock)
 
 def lock(fname):
