@@ -105,7 +105,7 @@ def do_xml(flock, fdata, hwdevice):
     f.write("##" + NODE + "\n")
 
     f.write('\n>>>>>>')
-    f.write(uname[0] + ' ' + uname[1] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '\n')
+    f.write(uname[0] + ' ' + uname[1] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '  \n')
     f.write(uptime + '\n')
 
     f.write('\n>>>')
