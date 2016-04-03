@@ -84,7 +84,9 @@ def do_mv_data(flock):
 
   if os.path.isfile('/tmp/' + MYAPP + '/default.md'):
     script = os.path.expanduser('~') + '/' + MYAPP + '/push.sh'
+    syslog_trace("...executing {0}.".format(script), False, DEBUG)
     subprocess.Popen([script])
+
   unlock(flock)
 
 def lock(fname):
