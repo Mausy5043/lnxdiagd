@@ -105,29 +105,44 @@ def do_xml(flock, fdata, hwdevice):
     # YAML header
     f.write('---\n')
     f.write('title: ' + NODE + '\n')
-    f.write('menu: Easy Content\n')
-    f.write('image_align: right\n')
+    f.write('menu: ' + NODE + '\n')
+    f.write('image_align: left\n')
     f.write('---\n')
 
+    # HEADER
     f.write('##' + NODE + '\n\n')
 
+    # System ID
     f.write('>>>>>>')
     f.write(uname[0] + ' ' + uname[1] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '  \n\n')
 
+    # System Uptime
     f.write('>>>>>> Server Uptime:  \n')
     f.write(uptime + '\n\n')
 
+    # CPU temperature and frequency
     f.write('>>>' + str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz\n\n')
 
+    # lnxdiagd branch
     f.write('>>>>lnxdiagd   on: ' + lnxdiagdbranch + '\n')
 
-    f.write('\n```\n')
-    f.write(dfh + '\n```\n')
+    # Disk usage
+    f.write('## Disk Usage\n')
+    f.write('```\n')
+    f.write(dfh + '\n')
+    f.write('```\n')
 
-    f.write('\n```\n')
-    f.write(freeh + '\n```\n')
+    # Memory usage
+    f.write('## Memory Usage\n')
+    f.write('```\n')
+    f.write(freeh + '\n')
+    f.write('```\n')
 
-    f.write('\n```\nTop 10 processes:  \n' + psout + '\n```\n')
+    # Top 10 processes
+    f.write('## Top 10 processes:\n')
+    f.write('```\n')
+    f.write(psout + '\n')
+    f.write('```\n')
 
   unlock(flock)
 
