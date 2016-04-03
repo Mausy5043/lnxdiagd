@@ -113,12 +113,12 @@ def do_xml(flock, fdata, hwdevice):
     f.write('# ' + NODE + '\n\n')
 
     # System ID
-    f.write('! ')
+    f.write('!!! ')
     f.write(uname[0] + ' ' + uname[1] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '  \n\n')
 
     # System Uptime
     f.write('## Server Uptime:  \n')
-    f.write('!')
+    f.write('!!! ')
     f.write(uptime + '\n\n')
 
     # CPU temperature and frequency
