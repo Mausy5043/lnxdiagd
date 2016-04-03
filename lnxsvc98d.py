@@ -83,9 +83,10 @@ def do_mv_data(flock):
     shutil.move(fname, fname+".DEAD")
 
   if os.path.isfile('/tmp/' + MYAPP + '/default.md'):
-    script = os.path.expanduser('~') + '/' + MYAPP + '/push.sh'
-    syslog_trace("...executing {0}.".format(script), False, DEBUG)
-    subprocess.Popen([script])
+    script = os.path.expanduser('~') + '/' + MYAPP + '/push.lftp'
+    syslog_trace("...executing  {0}.".format(script), False, DEBUG)
+    # lftp -f $HOME/lnxdiagd/push.lftp 2>&1
+    lftpout = subprocess.check_output(['lftp', '-f', script])
 
   unlock(flock)
 
