@@ -119,7 +119,7 @@ def do_xml(flock, fdata, hwdevice):
     # System Uptime
     f.write('## Server Uptime:  \n')
     f.write('!!! ')
-    f.write(uptime + '\n\n')
+    f.write(uptime + '\n')
 
     # CPU temperature and frequency
     f.write('!! ' + str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz\n\n')
@@ -130,19 +130,19 @@ def do_xml(flock, fdata, hwdevice):
     # Disk usage
     f.write('## Disk Usage\n')
     f.write('```\n')
-    f.write(dfh + '\n')
+    f.write(dfh)      # dfh comes with its own built-in '/n'
     f.write('```\n\n')
 
     # Memory usage
     f.write('## Memory Usage\n')
     f.write('```\n')
-    f.write(freeh + '\n')
+    f.write(freeh)    # freeh comes with its own built-in '/n'
     f.write('```\n\n')
 
     # Top 10 processes
     f.write('## Top 10 processes:\n')
     f.write('```\n')
-    f.write(psout + '\n')
+    f.write(psout)    # psout comes with its own built-in '/n'
     f.write('```\n\n')
 
   unlock(flock)
