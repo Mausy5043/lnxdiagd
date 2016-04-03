@@ -104,11 +104,11 @@ def do_xml(flock, fdata, hwdevice):
   with open(fdata, 'w') as f:
     f.write("##" + NODE + "\n")
 
-    f.write("\n```\n")
-    f.write(dfh + "\n```\n'")
-
-    f.write('\n')
+    f.write('\n>>>')
     f.write(str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz\n')
+
+    f.write("\n```\n")
+    f.write(dfh + "\n```\n")
 
     f.write('\n```\n')
     f.write(freeh + '\n```\n')
@@ -116,7 +116,7 @@ def do_xml(flock, fdata, hwdevice):
     f.write('\n')
     f.write(uptime + '\n')
     f.write(uname[0] + ' ' + uname[1] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '\n')
-    f.write(' - lnxdiagd   on: ' + lnxdiagdbranch + '\n')
+    f.write('>>> - lnxdiagd   on: ' + lnxdiagdbranch + '\n')
     f.write('\n```\nTop 10 processes:\n' + psout + '\n```\n')
 
   unlock(flock)
