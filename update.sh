@@ -30,17 +30,15 @@ pushd "$HOME/lnxdiagd"
     f6l4="${fname:0:6}${fname:${#fname}-4}"
 
     # Detect DIAG changes
-    #FIXME: starts daemons even if they are not in $diaglist
     if [[ "$f7l4" == "lnxdiagd.py" ]]; then
       echo "  ! Diagnostic daemon changed"
-      eval "./$fname restart"
+      eval "./$fname stop"
     fi
 
     # Detect SVC changes
-    #FIXME: starts daemons even if they are not in $svclist
     if [[ "$f6l4" == "lnxsvcd.py" ]]; then
       echo "  ! Service daemon changed"
-      eval "./$fname restart"
+      eval "./$fname stop"
     fi
 
     # LIBDAEMON.PY changed

@@ -1,0 +1,6 @@
+open hendrixnet.nl
+
+cd /public_html/grav/user/pages/04.status
+mkdir -p -f _rbian
+cd _rbian
+put /tmp/lnxdiagd/text.md
