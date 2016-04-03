@@ -117,32 +117,33 @@ def do_xml(flock, fdata, hwdevice):
     f.write(uname[0] + ' ' + uname[1] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '  \n\n')
 
     # System Uptime
-    f.write('>>>>>> Server Uptime:  \n')
+    f.write('## Server Uptime:  \n')
+    f.write('>>>>>>')
     f.write(uptime + '\n\n')
 
     # CPU temperature and frequency
     f.write('>>>' + str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz\n\n')
 
     # lnxdiagd branch
-    f.write('>>>>lnxdiagd   on: ' + lnxdiagdbranch + '\n')
+    f.write('>>>>lnxdiagd   on: ' + lnxdiagdbranch + '\n\n')
 
     # Disk usage
     f.write('## Disk Usage\n')
     f.write('```\n')
     f.write(dfh + '\n')
-    f.write('```\n')
+    f.write('```\n\n')
 
     # Memory usage
     f.write('## Memory Usage\n')
     f.write('```\n')
     f.write(freeh + '\n')
-    f.write('```\n')
+    f.write('```\n\n')
 
     # Top 10 processes
     f.write('## Top 10 processes:\n')
     f.write('```\n')
     f.write(psout + '\n')
-    f.write('```\n')
+    f.write('```\n\n')
 
   unlock(flock)
 
