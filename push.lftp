@@ -3,4 +3,4 @@ open hendrixnet.nl
 cd /public_html/grav/user/pages/
 mkdir -p -f 04.status
 cd 04.status
-put default.md
+put /tmp/lnxdiagd/default.md

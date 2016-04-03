@@ -102,10 +102,10 @@ def do_xml(flock, fdata, hwdevice):
   lock(flock)
 
   with open(fdata, 'w') as f:
-    f.write(NODE + '\n')
+    f.write("##" + NODE + "\n")
 
-    f.write('\n')
-    f.write(dfh + '\n')
+    f.write("\n'''")
+    f.write(dfh + "'''\n'")
 
     f.write('\n')
     f.write(str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz\n')
