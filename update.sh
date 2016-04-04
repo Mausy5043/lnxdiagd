@@ -8,8 +8,8 @@ HOSTNAME=$(cat /etc/hostname)
 branch=$(cat "$HOME/.lnxdiagd.branch")
 
 # make sure working directory exists
-if [ ! -d /tmp/lnxdiagd ]; then
-  mkdir -p /tmp/lnxdiagd
+if [ ! -d /tmp/lnxdiagd/site ]; then
+  mkdir -p /tmp/lnxdiagd/site
 fi
 
 pushd "$HOME/lnxdiagd"
