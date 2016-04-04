@@ -101,7 +101,6 @@ def do_markdown(flock, fdata, hwdevice):
     f.write('---\n')
     f.write('title: ' + NODE + '\n')
     f.write('menu: ' + NODE + '\n')
-    f.write('image_align: left\n')
     f.write('---\n')
 
     # HEADER
