@@ -82,13 +82,13 @@ def do_mv_data(flock):
     syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
     shutil.move(fname, fname+".DEAD")
 
-  if os.path.isfile('/tmp/' + MYAPP + '/text.md'):
+  if os.path.isfile('/tmp/' + MYAPP + '/site/text.md'):
     # script = os.path.expanduser('~') + '/' + MYAPP + '/push.lftp'
     # syslog_trace("...executing  {0}.".format(script), False, DEBUG)
     # lftp -f $HOME/lnxdiagd/push.lftp 2>&1
     # lftp -c "open hendrixnet.nl; cd /public_html/grav/user/pages/04.status/_$(hostname); put /tmp/lnxdiagd/text.md; ls; quit"
     # lftpout = subprocess.check_output(['lftp', '-f', script])
-    lftpcommand = 'lftp -c "open hendrixnet.nl; cd /public_html/grav/user/pages/04.status/_' + NODE + '; put /tmp/' + MYAPP + '/text.md;"'
+    lftpcommand = 'lftp -c "open hendrixnet.nl; cd /public_html/grav/user/pages/04.status/_' + NODE + '; put /tmp/' + MYAPP + '/site/text.md;"'
     syslog_trace("...:  {0}.".format(lftpcommand), False, DEBUG)
     subprocess.Popen(lftpcommand, shell=True)
   unlock(flock)
