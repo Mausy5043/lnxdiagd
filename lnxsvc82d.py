@@ -119,7 +119,7 @@ def do_xml(flock, fdata, hwdevice):
 
     # CPU temperature and frequency
     f.write('!! ' + str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz\n\n')
-    f.write('![This is the Debian logo](img/debian-logo.png)')
+    f.write('![This is the Debian logo](img/debian-logo.png)\n')
 
     # lnxdiagd branch
     f.write('!!! lnxdiagd   on: ' + lnxdiagdbranch + '\n\n')
