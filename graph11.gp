@@ -59,7 +59,7 @@ set object 1 rect from screen 0,0 to screen 1,1 behind
 set object 1 rect fc rgb "#eeeeee" fillstyle solid 1.0 noborder
 set object 2 rect from graph 0,0 to graph 1,1 behind
 set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
-set output "/tmp/lnxdiagd/site/day11.png"
+set output "/tmp/lnxdiagd/site/img/day11.png"
 
 # ***** PLOT *****
 plot fname  using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 \
