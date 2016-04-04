@@ -88,7 +88,12 @@ def do_mv_data(flock):
     # lftp -f $HOME/lnxdiagd/push.lftp 2>&1
     # lftp -c "open hendrixnet.nl; cd /public_html/grav/user/pages/04.status/_$(hostname); put /tmp/lnxdiagd/text.md; ls; quit"
     # lftpout = subprocess.check_output(['lftp', '-f', script])
-    lftpcommand = 'lftp -c "open hendrixnet.nl; cd /public_html/grav/user/pages/04.status/_' + NODE + '; put /tmp/' + MYAPP + '/site/text.md;"'
+    # lftpcommand = 'lftp -c "open hendrixnet.nl; \
+    #                cd /public_html/grav/user/pages/04.status/_' + NODE + '; \
+    #                put /tmp/' + MYAPP + '/site/text.md;"'
+    lftpcommand = 'lftp -c "open hendrixnet.nl; \
+                   cd /public_html/grav/user/pages/04.status/_' + NODE + '; \
+                   mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;"'
     syslog_trace("...:  {0}.".format(lftpcommand), False, DEBUG)
     subprocess.Popen(lftpcommand, shell=True)
   unlock(flock)
