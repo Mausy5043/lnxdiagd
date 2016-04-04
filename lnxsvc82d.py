@@ -48,7 +48,7 @@ class MyDaemon(Daemon):
       try:
         startTime   = time.time()
 
-        do_xml(flock, fdata, hwdevice)
+        do_markdown(flock, fdata, hwdevice)
 
         waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
@@ -62,12 +62,11 @@ class MyDaemon(Daemon):
         syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
-def do_xml(flock, fdata, hwdevice):
+def do_markdown(flock, fdata, hwdevice):
   home              = os.path.expanduser('~')
   uname             = os.uname()
   Tcpu              = "(no T-sensor)"
   fcpu              = "(no f-sensor)"
-  # FIXME: read HW paths from .ini
   if os.path.isfile(hwdevice):
     fi = hwdevice
     with open(fi, 'r') as f:
