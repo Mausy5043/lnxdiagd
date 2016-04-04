@@ -38,12 +38,8 @@ class MyDaemon(Daemon):
     sampleTime      = reportTime/samplesperCycle        # time [s] between samples
     # cycleTime       = samples * sampleTime              # time [s] per cycle
 
-    # mount_path      = '/mnt/share1/'
-    # remote_path     = mount_path + NODE
-    # remote_lock     = remote_path + '/client.lock'
-
     try:
-      hwdevice      = iniconf.get("11", NODE+".hwdevice")
+      hwdevice      = iniconf.get("11", NODE + ".hwdevice")
     except ConfigParser.NoOptionError as e:  # no hwdevice
       hwdevice      = "nohwdevice"
       pass
@@ -123,6 +119,7 @@ def do_xml(flock, fdata, hwdevice):
 
     # CPU temperature and frequency
     f.write('!! ' + str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz\n\n')
+    f.write('![This is the Debian logo](debian-logo.png)')
 
     # lnxdiagd branch
     f.write('!!! lnxdiagd   on: ' + lnxdiagdbranch + '\n\n')
