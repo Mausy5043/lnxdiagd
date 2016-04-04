@@ -7,9 +7,9 @@
 HOSTNAME=$(cat /etc/hostname)
 branch=$(cat "$HOME/.lnxdiagd.branch")
 
-# make sure working directory exists
-if [ ! -d /tmp/lnxdiagd/site ]; then
-  mkdir -p /tmp/lnxdiagd/site
+# make sure working tree exists
+if [ ! -d /tmp/lnxdiagd/site/img ]; then
+  mkdir -p /tmp/lnxdiagd/site/img
 fi
 
 pushd "$HOME/lnxdiagd"
