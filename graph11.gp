@@ -1,26 +1,28 @@
 #!/usr/bin/env gnuplot
 
-# graph of DHT22 data
+# graph of CPU temperature
+
+# datafile
+fname = "/tmp/sql11.csv"
 
 # ******************************************************* General settings *****
 set terminal png font "Helvetica" 11 size 640,480
 set datafile separator ';'
-set datafile missing "NaN"   # Ignore missing values
+set datafile missing "NaN"    # Ignore missing values
 set grid
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
 set timestamp 'created: %Y-%m-%d %H:%M' bottom
 
 # ************************************************************* Statistics *****
-# stats to be calculated here
-fname = "/tmp/sql22.csv"
-stats fname using 2 name "T2" nooutput
+# stats to be calculated here of column 2 (UX-epoch)
+stats fname using 2 name "X" nooutput
 
-T2_min = T2_min + utc_offset - 946684800
-T2_max = T2_max + utc_offset - 946684800
+X_min = X_min + utc_offset - 946684800
+X_max = X_max + utc_offset - 946684800
 
 # ****************************************************************** Title *****
-set title "Humidity (DHT22)"
+set title "CPU Temperature"
 #"-".utc_offset."-"
 
 # ***************************************************************** X-axis *****
@@ -29,17 +31,17 @@ set xdata time               # Define that data on X-axis should be interpreted 
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
 set xtics rotate by 40 right
-set xrange [ T2_min : T2_max ]
+set xrange [ X_min : X_max ]
 
 # ***************************************************************** Y-axis *****
-set ylabel "Humidity [%]"
+set ylabel "Temperature [degC]"
 #set yrange [10:20]
 set autoscale y
 
 # **************************************************************** Y2-axis *****
-set y2label "Temperature [degC]"
-set autoscale y2
-set y2tics border
+# set y2label "Temperature [degC]"
+# set autoscale y2
+# set y2tics border
 
 # ***************************************************************** Legend *****
 # generate a legend which is placed underneath the plot
@@ -57,8 +59,8 @@ set object 1 rect from screen 0,0 to screen 1,1 behind
 set object 1 rect fc rgb "#eeeeee" fillstyle solid 1.0 noborder
 set object 2 rect from graph 0,0 to graph 1,1 behind
 set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
-set output "/tmp/bonediagd/RHT.png"
+set output "/tmp/lnxdiagd/site/day11.png"
 
 # ***** PLOT *****
-plot "/tmp/sql22.csv"  using ($2+utc_offset):3 title " Humidity [%]"      with points pt 5 ps 0.2\
-    ,"/tmp/sql22.csv"  using ($2+utc_offset):4 title " Temperature [degC]" axes x1y2  with dots\
+plot fname  using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 \
+#    ,       using ($2+utc_offset):4 title " Temperature [degC]" axes x1y2  with dots\
