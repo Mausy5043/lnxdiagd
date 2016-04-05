@@ -3,7 +3,8 @@
 # graph of CPU temperature
 
 # datafile
-fname = "/tmp/sql11.csv"
+ifname = "/tmp/sql11.csv"
+ofname = "/tmp/lnxdiagd/site/img/day11.png"
 
 # ******************************************************* General settings *****
 set terminal png font "Helvetica" 11 size 640,480
@@ -16,7 +17,7 @@ set timestamp 'created: %Y-%m-%d %H:%M' bottom
 
 # ************************************************************* Statistics *****
 # stats to be calculated here of column 2 (UX-epoch)
-stats fname using 2 name "X" nooutput
+stats ifname using 2 name "X" nooutput
 
 X_min = X_min + utc_offset - 946684800
 X_max = X_max + utc_offset - 946684800
@@ -54,13 +55,13 @@ set key left top
 
 # ***************************************************************** Output *****
 set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
-set arrow from graph 1,graph 0 to graph 1,graph 1 nohead lc rgb "green" front
+#set arrow from graph 1,graph 0 to graph 1,graph 1 nohead lc rgb "green" front
 set object 1 rect from screen 0,0 to screen 1,1 behind
 set object 1 rect fc rgb "#eeeeee" fillstyle solid 1.0 noborder
 set object 2 rect from graph 0,0 to graph 1,1 behind
 set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
-set output "/tmp/lnxdiagd/site/img/day11.png"
+set output ofname
 
 # ***** PLOT *****
-plot fname  using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 \
+plot ifname  using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 \
 #    ,       using ($2+utc_offset):4 title " Temperature [degC]" axes x1y2  with dots\
