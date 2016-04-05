@@ -7,7 +7,8 @@ ifname = "/tmp/sql11.csv"
 ofname = "/tmp/lnxdiagd/site/img/day11.png"
 
 # ******************************************************* General settings *****
-set terminal png font "Vera" 11 size 640,480
+# set terminal png font "Vera" 11 size 640,480
+set terminal png font "Courier" 10 size 480,228
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
 set grid
