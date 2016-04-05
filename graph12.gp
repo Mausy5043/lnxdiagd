@@ -64,13 +64,14 @@ set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
 set output ofname
 
 # ***** PLOT *****
-set style data histogram
-set style histogram rowstacked
+#set style data histogram
+#set style histogram columnstacked
+set style data boxes
 set style fill solid noborder
 plot ifname \
-  using 10 ti col, \
-  using 11 ti col, \
-  using 12 ti col, \
-  using 13 ti col
+       using ($2+utc_offset):10 \
+  , '' using ($2+utc_offset):11 \
+  , '' using ($2+utc_offset):12 \
+  , '' using ($2+utc_offset):13
 # plot ifname  using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 \
 #     ,       using ($2+utc_offset):4 title " Load [degC]" axes x1y2  with dots\
