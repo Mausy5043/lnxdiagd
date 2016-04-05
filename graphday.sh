@@ -25,7 +25,7 @@ pushd $HOME/lnxdiagd >/dev/null
 
   #touch /tmp/bonediagd/graph.lock
   gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph11.gp
-  #gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph23.gp
+  gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph12.gp
   #gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph24.gp
   #gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph25.gp
 
