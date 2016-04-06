@@ -38,7 +38,7 @@ set xrange [ X_min : X_max ]
 # ***************************************************************** Y-axis *****
 set ylabel "Usage [%]"
 set yrange [0:100]
-set autoscale y
+# set autoscale y
 
 # **************************************************************** Y2-axis *****
 # set y2label "Load"
@@ -46,13 +46,8 @@ set autoscale y
 # set y2tics border
 
 # ***************************************************************** Legend *****
-# generate a legend which is placed underneath the plot
-# set key outside bottom center box title "-=legend=-"
-set key default
-set key box
+set key outside bottom center horizontal box
 set key samplen .2
-set key inside vertical
-set key left top
 
 # ***************************************************************** Output *****
 set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
@@ -69,9 +64,9 @@ set output ofname
 set style data boxes
 set style fill solid noborder
 plot ifname \
-       using ($2+utc_offset):($10+$11+$12+$13) title "13" \
-  , '' using ($2+utc_offset):($10+$11+$12)     title "12"\
-  , '' using ($2+utc_offset):($10+$11)         title "11"\
-  , '' using ($2+utc_offset):10                title "10"
+       using ($2+utc_offset):($10+$11+$12+$13) title "waiting" fc "yellow"\
+  , '' using ($2+utc_offset):($10+$11+$12)     title "idle" fc "green" \
+  , '' using ($2+utc_offset):($10+$11)         title "system" fc "blue"\
+  , '' using ($2+utc_offset):10                title "user" fc "red"
 # plot ifname  using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 \
 #     ,       using ($2+utc_offset):4 title " Load [degC]" axes x1y2  with dots\
