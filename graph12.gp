@@ -11,7 +11,7 @@ ofname = "/tmp/lnxdiagd/site/img/day12.png"
 set terminal png font "Courier" 10 size 640,304
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
-set grid
+set grid front
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
 set timestamp 'created: %Y-%m-%d %H:%M' bottom
@@ -49,8 +49,8 @@ set key outside bottom center horizontal box
 set key samplen .2
 
 # ***************************************************************** Output *****
-set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
-set arrow from graph 1,graph 0 to graph 1,graph 1 nohead lc rgb "green" front
+# set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
+# set arrow from graph 1,graph 0 to graph 1,graph 1 nohead lc rgb "green" front
 set object 1 rect from screen 0,0 to screen 1,1 behind
 set object 1 rect fc rgb "#eeeeee" fillstyle solid 1.0 noborder
 set object 2 rect from graph 0,0 to graph 1,1 behind
@@ -61,7 +61,7 @@ set output ofname
 set style data boxes
 set style fill solid noborder
 plot ifname \
-       using ($2+utc_offset):($10+$11+$12+$13) title "idle"    fc "green"\
+       using ($2+utc_offset):($10+$11+$12+$13) title "idle"    fc "#229922"\
   , '' using ($2+utc_offset):($10+$11+$13)     title "waiting" fc "blue" \
   , '' using ($2+utc_offset):($10+$11)         title "system"  fc "yellow"\
   , '' using ($2+utc_offset):10                title "user"    fc "red"
