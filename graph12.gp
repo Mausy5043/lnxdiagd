@@ -25,7 +25,6 @@ X_max = X_max + utc_offset - 946684800
 
 # ****************************************************************** Title *****
 set title "CPU Load"
-#"-".utc_offset."-"
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
@@ -59,14 +58,10 @@ set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
 set output ofname
 
 # ***** PLOT *****
-#set style data histogram
-#set style histogram columnstacked
 set style data boxes
 set style fill solid noborder
 plot ifname \
-       using ($2+utc_offset):($10+$11+$12+$13) title "waiting" fc "yellow"\
-  , '' using ($2+utc_offset):($10+$11+$12)     title "idle" fc "green" \
-  , '' using ($2+utc_offset):($10+$11)         title "system" fc "blue"\
-  , '' using ($2+utc_offset):10                title "user" fc "red"
-# plot ifname  using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 \
-#     ,       using ($2+utc_offset):4 title " Load [degC]" axes x1y2  with dots\
+       using ($2+utc_offset):($10+$11+$12+$13) title "idle"    fc "green"\
+  , '' using ($2+utc_offset):($10+$11+$13)     title "waiting" fc "blue" \
+  , '' using ($2+utc_offset):($10+$11)         title "system"  fc "yellow"\
+  , '' using ($2+utc_offset):10                title "user"    fc "red"
