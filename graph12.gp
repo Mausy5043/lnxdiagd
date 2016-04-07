@@ -61,8 +61,8 @@ set output ofname
 set style data boxes
 set style fill solid noborder
 plot ifname \
-       using ($2+utc_offset):($10+$11+$12+$13) title "idle"    fc "#229922"\
-  , '' using ($2+utc_offset):($10+$11+$13)     title "waiting" fc "blue" \
-  , '' using ($2+utc_offset):($10+$11)         title "system"  fc "yellow"\
-  , '' using ($2+utc_offset):10                title "user"    fc "red"
+       using ($2+utc_offset):($10+$11+$12+$13) title "idle"    fc "#229922" \
+  , '' using ($2+utc_offset):($10+$11+$13)     title "waiting" fc "blue"    \
+  , '' using ($2+utc_offset):($10+$11)         title "system"  fc "yellow"  \
+  , '' using ($2+utc_offset):10                title "user"    fc "red"     \
   , '' using ($2+utc_offset):5                 title "load 5min" with lines lc "black"
