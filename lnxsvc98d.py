@@ -45,7 +45,7 @@ class MyDaemon(Daemon):
       try:
         startTime   = time.time()
 
-        do_mv_data(flock)
+        do_mv_data(flock, home)
 
         waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
@@ -59,7 +59,7 @@ class MyDaemon(Daemon):
         syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
-def do_mv_data(flock):
+def do_mv_data(flock, homedir):
   # wait 15 seconds for processes to finish
   unlock(flock)  # remove stale lock
   time.sleep(15)
@@ -91,11 +91,12 @@ def do_mv_data(flock):
     # lftpcommand = 'lftp -c "open hendrixnet.nl; \
     #                cd /public_html/grav/user/pages/04.status/_' + NODE + '; \
     #                put /tmp/' + MYAPP + '/site/text.md;"'
-    lftpcommand = 'lftp -c "open hendrixnet.nl; \
-                   cd /public_html/grav/user/pages/04.status/_' + NODE + '; \
-                   mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;"'
-    syslog_trace("...:  {0}.".format(lftpcommand), False, DEBUG)
-    subprocess.Popen(lftpcommand, shell=True)
+    cmnd = homedir + '/graphday.sh'
+    syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
+    subprocess.Popen(cmnd, shell=True)
+    cmnd = 'lftp -c "open hendrixnet.nl; cd /public_html/grav/user/pages/04.status/_' + NODE + '; put /tmp/' + MYAPP + '/site/text.md;"'
+    syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
+    subprocess.Popen(cmnd, shell=True)
   unlock(flock)
 
 def lock(fname):
