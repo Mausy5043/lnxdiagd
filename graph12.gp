@@ -40,9 +40,9 @@ set yrange [0:100]
 # set autoscale y
 
 # **************************************************************** Y2-axis *****
-# set y2label "Load"
-# set autoscale y2
-# set y2tics border
+set y2label "Load"
+set autoscale y2
+set y2tics border
 
 # ***************************************************************** Legend *****
 set key outside bottom center horizontal box
@@ -65,4 +65,4 @@ plot ifname \
   , '' using ($2+utc_offset):($10+$11+$13)     title "waiting" fc "blue"    \
   , '' using ($2+utc_offset):($10+$11)         title "system"  fc "yellow"  \
   , '' using ($2+utc_offset):10                title "user"    fc "red"     \
-  , '' using ($2+utc_offset):5                 title "load 5min" with lines lc "black"
+  , '' using ($2+utc_offset):5                 title "load 5min" with lines lc "black" axes x1y2
