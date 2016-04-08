@@ -91,7 +91,7 @@ def do_mv_data(flock, homedir):
     # lftpcommand = 'lftp -c "open hendrixnet.nl; \
     #                cd /public_html/grav/user/pages/04.status/_' + NODE + '; \
     #                put /tmp/' + MYAPP + '/site/text.md;"'
-    cmnd = homedir + '/graphday.sh'
+    cmnd = homedir + '/' + MYAPP + '/graphday.sh'
     syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
     subprocess.Popen(cmnd, shell=True)
     cmnd = 'lftp -c "open hendrixnet.nl; cd /public_html/grav/user/pages/04.status/_' + NODE + '; put /tmp/' + MYAPP + '/site/text.md;"'
