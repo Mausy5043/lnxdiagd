@@ -93,10 +93,10 @@ def do_mv_data(flock, homedir):
     #                put /tmp/' + MYAPP + '/site/text.md;"'
     cmnd = homedir + '/' + MYAPP + '/graphday.sh'
     syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
-    subprocess.Popen(cmnd, shell=True)
+    subprocess.Popen(cmnd)
     cmnd = 'lftp -c "open hendrixnet.nl; cd /public_html/grav/user/pages/04.status/_' + NODE + '; put /tmp/' + MYAPP + '/site/text.md;"'
     syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
-    subprocess.Popen(cmnd, shell=True)
+    subprocess.Popen(cmnd)
   unlock(flock)
 
 def lock(fname):
