@@ -74,14 +74,6 @@ def do_mv_data(flock, homedir):
     syslog_trace("{0} internal locks exist".format(count_internal_locks), False, DEBUG)
   # endwhile
 
-  for fname in glob.glob(r'/tmp/' + MYAPP + '/*.csv'):
-    syslog_trace("...moving data {0}".format(fname), False, DEBUG)
-    shutil.move(fname, fname+".DEAD")
-
-  for fname in glob.glob(r'/tmp/' + MYAPP + '/*.png'):
-    syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
-    shutil.move(fname, fname+".DEAD")
-
   if os.path.isfile('/tmp/' + MYAPP + '/site/text.md'):
     # script = os.path.expanduser('~') + '/' + MYAPP + '/push.lftp'
     # syslog_trace("...executing  {0}.".format(script), False, DEBUG)
@@ -97,6 +89,15 @@ def do_mv_data(flock, homedir):
     cmnd = 'lftp -c "open hendrixnet.nl; cd /public_html/grav/user/pages/04.status/_' + NODE + '; put /tmp/' + MYAPP + '/site/text.md;"'
     syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
     subprocess.Popen(cmnd)
+
+  for fname in glob.glob(r'/tmp/' + MYAPP + '/*.csv'):
+    syslog_trace("...moving data {0}".format(fname), False, DEBUG)
+    shutil.move(fname, fname+".DEAD")
+
+  for fname in glob.glob(r'/tmp/' + MYAPP + '/*.png'):
+    syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
+    shutil.move(fname, fname+".DEAD")
+
   unlock(flock)
 
 def lock(fname):
