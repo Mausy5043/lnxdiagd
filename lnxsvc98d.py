@@ -90,7 +90,7 @@ def do_mv_data(flock, homedir):
             cd /public_html/grav/user/pages/04.status/_' + NODE + '; \
             mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;"'
     syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
-    subprocess.Popen(cmnd)
+    # subprocess.Popen(cmnd)
 
   for fname in glob.glob(r'/tmp/' + MYAPP + '/*.csv'):
     syslog_trace("...moving data {0}".format(fname), False, DEBUG)
