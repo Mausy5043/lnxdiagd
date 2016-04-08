@@ -86,7 +86,9 @@ def do_mv_data(flock, homedir):
     cmnd = homedir + '/' + MYAPP + '/graphday.sh'
     syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
     subprocess.Popen(cmnd)
-    cmnd = 'lftp -c "open hendrixnet.nl; cd /public_html/grav/user/pages/04.status/_' + NODE + '; put /tmp/' + MYAPP + '/site/text.md;"'
+    cmnd = 'lftp -c "open hendrixnet.nl; \
+            cd /public_html/grav/user/pages/04.status/_' + NODE + '; \
+            mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;"'
     syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
     subprocess.Popen(cmnd)
 
