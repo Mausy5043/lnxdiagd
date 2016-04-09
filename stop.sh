@@ -35,5 +35,6 @@ pushd "$HOME/lnxdiagd"
   done
 popd
 
+echo
 echo "To re-start all daemons, use:"
 echo "./update.sh"
