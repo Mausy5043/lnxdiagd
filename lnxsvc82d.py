@@ -117,8 +117,8 @@ def do_markdown(flock, fdata, hwdevice):
 
     # CPU temperature and frequency
     f.write('!! ' + str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz\n\n')
-    f.write('![This is a GNUplot image](img/day11.png?classes=zoomer)\n')
-    f.write('![This is a GNUplot image](img/day12.png?classes=zoomer)\n')
+    f.write('![A GNUplot image should be here: day11.png](img/day11.png?classes=zoomer)\n')
+    f.write('![A GNUplot image should be here: day12.png](img/day12.png?classes=zoomer)\n')
 
     # lnxdiagd branch
     f.write('!!! lnxdiagd   on: ' + lnxdiagdbranch + '\n\n')
