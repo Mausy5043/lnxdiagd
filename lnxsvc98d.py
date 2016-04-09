@@ -85,12 +85,12 @@ def do_mv_data(flock, homedir):
     #                put /tmp/' + MYAPP + '/site/text.md;"'
     cmnd = homedir + '/' + MYAPP + '/graphday.sh'
     syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
-    subprocess.Popen(cmnd)
-    cmnd = 'lftp -c "open hendrixnet.nl; \
-            cd /public_html/grav/user/pages/04.status/_' + NODE + '; \
-            mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;"'
+    cmnd = subprocess.Popen(cmnd, stdout=subprocess.PIPE).stdout.read()
     syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
-    # subprocess.Popen(cmnd)
+    # cmnd = ['lftp', '-c', ...]
+    # syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
+    # cmnd = subprocess.Popen(cmnd, stdout=subprocess.PIPE).stdout.read()
+    # syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
 
   for fname in glob.glob(r'/tmp/' + MYAPP + '/*.csv'):
     syslog_trace("...moving data {0}".format(fname), False, DEBUG)
@@ -101,6 +101,14 @@ def do_mv_data(flock, homedir):
     shutil.move(fname, fname+".DEAD")
 
   unlock(flock)
+
+def write_lftp():
+  # f = "open hendrixnet.nl; \
+  #        cd /public_html/grav/user/pages/04.status/_' + NODE + '; \
+  #        mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;".splitlines(";")
+  # with open(script, `w` as fo):
+  #  fo.write = ""
+  return
 
 def lock(fname):
   open(fname, 'a').close()
