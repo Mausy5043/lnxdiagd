@@ -101,19 +101,17 @@ def do_mv_data(flock, homedir, script):
   unlock(flock)
 
 def write_lftp(script):
-  # f = "open hendrixnet.nl; \
-  #        cd /public_html/grav/user/pages/04.status/_' + NODE + '; \
-  #        mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;".splitlines(";")
+
   with open(script, 'w') as f:
-    f.write = '# DO NOT EDIT\n'
-    f.write = '# This file is created automatically by ' + MYAPP + '\n\n'
-    f.write = '# lftp script'
-    f.write = 'open hendrixnet.nl;\n'
-    f.write = 'cd /public_html/grav/user/pages/04.status/;\n'
-    f.write = 'mkdir -p -f _' + NODE + ' ;\n'
-    f.write = 'cd _' + NODE + ' ;\n'
-    f.write = 'mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;\n'
-    f.write = '\n'
+    f.write('# DO NOT EDIT\n')
+    f.write('# This file is created automatically by ' + MYAPP + '\n\n')
+    f.write('# lftp script')
+    f.write('open hendrixnet.nl;\n')
+    f.write('cd /public_html/grav/user/pages/04.status/;\n')
+    f.write('mkdir -p -f _' + NODE + ' ;\n')
+    f.write('cd _' + NODE + ' ;\n')
+    f.write('mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;\n')
+    f.write('\n')
 
 def lock(fname):
   open(fname, 'a').close()
