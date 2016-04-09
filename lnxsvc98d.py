@@ -78,7 +78,9 @@ def do_mv_data(flock, homedir, script):
     cmnd = subprocess.Popen(cmnd, stdout=subprocess.PIPE).stdout.read()
     syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
 
-  time.sleep(15 - t0)
+  waitTime = 15 - (time.time() - t0)
+  if waitTime > 0:
+    time.sleep(waitTime)
   lock(flock)
   # wait for all other processes to release their locks.
   count_internal_locks = 2
