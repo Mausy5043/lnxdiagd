@@ -107,7 +107,7 @@ def write_lftp(script):
   with open(script, 'w') as f:
     f.write('# DO NOT EDIT\n')
     f.write('# This file is created automatically by ' + MYAPP + '\n\n')
-    f.write('# lftp script')
+    f.write('# lftp script\n\n')
     f.write('open hendrixnet.nl;\n')
     f.write('cd /public_html/grav/user/pages/04.status/;\n')
     f.write('mkdir -p -f _' + NODE + ' ;\n')
