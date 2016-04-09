@@ -45,7 +45,7 @@ set autoscale y2
 set y2tics border
 
 # ***************************************************************** Legend *****
-set key outside bottom center horizontal box
+set key outside bottom center horizontal box reverse
 set key samplen .2
 
 # ***************************************************************** Output *****
