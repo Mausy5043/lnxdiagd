@@ -19,9 +19,14 @@ set timestamp 'created: %Y-%m-%d %H:%M' bottom
 # ************************************************************* Statistics *****
 # stats to be calculated here of column 2 (UX-epoch)
 stats ifname using 2 name "X" nooutput
-
 X_min = X_min + utc_offset - 946684800
 X_max = X_max + utc_offset - 946684800
+
+stats ifname using 7 name "upY" nooutput
+Y_max = upY_max * 1.1
+
+stats ifname using 8 name "dnY" nooutput
+Y_min = dnY_max * -1.1
 
 # ************************************************************* Functions ******
 # determine delta data
@@ -37,11 +42,11 @@ set xdata time               # Define that data on X-axis should be interpreted 
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
 set xtics rotate by 40 right
-set xrange [ X_min : X_max ]
+set xrange [ Y_min : Y_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel "Usage []"
-# set yrange [0:100]
+set yrange [:100]
 set autoscale y
 set format y "%3.0s %c"
 
@@ -66,8 +71,8 @@ set output ofname
 
 # ***** PLOT *****
 set style data boxes
-set style fill transparent solid 0.1 noborder
+set style fill transparent solid 0.05 noborder
 
 plot ifname \
-       using ($2+utc_offset):(delta($6)*-1*8/60) title "Download (eth0)" fc rgb "#ccbb0000"  \
-  , '' using ($2+utc_offset):(delta($7)*8/60)    title "Upload   (eth0)" fc rgb "#990000bb" \
+       using ($2+utc_offset):(delta($6)*-1*8/60) title "Download (eth0)" fc rgb "#33bb0000"  \
+  , '' using ($2+utc_offset):(delta($7)*8/60)    title "Upload   (eth0)" fc rgb "#330000bb" \
