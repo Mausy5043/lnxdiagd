@@ -8,7 +8,7 @@ ofname = "/tmp/lnxdiagd/site/img/day12.png"
 
 # ******************************************************* General settings *****
 # set terminal png font "Vera" 11 size 640,480
-set terminal png font "Courier" 10 size 640,304
+set terminal png font "Vera" 10 size 640,304
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
 set grid front
@@ -45,8 +45,9 @@ set autoscale y2
 set y2tics border
 
 # ***************************************************************** Legend *****
-set key outside bottom center horizontal box reverse
+set key outside bottom center horizontal box
 set key samplen .2
+set key reverse Left
 
 # ***************************************************************** Output *****
 # set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
