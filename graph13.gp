@@ -23,10 +23,10 @@ X_min = X_min + utc_offset - 946684800
 X_max = X_max + utc_offset - 946684800
 
 stats ifname using 7 name "upY" nooutput
-Y_max = upY_max * 1.1
+Y_max = upY_max * 1.1 * 8/60
 
 stats ifname using 6 name "dnY" nooutput
-Y_min = dnY_max * -1.1
+Y_min = dnY_max * -1.1 * 8/60
 
 # ************************************************************* Functions ******
 # determine delta data
