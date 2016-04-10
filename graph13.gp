@@ -25,7 +25,7 @@ X_max = X_max + utc_offset - 946684800
 stats ifname using 7 name "upY" nooutput
 Y_max = upY_max * 1.1
 
-stats ifname using 8 name "dnY" nooutput
+stats ifname using 6 name "dnY" nooutput
 Y_min = dnY_max * -1.1
 
 # ************************************************************* Functions ******
@@ -42,13 +42,14 @@ set xdata time               # Define that data on X-axis should be interpreted 
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
 set xtics rotate by 40 right
-set xrange [ Y_min : Y_max ]
+set xrange [ X_min : X_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel "Usage []"
 set yrange [:100]
 set autoscale y
 set format y "%3.0s %c"
+set yrange [ Y_min : Y_max ]
 
 # **************************************************************** Y2-axis *****
 # set y2label "Load"
