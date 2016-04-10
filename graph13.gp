@@ -66,7 +66,8 @@ set output ofname
 
 # ***** PLOT *****
 set style data boxes
-set style fill solid noborder
+set style fill transparent solid 0.1 noborder
+
 plot ifname \
        using ($2+utc_offset):(delta($6)*-1*8/60) title "Download (eth0)" fc rgb "#ccbb0000"  \
   , '' using ($2+utc_offset):(delta($7)*8/60)    title "Upload   (eth0)" fc rgb "#990000bb" \
