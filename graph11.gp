@@ -46,13 +46,9 @@ set autoscale y
 # set y2tics border
 
 # ***************************************************************** Legend *****
-# generate a legend which is placed underneath the plot
-#set key outside bottom center box title "-=legend=-"
-set key default
-set key box
+set key outside bottom center horizontal box
 set key samplen .2
-set key inside vertical
-set key left top
+set key reverse Left
 
 # ***************************************************************** Output *****
 set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
