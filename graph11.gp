@@ -8,7 +8,7 @@ ofname = "/tmp/lnxdiagd/site/img/day11.png"
 
 # ******************************************************* General settings *****
 # set terminal png font "Vera" 11 size 640,480
-set terminal png font "Vera" 10 size 640,304
+set terminal png truecolor enhanced font "Vera" 10 size 640,304
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
 set grid
@@ -47,7 +47,7 @@ set autoscale y
 
 # ***************************************************************** Legend *****
 set key outside bottom center horizontal box
-set key samplen .2
+set key samplen .5
 set key reverse Left
 
 # ***************************************************************** Output *****
@@ -60,5 +60,5 @@ set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
 set output ofname
 
 # ***** PLOT *****
-plot ifname  using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 \
+plot ifname  using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.1 fc rgb "#ccbb0000" \
 #    ,       using ($2+utc_offset):4 title " Temperature [degC]" axes x1y2  with dots\

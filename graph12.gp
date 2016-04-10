@@ -8,7 +8,7 @@ ofname = "/tmp/lnxdiagd/site/img/day12.png"
 
 # ******************************************************* General settings *****
 # set terminal png font "Vera" 11 size 640,480
-set terminal png font "Vera" 10 size 640,304
+set terminal png truecolor enhanced font "Vera" 10 size 640,304
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
 set grid front
@@ -62,8 +62,8 @@ set output ofname
 set style data boxes
 set style fill solid noborder
 plot ifname \
-       using ($2+utc_offset):($10+$11+$12+$13) title "idle"    fc "#229922" \
+       using ($2+utc_offset):($10+$11+$12+$13) title "idle"    fc rgb "#229922" \
   , '' using ($2+utc_offset):($10+$11+$13)     title "waiting" fc "blue"    \
   , '' using ($2+utc_offset):($10+$11)         title "system"  fc "yellow"  \
-  , '' using ($2+utc_offset):10                title "user"    fc "red"     \
+  , '' using ($2+utc_offset):10                title "user"    fc rgb "#ccbb0000"    \
   , '' using ($2+utc_offset):5                 title "load 5min" with lines lw 0.1 lc "black" axes x1y2
