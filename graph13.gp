@@ -68,5 +68,5 @@ set output ofname
 set style data boxes
 set style fill solid noborder
 plot ifname \
-       using ($2+utc_offset):(delta($6))     title "Download (eth0)" fc "red"  \
-  , '' using ($2+utc_offset):(delta($7)*-1)  title "Upload   (eth0)" fc "blue" \
+       using ($2+utc_offset):(delta($6)*-1*8/60) title "Download (eth0)" fc "red"  \
+  , '' using ($2+utc_offset):(delta($7)*8/60)    title "Upload   (eth0)" fc "blue" \
