@@ -61,4 +61,3 @@ set output ofname
 
 # ***** PLOT *****
 plot ifname  using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.1 fc rgb "#ccbb0000" \
-#    ,       using ($2+utc_offset):4 title " Temperature [degC]" axes x1y2  with dots\
