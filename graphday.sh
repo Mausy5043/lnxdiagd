@@ -27,5 +27,8 @@ pushd $HOME/lnxdiagd >/dev/null
   if [ $(cat /tmp/sql12.csv |wc -l) -gt 30 ]; then
     gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph12.gp
   fi
+  if [ $(cat /tmp/sql13.csv |wc -l) -gt 30 ]; then
+    gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph13.gp
+  fi
 
 popd >/dev/null
