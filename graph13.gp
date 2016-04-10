@@ -22,11 +22,13 @@ stats ifname using 2 name "X" nooutput
 X_min = X_min + utc_offset - 946684800
 X_max = X_max + utc_offset - 946684800
 
-stats ifname using 7 name "upY" nooutput
-Y_max = upY_max * 1.1 * 8/60
+#FIXME: need stats on delta($7)
+#stats ifname using 7 name "upY" nooutput
+#Y_max = upY_max * 1.1 * 8/60
 
-stats ifname using 6 name "dnY" nooutput
-Y_min = dnY_max * -1.1 * 8/60
+#FIXME: need stats on delta($6)
+#stats ifname using 6 name "dnY" nooutput
+#Y_min = dnY_max * -1.1 * 8/60
 
 # ************************************************************* Functions ******
 # determine delta data
@@ -49,7 +51,7 @@ set ylabel "Usage []"
 set yrange [:100]
 set autoscale y
 set format y "%3.0s %c"
-set yrange [ Y_min : Y_max ]
+#set yrange [ Y_min : Y_max ]
 
 # **************************************************************** Y2-axis *****
 # set y2label "Load"
