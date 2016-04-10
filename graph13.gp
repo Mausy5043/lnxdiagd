@@ -3,7 +3,7 @@
 # graph of CPU load
 
 # datafile
-ifname = "/tmp/sql12.csv"
+ifname = "/tmp/sql13.csv"
 ofname = "/tmp/lnxdiagd/site/img/day13.png"
 
 # ******************************************************* General settings *****
@@ -23,8 +23,13 @@ stats ifname using 2 name "X" nooutput
 X_min = X_min + utc_offset - 946684800
 X_max = X_max + utc_offset - 946684800
 
+# ************************************************************* Functions ******
+# determine delta data
+delta(x) = ( xD = x - old_x, old_x = x, xD < 0 ? 0 : xD)
+old_x = NaN
+
 # ****************************************************************** Title *****
-set title "CPU Load"
+set title "Network Usage (eth0)"
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
@@ -35,14 +40,15 @@ set xtics rotate by 40 right
 set xrange [ X_min : X_max ]
 
 # ***************************************************************** Y-axis *****
-set ylabel "Usage [%]"
-set yrange [0:100]
-# set autoscale y
+set ylabel "Usage []"
+# set yrange [0:100]
+set autoscale y
+set format y "%.3s %c"
 
 # **************************************************************** Y2-axis *****
-set y2label "Load"
-set autoscale y2
-set y2tics border
+# set y2label "Load"
+# set autoscale y2
+# set y2tics border
 
 # ***************************************************************** Legend *****
 set key outside bottom center horizontal box
@@ -62,8 +68,5 @@ set output ofname
 set style data boxes
 set style fill solid noborder
 plot ifname \
-       using ($2+utc_offset):($10+$11+$12+$13) title "idle"    fc "#229922" \
-  , '' using ($2+utc_offset):($10+$11+$13)     title "waiting" fc "blue"    \
-  , '' using ($2+utc_offset):($10+$11)         title "system"  fc "yellow"  \
-  , '' using ($2+utc_offset):10                title "user"    fc "red"     \
-  , '' using ($2+utc_offset):5                 title "load 5min" with dots lc "black" axes x1y2
+       using ($2+utc_offset):(delta($6))     title "Download (eth0)" fc "red"  \
+  , '' using ($2+utc_offset):(delta($7)*-1)  title "Upload   (eth0)" fc "blue" \
