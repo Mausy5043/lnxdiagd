@@ -12,7 +12,7 @@ pushd "$HOME/lnxdiagd"
   git config core.fileMode false
   # set the branch
   if [ ! -e "$HOME/.lnxdiagd.branch" ]; then
-    echo "master" > "$HOME/.lnxdiagd.branch"
+    echo "v1_0" > "$HOME/.lnxdiagd.branch"
   fi
 
   # Create the /etc/cron.d directory if it doesn't exist
