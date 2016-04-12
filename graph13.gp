@@ -50,7 +50,7 @@ set xrange [ X_min : X_max ]
 set ylabel "Usage []"
 set yrange [:100]
 set autoscale y
-set format y "%3.0s %c"
+set format y "%4.1s %c"
 #set yrange [ Y_min : Y_max ]
 
 # **************************************************************** Y2-axis *****
