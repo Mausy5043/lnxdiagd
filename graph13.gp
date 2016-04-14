@@ -1,6 +1,6 @@
 #!/usr/bin/env gnuplot
 
-# graph of CPU load
+# graph of network usage
 
 # datafile
 ifname = "/tmp/sql13.csv"
@@ -22,14 +22,6 @@ stats ifname using 2 name "X" nooutput
 X_min = X_min + utc_offset - 946684800
 X_max = X_max + utc_offset - 946684800
 
-#FIXME: need stats on delta($7)
-#stats ifname using 7 name "upY" nooutput
-#Y_max = upY_max * 1.1 * 8/60
-
-#FIXME: need stats on delta($6)
-#stats ifname using 6 name "dnY" nooutput
-#Y_min = dnY_max * -1.1 * 8/60
-
 # ************************************************************* Functions ******
 # determine delta data
 delta(x) = ( xD = x - old_x, old_x = x, xD < 0 ? 0 : xD)
@@ -48,10 +40,8 @@ set xrange [ X_min : X_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel "Usage []"
-set yrange [:100]
 set autoscale y
 set format y "%4.1s %c"
-#set yrange [ Y_min : Y_max ]
 
 # **************************************************************** Y2-axis *****
 # set y2label "Load"
@@ -74,8 +64,8 @@ set output ofname
 
 # ***** PLOT *****
 set style data boxes
-set style fill transparent solid 0.05 noborder
+set style fill solid noborder
 
 plot ifname \
-       using ($2+utc_offset):(delta($6)*-1*8/60) title "Download (eth0)" fc rgb "#33bb0000"  \
-  , '' using ($2+utc_offset):(delta($7)*8/60)    title "Upload   (eth0)" fc rgb "#330000bb" \
+       using ($2+utc_offset):(delta($6)*-1*8/60) title "Download (eth0)" fc rgb "#bb0000"  \
+  , '' using ($2+utc_offset):(delta($7)*8/60)    title "Upload   (eth0)" fc rgb "#0000bb" \

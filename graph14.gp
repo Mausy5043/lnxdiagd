@@ -35,9 +35,9 @@ set xtics rotate by 40 right
 set xrange [ X_min : X_max ]
 
 # ***************************************************************** Y-axis *****
-set ylabel "Usage [%]"
-set yrange [0:100]
-# set autoscale y
+set ylabel "Usage []"
+set autoscale y
+set format y "%4.1s %c"
 
 # **************************************************************** Y2-axis *****
 # set y2label "Load"
@@ -65,5 +65,4 @@ plot ifname \
        using ($2+utc_offset):($5+$6+$7+$8) title "free"    fc rgb "#229922" \
   , '' using ($2+utc_offset):($5+$6+$7)     title "cached" fc "blue"    \
   , '' using ($2+utc_offset):($5+$6)         title "buffers"  fc "yellow"  \
-  , '' using ($2+utc_offset):5                title "user"    fc rgb "#ccbb0000"    \
-#  , '' using ($2+utc_offset):()($8*-1)         title "swap" with lines lw 0.1 lc "black" axes x1y2
+  , '' using ($2+utc_offset):5                title "user"    fc rgb "#ccbb0000"
