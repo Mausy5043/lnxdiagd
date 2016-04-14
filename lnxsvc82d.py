@@ -108,22 +108,24 @@ def do_markdown(flock, fdata, hwdevice):
 
     # System ID
     f.write('!!! ')
-    f.write(uname[0] + ' ' + uname[1] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '  \n\n')
+    f.write(uname[0] + ' ' + uname[1] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '  \n')
+
+    # lnxdiagd branch
+    f.write('!!! lnxdiagd   on: ' + lnxdiagdbranch + '\n\n')
 
     # System Uptime
-    f.write('## Server Uptime:  \n')
+    f.write('### Server Uptime:  \n')
     f.write('!!! ')
     f.write(uptime + '\n')
 
     # CPU temperature and frequency
+    f.write('### Server Temperature:  \n')
     f.write('!! ' + str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz\n\n')
+    f.write('### Server Graphs:  \n')
     f.write('![A GNUplot image should be here: day11.png](img/day11.png?classes=zoomer)\n')
     f.write('![A GNUplot image should be here: day12.png](img/day12.png?classes=zoomer)\n')
     f.write('![A GNUplot image should be here: day13.png](img/day13.png?classes=zoomer)\n')
     f.write('![A GNUplot image should be here: day14.png](img/day14.png?classes=zoomer)\n')
-
-    # lnxdiagd branch
-    f.write('!!! lnxdiagd   on: ' + lnxdiagdbranch + '\n\n')
 
     # Disk usage
     f.write('## Disk Usage\n')
