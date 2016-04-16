@@ -43,7 +43,8 @@ set xrange [ X_min : X_max ]
 # ***************************************************************** Y-axis *****
 set ylabel "Temperature [degC]"
 #set yrange [10:20]
-set autoscale y
+#set autoscale y
+set yrange [ Y_min : Y_max ]
 
 # **************************************************************** Y2-axis *****
 # set y2label "Temperature [degC]"
