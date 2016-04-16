@@ -32,6 +32,10 @@ stats ifname using (delta($6)) name "Ydn" nooutput
 Ydn_min = 1 * 8 / 60.
 Ydn_max = Ydn_max * 8 / 60.
 
+# stats to be calculated here of column 6 (Download bytes per minute)
+stats ifname using (delta($7)) name "Yup" nooutput
+Yup_min = 1 * 8 / 60.
+Yup_max = Yup_max * 8 / 60.
 
 # ****************************************************************** Title *****
 
@@ -47,17 +51,15 @@ set multiplot layout 2,1 title "Network Usage (eth0)"
 # ***************************************************************** X-axis *****
 set xdata time               # Define that data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
-set format x "%R"            # Display time in 24 hour notation on the X axis
+set format x ""
 set xtics rotate by 40 right
 set xrange [ X_min : X_max ]
-#unset xlabel
-#unset xtics
 
 # ***************************************************************** Y-axis *****
-##set ylabel "Usage []"
-##set autoscale y
-##set format y "%4.1s %c"
+set ylabel "Speed [bits/sec]"
+set format y "%3.0s %c"
 set logscale y 2
+set yrange [ Yup_min : Yup_max ]
 set bmargin 0
 
 # ***************************************************************** Output *****
@@ -71,7 +73,7 @@ set bmargin 0
 ##set style data boxes
 ##set style fill solid noborder
 
-plot ifname using ($2+utc_offset):(delta($7)*8/60) title "Upload   (eth0)" fc rgb "#0000bb" \
+plot ifname using ($2+utc_offset):(delta($7)*8/60) title "Upload   (eth0)" fc rgb "#0000bb" with dots\
 
 
 ################################################################################
@@ -90,9 +92,7 @@ set xtics rotate by 40 right
 set xrange [ X_min : X_max ]
 
 # ***************************************************************** Y-axis *****
-##set ylabel "Usage []"
-##set autoscale y
-##set format y "%4.1s %c"
+unset ylabel
 set logscale y 2
 set yrange [ Ydn_min : Ydn_max ] reverse
 set tmargin 0
@@ -110,6 +110,6 @@ unset bmargin
 ##set style data boxes
 ##set style fill solid noborder
 
-plot ifname using ($2+utc_offset):(delta($6)*8/60) title "Download (eth0)" fc rgb "#bb0000"  \
+plot ifname using ($2+utc_offset):(delta($6)*8/60) title "Download (eth0)" fc rgb "#bb0000"  with dots \
 
 unset multiplot
