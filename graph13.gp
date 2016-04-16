@@ -91,7 +91,7 @@ set xtics rotate by 40 right
 set xrange [ X_min : X_max ]
 
 # ***************************************************************** Y-axis *****
-unset ylabel
+set ylabel " "
 set logscale y 10
 set yrange [ Ydn_min : Ydn_max ] reverse
 set tmargin 0
