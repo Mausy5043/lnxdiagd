@@ -14,7 +14,7 @@ set datafile missing "NaN"    # Ignore missing values
 set grid
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
-set timestamp 'created: %Y-%m-%d %H:%M' bottom
+set timestamp 'created: %Y-%m-%d %H:%M' bottom font "Vera,8"
 
 # ************************************************************* Statistics *****
 # stats to be calculated here of column 2 (UX-epoch)

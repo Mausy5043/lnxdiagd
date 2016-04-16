@@ -81,7 +81,7 @@ unset object 1
 ################################################################################
 
 # ******************************************************* General settings *****
-set timestamp 'created: %Y-%m-%d %H:%M' bottom
+set timestamp 'created: %Y-%m-%d %H:%M' bottom font "Vera,8"
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
