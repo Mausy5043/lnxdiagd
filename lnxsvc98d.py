@@ -66,7 +66,7 @@ def do_mv_data(flock, homedir, script):
   unlock(flock)  # remove stale lock
   t0 = time.time()
 
-  cmnd = 'nice ' + homedir + '/' + MYAPP + '/graphday.sh'
+  cmnd = homedir + '/' + MYAPP + '/graphday.sh'
   syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
   cmnd = subprocess.Popen(cmnd, stdout=subprocess.PIPE).stdout.read()
   syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
