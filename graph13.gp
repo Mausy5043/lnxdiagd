@@ -37,9 +37,10 @@ stats ifname using (delta($7)) name "Yup" nooutput
 Yup_min = 1024 * 8 / 60.
 Yup_max = Yup_max * 8 / 60.
 
-# ****************************************************************** Title *****
-
-unset key
+# ***************************************************************** Legend *****
+set key inside top left nobox
+set key samplen .5
+set key reverse Left
 
 set multiplot layout 2,1 title "Network Usage (eth0)"
 
