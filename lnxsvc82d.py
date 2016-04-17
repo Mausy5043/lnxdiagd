@@ -122,10 +122,12 @@ def do_markdown(flock, fdata, hwdevice):
     f.write('### Server Temperature:  \n')
     f.write('!! ' + str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz\n\n')
     f.write('### Server Graphs:  \n')
-    f.write('![A GNUplot image should be here: day11.png](img/day11.png?classes=zoomer)\n')
+    if (hwdevice != "nohwdevice"):
+      f.write('![A GNUplot image should be here: day11.png](img/day11.png?classes=zoomer)\n')
     f.write('![A GNUplot image should be here: day12.png](img/day12.png?classes=zoomer)\n')
     f.write('![A GNUplot image should be here: day14.png](img/day14.png?classes=zoomer)\n')
     f.write('![A GNUplot image should be here: day13.png](img/day13.png?classes=zoomer)\n')
+    f.write('![A GNUplot image should be here: day15.png](img/day15.png?classes=zoomer)\n')
 
     # Disk usage
     f.write('## Disk Usage\n')
