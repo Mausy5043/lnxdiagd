@@ -43,6 +43,7 @@ set xrange [ X_min : X_max ]
 set ylabel "Lines []"
 set autoscale y
 set format y "%4.1s %c"
+set logscale y 10
 
 # **************************************************************** Y2-axis *****
 # set y2label "Load"
