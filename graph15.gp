@@ -63,11 +63,11 @@ set style data boxes
 set style fill solid noborder
 
 plot ifname \
-      using ($2+utc_offset):($4+$5+$6+$7+$8+$9+$10+$11) \
-  ,'' using ($2+utc_offset):($4+$5+$6+$7+$8+$9+$10) \
-  ,'' using ($2+utc_offset):($4+$5+$6+$7+$8+$9) \
-  ,'' using ($2+utc_offset):($4+$5+$6+$7+$8) \
-  ,'' using ($2+utc_offset):($4+$5+$6+$7) \
-  ,'' using ($2+utc_offset):($4+$5+$6) \
-  ,'' using ($2+utc_offset):($4+$5) \
-  ,'' using ($2+utc_offset):($4) \
+      using ($2+utc_offset):($4+$5+$6+$7+$8+$9+$10+$11) title "04" \
+  ,'' using ($2+utc_offset):($5+$6+$7+$8+$9+$10+$11) title "05" \
+  ,'' using ($2+utc_offset):($6+$7+$8+$9+$10+$11) title "06" \
+  ,'' using ($2+utc_offset):($7+$8+$9+$10+$11) title "07" \
+  ,'' using ($2+utc_offset):($8+$9+$10+$11) title "08" \
+  ,'' using ($2+utc_offset):($9+$10+$11) title "09" \
+  ,'' using ($2+utc_offset):($10+$11) title "10" \
+  ,'' using ($2+utc_offset):($11) title "11" \
