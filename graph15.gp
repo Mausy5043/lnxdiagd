@@ -16,6 +16,11 @@ tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
 set timestamp 'created: %Y-%m-%d %H:%M' bottom font "Vera,8"
 
+# ************************************************************* Functions ******
+# determine delta data
+delta(x) = ( xD = x - old_x, old_x = x, xD <= 0 ? NaN : xD)
+old_x = NaN
+
 # ************************************************************* Statistics *****
 # stats to be calculated here of column 2 (UX-epoch)
 stats ifname using 2 name "X" nooutput
@@ -63,11 +68,11 @@ set style data boxes
 set style fill solid noborder
 
 plot ifname \
-      using ($2+utc_offset):($4+$5+$6+$7+$8+$9+$10+$11) title "04" \
-  ,'' using ($2+utc_offset):($5+$6+$7+$8+$9+$10+$11) title "05" \
-  ,'' using ($2+utc_offset):($6+$7+$8+$9+$10+$11) title "06" \
-  ,'' using ($2+utc_offset):($7+$8+$9+$10+$11) title "07" \
-  ,'' using ($2+utc_offset):($8+$9+$10+$11) title "08" \
-  ,'' using ($2+utc_offset):($9+$10+$11) title "09" \
-  ,'' using ($2+utc_offset):($10+$11) title "10" \
-  ,'' using ($2+utc_offset):($11) title "11" \
+      using ($2+utc_offset):(delta($4+$5+$6+$7+$8+$9+$10+$11)) title "04" \
+  ,'' using ($2+utc_offset):(delta($5+$6+$7+$8+$9+$10+$11)) title "05" \
+  ,'' using ($2+utc_offset):(delta($6+$7+$8+$9+$10+$11)) title "06" \
+  ,'' using ($2+utc_offset):(delta($7+$8+$9+$10+$11)) title "07" \
+  ,'' using ($2+utc_offset):(delta($8+$9+$10+$11)) title "08" \
+  ,'' using ($2+utc_offset):(delta($9+$10+$11)) title "09" \
+  ,'' using ($2+utc_offset):(delta($10+$11)) title "10" \
+  ,'' using ($2+utc_offset):(delta($11)) title "11" \
