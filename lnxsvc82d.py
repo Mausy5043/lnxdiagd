@@ -38,12 +38,8 @@ class MyDaemon(Daemon):
     sampleTime      = reportTime/samplesperCycle        # time [s] between samples
     # cycleTime       = samples * sampleTime              # time [s] per cycle
 
-    # mount_path      = '/mnt/share1/'
-    # remote_path     = mount_path + NODE
-    # remote_lock     = remote_path + '/client.lock'
-
     try:
-      hwdevice      = iniconf.get("11", NODE+".hwdevice")
+      hwdevice      = iniconf.get("11", NODE + ".hwdevice")
     except ConfigParser.NoOptionError as e:  # no hwdevice
       hwdevice      = "nohwdevice"
       pass
@@ -52,7 +48,7 @@ class MyDaemon(Daemon):
       try:
         startTime   = time.time()
 
-        do_xml(flock, fdata, hwdevice)
+        do_markdown(flock, fdata, hwdevice)
 
         waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
@@ -66,12 +62,11 @@ class MyDaemon(Daemon):
         syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
-def do_xml(flock, fdata, hwdevice):
+def do_markdown(flock, fdata, hwdevice):
   home              = os.path.expanduser('~')
   uname             = os.uname()
   Tcpu              = "(no T-sensor)"
   fcpu              = "(no f-sensor)"
-  # FIXME: read HW paths from .ini
   if os.path.isfile(hwdevice):
     fi = hwdevice
     with open(fi, 'r') as f:
@@ -106,7 +101,6 @@ def do_xml(flock, fdata, hwdevice):
     f.write('---\n')
     f.write('title: ' + NODE + '\n')
     f.write('menu: ' + NODE + '\n')
-    f.write('image_align: left\n')
     f.write('---\n')
 
     # HEADER
@@ -114,18 +108,26 @@ def do_xml(flock, fdata, hwdevice):
 
     # System ID
     f.write('!!! ')
-    f.write(uname[0] + ' ' + uname[1] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '  \n\n')
+    f.write(uname[0] + ' ' + uname[1] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '  \n')
+
+    # lnxdiagd branch
+    f.write('!!! lnxdiagd   on: ' + lnxdiagdbranch + '\n\n')
 
     # System Uptime
-    f.write('## Server Uptime:  \n')
+    f.write('### Server Uptime:  \n')
     f.write('!!! ')
     f.write(uptime + '\n')
 
     # CPU temperature and frequency
+    f.write('### Server Temperature:  \n')
     f.write('!! ' + str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz\n\n')
-
-    # lnxdiagd branch
-    f.write('!!! lnxdiagd   on: ' + lnxdiagdbranch + '\n\n')
+    f.write('### Server Graphs:  \n')
+    if (hwdevice != "nohwdevice"):
+      f.write('![A GNUplot image should be here: day11.png](img/day11.png?classes=zoomer)\n')
+    f.write('![A GNUplot image should be here: day12.png](img/day12.png?classes=zoomer)\n')
+    f.write('![A GNUplot image should be here: day14.png](img/day14.png?classes=zoomer)\n')
+    f.write('![A GNUplot image should be here: day13.png](img/day13.png?classes=zoomer)\n')
+    f.write('![A GNUplot image should be here: day15.png](img/day15.png?classes=zoomer)\n')
 
     # Disk usage
     f.write('## Disk Usage\n')

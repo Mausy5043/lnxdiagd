@@ -34,6 +34,8 @@ class MyDaemon(Daemon):
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
 
+    scriptname      = iniconf.get(inisection, "lftpscript")
+
     # samples         = samplesperCycle * cycles           # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle         # time [s] between samples
     # cycleTime       = samples * sampleTime               # time [s] per cycle
@@ -45,7 +47,7 @@ class MyDaemon(Daemon):
       try:
         startTime   = time.time()
 
-        do_mv_data(flock)
+        do_mv_data(flock, home, scriptname)
 
         waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
@@ -59,10 +61,26 @@ class MyDaemon(Daemon):
         syslog_trace(traceback.format_exc(), syslog.LOG_ALERT, DEBUG)
         raise
 
-def do_mv_data(flock):
+def do_mv_data(flock, homedir, script):
   # wait 15 seconds for processes to finish
   unlock(flock)  # remove stale lock
-  time.sleep(15)
+  t0 = time.time()
+
+  cmnd = homedir + '/' + MYAPP + '/graphday.sh'
+  syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
+  cmnd = subprocess.Popen(cmnd, stdout=subprocess.PIPE).stdout.read()
+  syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
+
+  if os.path.isfile('/tmp/' + MYAPP + '/site/text.md'):
+    write_lftp(script)
+    cmnd = ['lftp', '-f', script]
+    syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
+    cmnd = subprocess.Popen(cmnd, stdout=subprocess.PIPE).stdout.read()
+    syslog_trace("...:  {0}.".format(cmnd), False, DEBUG)
+
+  waitTime = 15 - (time.time() - t0)
+  if waitTime > 0:
+    time.sleep(waitTime)
   lock(flock)
   # wait for all other processes to release their locks.
   count_internal_locks = 2
@@ -82,16 +100,20 @@ def do_mv_data(flock):
     syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
     shutil.move(fname, fname+".DEAD")
 
-  if os.path.isfile('/tmp/' + MYAPP + '/site/text.md'):
-    # script = os.path.expanduser('~') + '/' + MYAPP + '/push.lftp'
-    # syslog_trace("...executing  {0}.".format(script), False, DEBUG)
-    # lftp -f $HOME/lnxdiagd/push.lftp 2>&1
-    # lftp -c "open hendrixnet.nl; cd /public_html/grav/user/pages/04.status/_$(hostname); put /tmp/lnxdiagd/text.md; ls; quit"
-    # lftpout = subprocess.check_output(['lftp', '-f', script])
-    lftpcommand = 'lftp -c "open hendrixnet.nl; cd /public_html/grav/user/pages/04.status/_' + NODE + '; put /tmp/' + MYAPP + '/site/text.md;"'
-    syslog_trace("...:  {0}.".format(lftpcommand), False, DEBUG)
-    subprocess.Popen(lftpcommand, shell=True)
   unlock(flock)
+
+def write_lftp(script):
+
+  with open(script, 'w') as f:
+    f.write('# DO NOT EDIT\n')
+    f.write('# This file is created automatically by ' + MYAPP + '\n\n')
+    f.write('# lftp script\n\n')
+    f.write('open hendrixnet.nl;\n')
+    f.write('cd /public_html/grav/user/pages/04.status/;\n')
+    f.write('mkdir -p -f _' + NODE + ' ;\n')
+    f.write('cd _' + NODE + ' ;\n')
+    f.write('mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;\n')
+    f.write('\n')
 
 def lock(fname):
   open(fname, 'a').close()
