@@ -94,10 +94,10 @@ def do_xml(flock, fdata, hwdevice):
   p3                = subprocess.Popen(["awk", "NR>2"],         stdin=p2.stdout,  stdout=subprocess.PIPE)
   p4                = subprocess.Popen(["sort", "-nr"],         stdin=p3.stdout,  stdout=subprocess.PIPE)
   p5                = subprocess.Popen(["head", "-10"],         stdin=p4.stdout,  stdout=subprocess.PIPE)
-  p6                = subprocess.Popen(["sed", "s/&/\&amp;/g"], stdin=p5.stdout,  stdout=subprocess.PIPE)
-  p7                = subprocess.Popen(["sed", "s/>/\&gt;/g"],  stdin=p6.stdout,  stdout=subprocess.PIPE)
-  p8                = subprocess.Popen(["sed", "s/</\&lt;/g"],  stdin=p7.stdout,  stdout=subprocess.PIPE)
-  psout             = p8.stdout.read()
+  # p6                = subprocess.Popen(["sed", "s/&/\&amp;/g"], stdin=p5.stdout,  stdout=subprocess.PIPE)
+  # p7                = subprocess.Popen(["sed", "s/>/\&gt;/g"],  stdin=p6.stdout,  stdout=subprocess.PIPE)
+  # p8                = subprocess.Popen(["sed", "s/</\&lt;/g"],  stdin=p7.stdout,  stdout=subprocess.PIPE)
+  psout             = p5.stdout.read()
 
   lock(flock)
 
