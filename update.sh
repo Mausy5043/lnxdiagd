@@ -10,6 +10,7 @@ branch=$(cat "$HOME/.lnxdiagd.branch")
 # make sure working tree exists
 if [ ! -d /tmp/lnxdiagd/site/img ]; then
   mkdir -p /tmp/lnxdiagd/site/img
+  chmod -R 755 /tmp/lnxdiagd
 fi
 
 pushd "$HOME/lnxdiagd"
