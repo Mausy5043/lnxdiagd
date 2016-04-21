@@ -33,6 +33,11 @@ class MyDaemon(Daemon):
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
     fdata           = iniconf.get(inisection, "resultfile")
+    try:
+      netdevice     = iniconf.get(inisection, NODE+".net")
+    except ConfigParser.NoOptionError as e:  # no netdevice
+      netdevice     = "eth0"
+    syslog_trace("Monitoring device: {0}".format(netdevice), syslog.LOG_DEBUG, DEBUG)
 
     # samples         = samplesperCycle * cycles          # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle        # time [s] between samples
@@ -44,7 +49,7 @@ class MyDaemon(Daemon):
       try:
         startTime   = time.time()
 
-        result      = do_work().split(',')
+        result      = do_work(netdevice).split(',')
 
         data        = map(int, result)
         syslog_trace("Data     : {0}".format(data), False, DEBUG)
@@ -76,7 +81,7 @@ def cat(filename):
       ret = f.read().strip('\n')
   return ret
 
-def do_work():
+def do_work(nwdev):
   # 6 #datapoints gathered here
   # Network traffic
   wlIn  = 0
@@ -92,7 +97,7 @@ def do_work():
     if device == "lo":
       loIn    = int(list[line].split()[1])
       loOut   = int(list[line].split()[9])
-    if device == "eth0":
+    if device == nwdev:
       etIn    = int(list[line].split()[1])
       etOut   = int(list[line].split()[9])
     if device == "wlan0":
