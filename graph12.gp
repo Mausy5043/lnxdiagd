@@ -41,7 +41,8 @@ set yrange [0:100]
 
 # **************************************************************** Y2-axis *****
 set y2label "Load"
-set autoscale y2
+#set autoscale y2
+set y2range [0:2]
 set y2tics border
 
 # ***************************************************************** Legend *****
