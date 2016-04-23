@@ -74,6 +74,6 @@ plot ifname \
   ,'' using ($2+utc_offset):(delta($6+$7+$8+$9+$10+$11)) title "p2" fc "red"\
   ,'' using ($2+utc_offset):(delta($7+$8+$9+$10+$11)) title "p3" fc "orange"\
   ,'' using ($2+utc_offset):(delta($8+$9+$10+$11)) title "p4" fc "gold"\
-  ,'' using ($2+utc_offset):(delta($9+$10+$11)) title "p5" fc "yellow"\
+  #,'' using ($2+utc_offset):(delta($9+$10+$11)) title "p5" fc "yellow"\
   #,'' using ($2+utc_offset):(delta($10+$11)) title "p6" fc "green" \
   #,'' using ($2+utc_offset):(delta($11)) title "p7" fc "grey" \
