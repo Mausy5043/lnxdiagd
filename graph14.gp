@@ -66,4 +66,5 @@ plot ifname \
       using ($2+utc_offset):($5+$6+$7+$8) title "free"    fc rgb "#229922"  \
   ,'' using ($2+utc_offset):($5+$6+$7)    title "cached"  fc "yellow"       \
   ,'' using ($2+utc_offset):($5+$6)       title "buffers" fc "blue"         \
-  ,'' using ($2+utc_offset):5             title "user"    fc rgb "#bb0000"
+  ,'' using ($2+utc_offset):5             title "used"    fc rgb "#bb0000"  \
+  ,'' using ($2+utc_offset):($11*-1)      title "swap"    fc rgb "#ee0000"  \
