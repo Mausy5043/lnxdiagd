@@ -11,7 +11,7 @@ pushd "$HOME/lnxdiagd"
     # command the daemon to stop regardless if it is running or not.
     eval "./lnxdiag$daemon"d.py stop
     # kill off any rogue daemons by the same name (it happens sometimes)
-    if [   $(pgrep -fc "lnxdiag$daemon"d.py) -ne 0 ]; then
+    if [   $(pgrep -f "lnxdiag$daemon"d.py | wc -l) -ne 0 ]; then
       kill $(pgrep -f  "lnxdiag$daemon"d.py)
     fi
     # log the activity
@@ -25,7 +25,7 @@ pushd "$HOME/lnxdiagd"
     # command the daemon to stop regardless if it is running or not.
     eval "./lnxsvc$daemon"d.py stop
     # kill off any rogue daemons by the same name (it happens sometimes)
-    if [   $(pgrep -fc "lnxsvc$daemon"d.py) -ne 0 ]; then
+    if [   $(pgrep -f "lnxsvc$daemon"d.py | wc -l) -ne 0 ]; then
       kill $(pgrep -f  "lnxsvc$daemon"d.py)
     fi
     # log the activity
