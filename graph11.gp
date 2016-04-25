@@ -8,7 +8,7 @@ ofname = "/tmp/lnxdiagd/site/img/day11.png"
 
 # ******************************************************* General settings *****
 # set terminal png font "Vera" 11 size 640,480
-set terminal png truecolor enhanced font "Vera" 10 size 640,320
+set terminal png truecolor enhanced font "Vera" 10 size 800,320
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
 set grid
