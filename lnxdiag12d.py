@@ -104,7 +104,9 @@ def do_work(stat1):
   sum0 = sum(diff0)
   perc = [x / float(sum0) * 100. for x in diff0]
 
-  outCpuUS      = perc[0] + perc[1] + perc[8] + perc[9]
+  outCpuUS      = perc[0] + perc[1] + perc[8]
+  if (len(perc) == 10):
+    outCpuUS += perc[9]
   outCpuSY      = perc[2]
   outCpuID      = perc[3]
   outCpuWA      = perc[4] + perc[5] + perc[6] + perc[7]
