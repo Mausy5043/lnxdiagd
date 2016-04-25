@@ -50,7 +50,7 @@ set multiplot layout 2,1 title "Network Usage (eth0)"
 ################################################################################
 
 # ***************************************************************** X-axis *****
-set xdata time               # Define that data on X-axis should be interpreted as time
+set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x ""
 set xtics rotate by 40 right
@@ -85,7 +85,7 @@ set timestamp 'created: %Y-%m-%d %H:%M' bottom font "Vera,6"
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
-set xdata time               # Define that data on X-axis should be interpreted as time
+set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
 set xtics rotate by 40 right
