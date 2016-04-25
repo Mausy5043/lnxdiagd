@@ -107,6 +107,8 @@ pushd "$HOME/lnxdiagd"
 
   # Do some host specific stuff
   case "$HOSTNAME" in
+    rbagain ) echo "Weather Monitor"
+              ;;
     bbone )   echo "BeagleBone Black"
               ;;
     rbups )   echo "UPS monitor"
