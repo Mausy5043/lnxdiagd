@@ -7,7 +7,7 @@ ifname = "/tmp/sql13.csv"
 ofname = "/tmp/lnxdiagd/site/img/day13.png"
 
 # ******************************************************* General settings *****
-set terminal png truecolor enhanced font "Vera" 10 size 640,304
+set terminal png truecolor enhanced font "Vera" 9 size 1040,320
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
 set grid front
@@ -81,7 +81,7 @@ unset object 1
 ################################################################################
 
 # ******************************************************* General settings *****
-set timestamp 'created: %Y-%m-%d %H:%M' bottom font "Vera,8"
+set timestamp 'created: %Y-%m-%d %H:%M' bottom font "Vera,6"
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
