@@ -6,7 +6,8 @@
 ME=$(whoami)
 
 echo -n "Started installing LNXDIAGD on "; date
-
+minit=$(echo $RANDOM/555 |bc)
+echo "MINIT = "$minit
 pushd "$HOME/lnxdiagd"
   # To suppress git detecting changes by chmod:
   git config core.fileMode false
@@ -20,9 +21,9 @@ pushd "$HOME/lnxdiagd"
 
   # Set up some cronjobs
   echo "# m h dom mon dow user  command" | sudo tee /etc/cron.d/lnxdiagd
-  echo "42  * *   *   *   $ME    $HOME/lnxdiagd/update.sh 2>&1 | logger -p info -t lnxdiagd" | sudo tee --append /etc/cron.d/lnxdiagd
+  echo "$MINIT  * *   *   *   $ME    $HOME/lnxdiagd/update.sh 2>&1 | logger -p info -t lnxdiagd" | sudo tee --append /etc/cron.d/lnxdiagd
   # @reboot we allow for 120s for the WiFi to come up:
-  echo "@reboot           $ME    sleep 120; $HOME/lnxdiagd/update.sh 2>&1 | logger -p info -t lnxdiagd" | sudo tee --append /etc/cron.d/lnxdiagd
+  echo "@reboot               $ME    sleep 120; $HOME/lnxdiagd/update.sh 2>&1 | logger -p info -t lnxdiagd" | sudo tee --append /etc/cron.d/lnxdiagd
 
   #./update.sh
 popd
