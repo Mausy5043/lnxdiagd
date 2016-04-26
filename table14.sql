@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS sysmem;
 
 CREATE TABLE `sysmem` (
   `sample_time`   datetime,
-  `sample_epoch`  int(11) unsigned,
+  `sample_epoch`  bigint(20) unsigned,
   `host`          varchar(24),
   `total`         int(11) unsigned,
   `used`          int(11) unsigned,
@@ -21,7 +21,9 @@ CREATE TABLE `sysmem` (
   `free`          int(11) unsigned,
   `swaptotal`     int(11) unsigned,
   `swapfree`      int(11) unsigned,
-  `swapused`      int(11) unsigned
+  `swapused`      int(11) unsigned,
+  `id`            varchar(24),
+  PRIMARY KEY (`id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
 # example to retrieve data:

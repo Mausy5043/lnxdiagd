@@ -12,14 +12,16 @@ DROP TABLE IF EXISTS sysnet;
 
 CREATE TABLE `sysnet` (
   `sample_time`   datetime,
-  `sample_epoch`  int(11) unsigned,
+  `sample_epoch`  bigint(20) unsigned,
   `host`          varchar(24),
   `loIn`          bigint(20) unsigned,
   `loOut`         bigint(20) unsigned,
   `etIn`          bigint(20) unsigned,
   `etOut`         bigint(20) unsigned,
   `wlIn`          bigint(20) unsigned,
-  `wlOut`         bigint(20) unsigned
+  `wlOut`         bigint(20) unsigned,
+  `id`            varchar(24),
+  PRIMARY KEY (`id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
 # example to retrieve data:

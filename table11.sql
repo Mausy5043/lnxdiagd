@@ -6,15 +6,18 @@
 # [ ] sysdskt = create table for system disk temperatures
 # [ ] sysmem  = create table for system memory usage
 
+# id is <hostname><sample-epoch>
 USE domotica;
 
 DROP TABLE IF EXISTS systemp;
 
 CREATE TABLE `systemp` (
   `sample_time`   datetime,
-  `sample_epoch`  int(11) unsigned,
+  `sample_epoch`  bigint(20) unsigned,
   `host`          varchar(24),
-  `temperature`   decimal(6,3)
+  `temperature`   decimal(6,3),
+  `id`            varchar(24),
+  PRIMARY KEY (`id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
 # example to retrieve data:
