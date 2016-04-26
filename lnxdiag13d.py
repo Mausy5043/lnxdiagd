@@ -116,9 +116,10 @@ def do_report(result, flock, fdata):
   # round to current minute to ease database JOINs
   outEpoch  = outEpoch - (outEpoch % 60)
   result    = ', '.join(map(str, result))
+  ident            = NODE + '@' + str(outEpoch)
   lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, result))
+    f.write('{0}, {1}, {2}, {3}, {4}\n'.format(outDate, outEpoch, NODE, result, ident))
   unlock(flock)
 
 def lock(fname):

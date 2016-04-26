@@ -4,7 +4,6 @@
 # uses moving averages
 
 import ConfigParser
-# import math
 import os
 import sys
 import syslog
@@ -36,7 +35,6 @@ class MyDaemon(Daemon):
 
     samples         = samplesperCycle * cycles      # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle    # time [s] between samples
-    # cycleTime       = samples * sampleTime          # time [s] per cycle
 
     data            = []                            # array for holding sampledata
 
@@ -98,9 +96,10 @@ def do_report(result, flock, fdata):
   outEpoch  = int(time.strftime('%s'))
   # round to current minute to ease database JOINs
   outEpoch  = outEpoch - (outEpoch % 60)
+  ident            = NODE + '@' + str(outEpoch)
   lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}, {2}, {3}\n'.format(outDate, outEpoch, NODE, float(result)))
+    f.write('{0}, {1}, {2}, {3}, {4}\n'.format(outDate, outEpoch, NODE, float(result), ident))
   unlock(flock)
 
 def lock(fname):
