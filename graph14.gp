@@ -7,7 +7,7 @@ ifname = "/tmp/sql14.csv"
 ofname = "/tmp/lnxdiagd/site/img/day14.png"
 
 # ******************************************************* General settings *****
-set terminal png truecolor enhanced font "Vera" 9 size 1040,320
+set terminal png truecolor enhanced font "Vera" 9 size 640,320
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
 set grid front
