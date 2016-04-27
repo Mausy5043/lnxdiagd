@@ -68,11 +68,12 @@ set style data boxes
 set style fill solid noborder
 
 plot ifname \
-      using ($2+utc_offset):(delta($4+$5+$6+$7+$8)) title "p4" fc "gold"   \
-  ,'' using ($2+utc_offset):(delta($4+$5+$6+$7))    title "p3" fc "orange" \
-  ,'' using ($2+utc_offset):(delta($4+$5+$6))       title "p2" fc "red"    \
-  ,'' using ($2+utc_offset):(delta($4+$5))          title "p1" fc "blue"   \
-  ,'' using ($2+utc_offset):(delta($4))             title "p0" fc "black"  \
+      using ($2+utc_offset):(delta($4+$5+$6+$7+$8+$9)) title "p5" fc "green"  \
+  ,'' using ($2+utc_offset):(delta($4+$5+$6+$7+$8))    title "p4" fc "gold"   \
+  ,'' using ($2+utc_offset):(delta($4+$5+$6+$7))       title "p3" fc "orange" \
+  ,'' using ($2+utc_offset):(delta($4+$5+$6))          title "p2" fc "red"    \
+  ,'' using ($2+utc_offset):(delta($4+$5))             title "p1" fc "blue"   \
+  ,'' using ($2+utc_offset):(delta($4))                title "p0" fc "black"  \
   #    using ($2+utc_offset):(delta($4+$5+$6+$7+$8+$9+$10+$11)) title "p0" fc "black"\
   #,'' using ($2+utc_offset):(delta($5+$6+$7+$8+$9+$10+$11)) title "p1" fc "blue"\
   #,'' using ($2+utc_offset):(delta($6+$7+$8+$9+$10+$11)) title "p2" fc "red"\
