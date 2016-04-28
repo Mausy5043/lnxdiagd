@@ -72,7 +72,8 @@ set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
 ##set style data boxes
 ##set style fill solid noborder
 
-plot ifname using ($2+utc_offset):(delta($7)*8/60) title "Upload   (eth0)" fc rgb "#0000bb" with dots\
+plot ifname \
+      using ($2+utc_offset):(delta($7)*8/60) title "Upload   (eth0)" fc rgb "#0000bb" with dots\
 
 unset object 1
 
@@ -108,7 +109,8 @@ set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
 ##set style data boxes
 ##set style fill solid noborder
 
-plot ifname using ($2+utc_offset):(delta($6)*8/60) title "Download (eth0)" fc rgb "#bb0000"  with dots \
+plot ifname \
+      using ($2+utc_offset):(delta($6)*8/60) title "Download (eth0)" fc rgb "#bb0000"  with dots \
 
 unset object 2
 unset multiplot

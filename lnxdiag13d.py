@@ -117,6 +117,7 @@ def do_report(result, flock, fdata):
   outEpoch  = outEpoch - (outEpoch % 60)
   result    = ', '.join(map(str, result))
   ident            = NODE + '@' + str(outEpoch)
+  syslog_trace(">>> ID : {0}  -  {1}".format(ident, outDate), False, DEBUG)
   lock(flock)
   with open(fdata, 'a') as f:
     f.write('{0}, {1}, {2}, {3}, {4}\n'.format(outDate, outEpoch, NODE, result, ident))
