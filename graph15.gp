@@ -17,7 +17,7 @@ set timestamp 'created: %Y-%m-%d %H:%M' bottom font "Vera,6"
 
 # ************************************************************* Functions ******
 # determine delta data
-delta(x) = ( xD = x - old_x, old_x = x, xD <= 0 ? NaN : xD)
+delta(x) = ( xD = x - old_x, old_x = x, xD <= 0 ? 0.1 : xD)
 old_x = NaN
 
 # ************************************************************* Statistics *****
