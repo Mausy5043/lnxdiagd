@@ -91,6 +91,7 @@ def do_work(fdev):
   return Tcpu
 
 def do_report(result, flock, fdata):
+  time.sleep(1)   # sometimes the function is called a sec too soon.
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate   = time.strftime('%Y-%m-%dT%H:%M:%S')
   outEpoch  = int(time.strftime('%s'))

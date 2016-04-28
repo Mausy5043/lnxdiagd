@@ -108,6 +108,7 @@ def do_work():
   return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(outMemTotal, outMemUsed, outMemBuf, outMemCache, outMemFree, outMemSwapTotal, outMemSwapFree, outMemSwapUsed)
 
 def do_report(result, flock, fdata):
+  time.sleep(1)   # sometimes the function is called a sec too soon.
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate     = time.strftime('%Y-%m-%dT%H:%M:%S')
   outEpoch    = int(time.strftime('%s'))
