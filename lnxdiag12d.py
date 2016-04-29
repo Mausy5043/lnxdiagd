@@ -87,17 +87,21 @@ def do_work(stat1):
   with open('/proc/stat', 'r') as f:
     stat2 = f.readlines()[0].split()
     # ref: https://www.kernel.org/doc/Documentation/filesystems/proc.txt
+    #      http://man7.org/linux/man-pages/man5/proc.5.html
     # -1 "cpu"
-    #  0 user: normal processes executing in user mode    0
-    #  1 nice: niced processes executing in user mode     +0
-    #  2 system: processes executing in kernel mode       1
-    #  3 idle: twiddling thumbs                           2
-    #  4 iowait: waiting for I/O to complete              3
-    #  5 irq: servicing interrupts                        +3
-    #  6 softirq: servicing softirqs                      +3
-    #  7 steal: involuntary wait                          +3
-    #  8 guest: running a normal guest                    +1
-    #  9 guest_nice: running a niced guest                +1
+    #  0 user: ______ normal processes executing in user mode    0
+    #  1 nice: ______ niced processes executing in user mode __ +0
+    #  2 system: ____ processes executing in kernel mode         1
+    #  3 idle: ______ twiddling thumbs                           2
+    #  4 iowait: ____ waiting for I/O to complete                3
+    #  5 irq: _______ servicing interrupts ____________________ +3
+    #  6 softirq: ___ servicing softirqs                        +3
+    #  7 steal: _____ involuntary wait (*)                      +3
+    #  8 guest: _____ running a normal guest (**) _____________ +1
+    #  9 guest_nice:  running a niced guest (***)               +1
+    # (*)   since linux 2.6.11
+    # (**)  since linux 2.6.24
+    # (***) since linux 2.6.33
 
   stat2 = map(int, stat2[1:])
   diff0 = [x - y for x, y in zip(stat2, stat1)]
