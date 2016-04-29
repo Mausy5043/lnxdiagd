@@ -30,12 +30,12 @@ X_max = X_max + utc_offset - 946684800
 # stats to be calculated here of column 6 (Download bytes per minute)
 stats ifname using (delta($6)) name "Ydn" nooutput
 Ydn_min = 1024 * 8 / 60.
-Ydn_max = Ydn_max * 8 / 60.
+Ydn_max = (Ydn_max * 1.1) * 8 / 60.
 
 # stats to be calculated here of column 6 (Download bytes per minute)
 stats ifname using (delta($7)) name "Yup" nooutput
 Yup_min = 1024 * 8 / 60.
-Yup_max = Yup_max * 8 / 60.
+Yup_max = (Yup_max * 1.1) * 8 / 60.
 
 # ***************************************************************** Legend *****
 set key inside top left nobox
