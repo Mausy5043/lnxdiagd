@@ -21,7 +21,7 @@ pushd "$HOME/lnxdiagd"
 
   # Set up some cronjobs
   echo "# m h dom mon dow user  command" | sudo tee /etc/cron.d/lnxdiagd
-  echo "$MINIT  * *   *   *   $ME    $HOME/lnxdiagd/update.sh 2>&1 | logger -p info -t lnxdiagd" | sudo tee --append /etc/cron.d/lnxdiagd
+  echo "$minit  * *   *   *   $ME    $HOME/lnxdiagd/update.sh 2>&1 | logger -p info -t lnxdiagd" | sudo tee --append /etc/cron.d/lnxdiagd
   # @reboot we allow for 120s for the WiFi to come up:
   echo "@reboot               $ME    sleep 120; $HOME/lnxdiagd/update.sh 2>&1 | logger -p info -t lnxdiagd" | sudo tee --append /etc/cron.d/lnxdiagd
 
