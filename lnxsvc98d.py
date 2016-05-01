@@ -96,9 +96,9 @@ def do_mv_data(flock, homedir, script):
     syslog_trace("...moving data {0}".format(fname), False, DEBUG)
     shutil.move(fname, fname+".DEAD")
 
-  for fname in glob.glob(r'/tmp/' + MYAPP + '/*.png'):
-    syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
-    shutil.move(fname, fname+".DEAD")
+  # for fname in glob.glob(r'/tmp/' + MYAPP + '/*.png'):
+  #  syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
+  #  shutil.move(fname, fname+".DEAD")
 
   unlock(flock)
 
