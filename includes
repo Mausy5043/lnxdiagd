@@ -1,2 +1,4 @@
 diaglist="11 12 13 14 15"
-srvclist="82 97 98"
+
+# order is important <98> before <97>
+srvclist="98 82 97"
