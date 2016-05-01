@@ -18,7 +18,7 @@ set output ofname
 # ************************************************************* Functions ******
 # determine delta data
 delta(x) = ( xD = x - old_x, old_x = x, xD <= 0 ? 0.1 : xD)
-lg(x)    = ( xL = x, xL == NaN ? NaN : log(xL) )
+# lg(x)    = ( xL = x, xL == NaN ? NaN : log(xL) )
 old_x = NaN
 
 # ************************************************************* Statistics *****
@@ -59,7 +59,7 @@ set xrange [ X_min : X_max ]
 # ***************************************************************** Y-axis *****
 set ylabel "Speed [bits/sec]"
 set format y "%3.0s %c"
-set logscale y 10
+#set logscale y 10
 set yrange [ Yup_min : Yup_max ]
 set bmargin 0
 
@@ -94,7 +94,7 @@ set xrange [ X_min : X_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel " "
-set logscale y 10
+#set logscale y 10
 set yrange [ Ydn_min : Ydn_max ] reverse
 set tmargin 0
 unset bmargin
