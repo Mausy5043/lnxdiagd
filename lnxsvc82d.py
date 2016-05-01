@@ -32,7 +32,7 @@ class MyDaemon(Daemon):
     # cycles          = iniconf.getint(inisection, "cycles")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
-    fdata           = iniconf.get(inisection, "resultfile")
+    fdata           = iniconf.get(inisection, "markdown")
 
     # samples         = samplesperCycle * cycles          # total number of samples averaged
     sampleTime      = reportTime/samplesperCycle        # time [s] between samples
@@ -94,6 +94,7 @@ def do_markdown(flock, fdata, hwdevice):
   lock(flock)
 
   with open(fdata, 'w') as f:
+    syslog_trace("writing {0}".format(fdata), False, DEBUG)
     # YAML header
     f.write('---\n')
     f.write('title: ' + NODE + '\n')
