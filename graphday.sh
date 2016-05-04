@@ -8,7 +8,7 @@ UTC=$(date -u -d "$LOCAL" +"%Y-%m-%d %H:%M:%S")  #remove timezone reference
 UTCSECONDS=$(date -d "$UTC" +%s)
 UTCOFFSET=$(($LOCALSECONDS-$UTCSECONDS))
 
-interval="INTERVAL 50 HOUR "
+interval="INTERVAL 25 HOUR "
 host=$(hostname)
 
 pushd $HOME/lnxdiagd >/dev/null
@@ -16,7 +16,7 @@ pushd $HOME/lnxdiagd >/dev/null
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM sysload where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > /tmp/sql12.csv
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM sysnet  where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > /tmp/sql13.csv
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM sysmem  where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > /tmp/sql14.csv
- interval="INTERVAL 25 HOUR "
+ # interval="INTERVAL 25 HOUR "
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM syslog  where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > /tmp/sql15.csv
 
   #http://www.sitepoint.com/understanding-sql-joins-mysql-database/
