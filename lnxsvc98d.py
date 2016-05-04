@@ -66,7 +66,7 @@ def do_mv_data(flock, homedir, script):
   unlock(flock)  # remove stale lock
   t0 = time.time()
 
-  # getsqldata(homedir)
+  getsqldata(homedir)
 
   cmnd = homedir + '/' + MYAPP + '/graphday.sh'
   syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
@@ -105,8 +105,8 @@ def do_mv_data(flock, homedir, script):
   unlock(flock)
 
 def getsqldata(homedir):
-  minit = time.strftime('%M')
-  nowur = time.strftime('%H')
+  minit = int(time.strftime('%M'))
+  nowur = int(time.strftime('%H'))
   # data of last hour is updated every minute
   cmnd = homedir + '/' + MYAPP + '/getsqlhour.sh'
   syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
