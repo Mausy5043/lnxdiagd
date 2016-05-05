@@ -60,7 +60,8 @@ set xrange [ X_min : X_max ]
 set ylabel "Speed [bits/sec]"
 set format y "%3.0s %c"
 #set logscale y 10
-set yrange [ Yup_min : Yup_max ]
+#set yrange [ Yup_min : Yup_max ]
+set autoscale y
 set bmargin 0
 
 # ***************************************************************** Output *****
