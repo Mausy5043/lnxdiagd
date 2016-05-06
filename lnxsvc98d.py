@@ -13,6 +13,7 @@ import time
 import traceback
 
 from libdaemon import Daemon
+from random import randrange as rnd
 
 # constants
 DEBUG       = False
@@ -20,6 +21,8 @@ IS_JOURNALD = os.path.isfile('/bin/journalctl')
 MYID        = filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
+SQLMNT      = rnd(0, 59)
+SQLHR       = rnd(0, 23)
 
 class MyDaemon(Daemon):
   def run(self):
@@ -29,6 +32,8 @@ class MyDaemon(Daemon):
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
+    syslog_trace("getsqlday.sh  runs every 30 minutes starting at minute {0}".format(SQLMNT), syslog.LOG_DEBUG, DEBUG)
+    syslog_trace("getsqlweek.sh runs every 4th hour  starting  at hour   {0}".format(SQLHR), syslog.LOG_DEBUG, DEBUG)
     reportTime      = iniconf.getint(inisection, "reporttime")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
@@ -107,13 +112,13 @@ def getsqldata(homedir):
   cmnd = subprocess.call(cmnd)
   syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last day is updated every 30 minutes
-  if (minit % 30 == 0):
+  if (minit == SQLMNT):
     cmnd = homedir + '/' + MYAPP + '/getsqlday.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     # dat of the last week is updated every 4 hours
-    if (nowur % 4 == 0):
+    if (nowur == SQLHR):
       cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
       syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
       cmnd = subprocess.call(cmnd)
