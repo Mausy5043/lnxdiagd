@@ -112,13 +112,13 @@ def getsqldata(homedir):
   cmnd = subprocess.call(cmnd)
   syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last day is updated every 30 minutes
-  if (minit == SQLMNT):
+  if ((minit % 30) == (SQLMNT % 30)):
     cmnd = homedir + '/' + MYAPP + '/getsqlday.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     # dat of the last week is updated every 4 hours
-    if (nowur == SQLHR):
+    if ((nowur % 4) == (SQLHR % 4)):
       cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
       syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
       cmnd = subprocess.call(cmnd)
