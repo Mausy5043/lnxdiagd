@@ -41,7 +41,7 @@ class MyDaemon(Daemon):
     scriptname      = iniconf.get(inisection, "lftpscript")
 
     sampleTime      = reportTime/samplesperCycle         # time [s] between samples
-
+    getsqldata(home, True)
     while True:
       try:
         startTime   = time.time()
@@ -65,7 +65,7 @@ def do_mv_data(flock, homedir, script):
   unlock(flock)  # remove stale lock
   t0 = time.time()
 
-  getsqldata(homedir)
+  getsqldata(homedir, False)
 
   cmnd = homedir + '/' + MYAPP + '/graphday.sh'
   syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
@@ -103,7 +103,7 @@ def do_mv_data(flock, homedir, script):
 
   unlock(flock)
 
-def getsqldata(homedir):
+def getsqldata(homedir, nu):
   minit = int(time.strftime('%M'))
   nowur = int(time.strftime('%H'))
   # data of last hour is updated every minute
@@ -112,13 +112,13 @@ def getsqldata(homedir):
   cmnd = subprocess.call(cmnd)
   syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last day is updated every 30 minutes
-  if ((minit % 30) == (SQLMNT % 30)):
+  if ((minit % 30) == (SQLMNT % 30)) or nu:
     cmnd = homedir + '/' + MYAPP + '/getsqlday.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     # dat of the last week is updated every 4 hours
-    if ((nowur % 4) == (SQLHR % 4)):
+    if ((nowur % 4) == (SQLHR % 4)) or nu:
       cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
       syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
       cmnd = subprocess.call(cmnd)
