@@ -69,7 +69,7 @@ set xlabel "past week"       # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%a %d"            # Display time in 24 hour notation on the X axis
-set xtics rotate by 40 right
+#set xtics rotate by 40 right
 set xrange [ Xw_min : Xw_max ]
 
 # ***************************************************************** Y-axis *****
@@ -108,7 +108,7 @@ set xlabel "past day"       # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
-set xtics rotate by 40 right
+#set xtics rotate by 40 right
 set xrange [ Xd_min : Xd_max ]
 
 # ***************************************************************** Y-axis *****
@@ -130,7 +130,7 @@ set xlabel "past hour"       # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
-set xtics rotate by 40 right
+#set xtics rotate by 40 right
 set xrange [ Xh_min : Xh_max ]
 
 # ***************************************************************** Y-axis *****
