@@ -3,7 +3,7 @@
 # graph of CPU temperature
 
 # datafile
-ifname = "/tmp/lnxdiagd/mysql/sql11h.csv"
+ifname = "/tmp/lnxdiagd/mysql/sql11d.csv"
 ofname = "/tmp/lnxdiagd/site/img/day11.png"
 
 # ******************************************************* General settings *****

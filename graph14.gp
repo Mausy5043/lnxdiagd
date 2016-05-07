@@ -3,7 +3,7 @@
 # graph of memory usage
 
 # datafile
-ifname = "/tmp/lnxdiagd/mysql/sql14h.csv"
+ifname = "/tmp/lnxdiagd/mysql/sql14d.csv"
 ofname = "/tmp/lnxdiagd/site/img/day14.png"
 
 # ******************************************************* General settings *****

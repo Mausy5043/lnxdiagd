@@ -3,7 +3,7 @@
 # graph of count of loglines
 
 # datafile
-ifname = "/tmp/lnxdiagd/mysql/sql15h.csv"
+ifname = "/tmp/lnxdiagd/mysql/sql15d.csv"
 ofname = "/tmp/lnxdiagd/site/img/day15.png"
 
 # ******************************************************* General settings *****

@@ -3,7 +3,7 @@
 # graph of CPU load
 
 # datafile
-ifname = "/tmp/lnxdiagd/mysql/sql12h.csv"
+ifname = "/tmp/lnxdiagd/mysql/sql12d.csv"
 ofname = "/tmp/lnxdiagd/site/img/day12.png"
 
 # ******************************************************* General settings *****
