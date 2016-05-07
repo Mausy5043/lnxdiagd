@@ -58,7 +58,7 @@ set multiplot layout 1, 3 title "CPU Temperature"
 
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#                                                      RIGHT PLOT: last hour
+#                                                       LEFT PLOT: past week
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -68,16 +68,16 @@ set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
 set xtics rotate by 40 right
-set xrange [ Xh_min : Xh_max ]
+set xrange [ Xw_min : Xw_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel "Temperature [degC]"
 #set yrange [10:20]
 #set autoscale y
-set yrange [ Yh_min : Yh_max ]
+set yrange [ Yw_min : Yw_max ]
 
 # ***************************************************************** Legend *****
-set key outside bottom center horizontal box
+set key inside top Left horizontal box
 set key samplen .5
 set key reverse Left
 
@@ -90,7 +90,7 @@ set key reverse Left
 #set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
 
 # ***** PLOT *****
-plot ifnameh \
+plot ifnamew \
       using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
 
 
@@ -100,25 +100,20 @@ plot ifnameh \
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-# ****************************************************************** Title *****
-set title "CPU Temperature"
-
 
 # ***** PLOT *****
-plot ifnameh \
+plot ifnamed \
       using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#                                                       LEFT PLOT: past week
+#                                                      RIGHT PLOT: past hour
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-# ****************************************************************** Title *****
-set title "CPU Temperature"
 
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($2+utc_offset):4 title "LEFT" with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
+      using ($2+utc_offset):4 title "RIGHT" with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
