@@ -15,22 +15,52 @@ set datafile missing "NaN"    # Ignore missing values
 set grid
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
+
+
+# ********************************************************* Statistics (R) *****
+# stats to be calculated here of column 2 (UX-epoch)
+stats ifnameh using 2 name "X" nooutput
+
+Xh_min = X_min + utc_offset - 946684800
+Xh_max = X_max + utc_offset - 946684800
+
+# stats to be calculated here for Y-axes
+stats ifnameh using 4 name "Y" nooutput
+Yh_min = Y_min * 0.90
+Yh_max = Y_max * 1.10
+
+# ********************************************************* Statistics (M) *****
+# stats to be calculated here of column 2 (UX-epoch)
+stats ifnamed using 2 name "X" nooutput
+
+Xd_min = X_min + utc_offset - 946684800
+Xd_max = X_max + utc_offset - 946684800
+
+# stats to be calculated here for Y-axes
+stats ifnameh using 4 name "Y" nooutput
+Yd_min = Y_min * 0.90
+Yd_max = Y_max * 1.10
+
+
+# ********************************************************* Statistics (L) *****
+# stats to be calculated here of column 2 (UX-epoch)
+stats ifnamew using 2 name "X" nooutput
+Xw_min = X_min + utc_offset - 946684800
+Xw_max = X_max + utc_offset - 946684800
+
+# stats for Y-axis
+stats ifnameh using 4 name "Y" nooutput
+Yw_min = Y_min * 0.90
+Yw_max = Y_max * 1.10
+
+
 set multiplot 3, 1
+
+
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                      RIGHT PLOT: last hour
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-# ************************************************************* Statistics *****
-# stats to be calculated here of column 2 (UX-epoch)
-stats ifnameh using 2 name "X" nooutput
-
-X_min = X_min + utc_offset - 946684800
-X_max = X_max + utc_offset - 946684800
-
-# stats to be calculated here for Y-axes
-stats ifnameh using 4 name "Y" nooutput
-Y_min = Y_min * 0.90
-Y_max = Y_max * 1.10
 
 # ****************************************************************** Title *****
 set title "CPU Temperature"
@@ -41,13 +71,13 @@ set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
 set xtics rotate by 40 right
-set xrange [ X_min : X_max ]
+set xrange [ Xh_min : Xh_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel "Temperature [degC]"
 #set yrange [10:20]
 #set autoscale y
-set yrange [ Y_min : Y_max ]
+set yrange [ Yh_min : Yh_max ]
 
 # ***************************************************************** Legend *****
 set key outside bottom center horizontal box
@@ -63,7 +93,7 @@ set object 2 rect from graph 0,0 to graph 1,1 behind
 set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
 
 # ***** PLOT *****
-plot ifname \
+plot ifnameh \
       using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
 
 
@@ -72,17 +102,6 @@ plot ifname \
 #                                                     MIDDLE PLOT:  past day
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-# ************************************************************* Statistics *****
-# stats to be calculated here of column 2 (UX-epoch)
-stats ifnamed using 2 name "X" nooutput
-
-X_min = X_min + utc_offset - 946684800
-X_max = X_max + utc_offset - 946684800
-
-# stats to be calculated here for Y-axes
-stats ifnameh using 4 name "Y" nooutput
-Y_min = Y_min * 0.90
-Y_max = Y_max * 1.10
 
 # ****************************************************************** Title *****
 set title "CPU Temperature"
@@ -91,18 +110,6 @@ set title "CPU Temperature"
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                       LEFT PLOT: past week
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-# ************************************************************* Statistics *****
-# stats to be calculated here of column 2 (UX-epoch)
-stats ifnamew using 2 name "X" nooutput
-X_min = X_min + utc_offset - 946684800
-X_max = X_max + utc_offset - 946684800
-
-# stats for Y-axis
-stats ifnameh using 4 name "Y" nooutput
-Y_min = Y_min * 0.90
-Y_max = Y_max * 1.10
-
 
 # ****************************************************************** Title *****
 set title "CPU Temperature"
