@@ -2,9 +2,11 @@
 
 # graph of CPU temperature
 
-# datafile
-ifname = "/tmp/lnxdiagd/mysql/sql11d.csv"
-ofname = "/tmp/lnxdiagd/site/img/day11.png"
+# datafiles
+ifnameh = "/tmp/lnxdiagd/mysql/sql11h.csv"
+ifnamed = "/tmp/lnxdiagd/mysql/sql11d.csv"
+ifnamew = "/tmp/lnxdiagd/mysql/sql11w.csv"
+set output ofname = "/tmp/lnxdiagd/site/img/day11.png"
 
 # ******************************************************* General settings *****
 set terminal png truecolor enhanced font "Vera,9" size 1280,304
@@ -13,23 +15,25 @@ set datafile missing "NaN"    # Ignore missing values
 set grid
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
-set timestamp 'created: %Y-%m-%d %H:%M' bottom font "Vera,6"
+set multiplot 3, 1
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                                      RIGHT PLOT: last hour
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 # ************************************************************* Statistics *****
 # stats to be calculated here of column 2 (UX-epoch)
-stats ifname using 2 name "X" nooutput
+stats ifnameh using 2 name "X" nooutput
 
 X_min = X_min + utc_offset - 946684800
 X_max = X_max + utc_offset - 946684800
 
-# stats to be calculated here for Y-axis
-stats ifname using 4 name "Y" nooutput
+# stats to be calculated here for Y-axes
+stats ifnameh using 4 name "Y" nooutput
 Y_min = Y_min * 0.90
 Y_max = Y_max * 1.10
 
 # ****************************************************************** Title *****
 set title "CPU Temperature"
-#"-".utc_offset."-"
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
@@ -45,25 +49,67 @@ set ylabel "Temperature [degC]"
 #set autoscale y
 set yrange [ Y_min : Y_max ]
 
-# **************************************************************** Y2-axis *****
-# set y2label "Temperature [degC]"
-# set autoscale y2
-# set y2tics border
-
 # ***************************************************************** Legend *****
 set key outside bottom center horizontal box
 set key samplen .5
 set key reverse Left
 
 # ***************************************************************** Output *****
-set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
-#set arrow from graph 1,graph 0 to graph 1,graph 1 nohead lc rgb "green" front
+# set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
+# set arrow from graph 1,graph 0 to graph 1,graph 1 nohead lc rgb "green" front
 set object 1 rect from screen 0,0 to screen 1,1 behind
 set object 1 rect fc rgb "#eeeeee" fillstyle solid 1.0 noborder
 set object 2 rect from graph 0,0 to graph 1,1 behind
 set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
-set output ofname
 
 # ***** PLOT *****
 plot ifname \
-      using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.1 fc rgb "#ccbb0000" \
+      using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
+
+
+
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                                     MIDDLE PLOT:  past day
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+# ************************************************************* Statistics *****
+# stats to be calculated here of column 2 (UX-epoch)
+stats ifnamed using 2 name "X" nooutput
+
+X_min = X_min + utc_offset - 946684800
+X_max = X_max + utc_offset - 946684800
+
+# stats to be calculated here for Y-axes
+stats ifnameh using 4 name "Y" nooutput
+Y_min = Y_min * 0.90
+Y_max = Y_max * 1.10
+
+# ****************************************************************** Title *****
+set title "CPU Temperature"
+
+
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                                       LEFT PLOT: past week
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+# ************************************************************* Statistics *****
+# stats to be calculated here of column 2 (UX-epoch)
+stats ifnamew using 2 name "X" nooutput
+X_min = X_min + utc_offset - 946684800
+X_max = X_max + utc_offset - 946684800
+
+# stats for Y-axis
+stats ifnameh using 4 name "Y" nooutput
+Y_min = Y_min * 0.90
+Y_max = Y_max * 1.10
+
+
+# ****************************************************************** Title *****
+set title "CPU Temperature"
+
+
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                                                 FINALIZING
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+set timestamp 'created: %Y-%m-%d %H:%M' bottom font "Vera,6"
+unset multiplot
