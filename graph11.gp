@@ -58,15 +58,17 @@ set multiplot layout 1, 3 title "CPU Temperature"
 
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                       LEFT PLOT: past week
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 # ***************************************************************** X-axis *****
-set xlabel "Date/Time"       # X-axis label
+set xlabel "past week"       # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
-set format x "%R"            # Display time in 24 hour notation on the X axis
+set format x "%a %d"            # Display time in 24 hour notation on the X axis
 set xtics rotate by 40 right
 set xrange [ Xw_min : Xw_max ]
 
@@ -77,8 +79,8 @@ set ylabel "Temperature [degC]"
 set yrange [ Yw_min : Yw_max ]
 
 # ***************************************************************** Legend *****
-set key inside top Left horizontal box
-set key samplen .5
+set key inside top left horizontal box
+set key samplen 1
 set key reverse Left
 
 # ***************************************************************** Output *****
@@ -96,36 +98,48 @@ plot ifnamew \
 
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                     MIDDLE PLOT:  past day
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 # ***************************************************************** X-axis *****
-set xlabel "Date/Time"       # X-axis label
+set xlabel "past day"       # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
 set xtics rotate by 40 right
 set xrange [ Xd_min : Xd_max ]
 
+# ***************************************************************** Y-axis *****
+set ylabel " "
+set yrange [ Yd_min : Yd_max ]
+
 # ***** PLOT *****
 plot ifnamed \
-      using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
+      using ($2+utc_offset):4 with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
 
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                      RIGHT PLOT: past hour
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 # ***************************************************************** X-axis *****
-set xlabel "Date/Time"       # X-axis label
+set xlabel "past hour"       # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
 set xtics rotate by 40 right
 set xrange [ Xh_min : Xh_max ]
 
+# ***************************************************************** Y-axis *****
+set ylabel " "
+set yrange [ Yh_min : Yh_max ]
+
 # ***** PLOT *****
 plot ifnameh \
-      using ($2+utc_offset):4 title "RIGHT" with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
+      using ($2+utc_offset):4 with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
