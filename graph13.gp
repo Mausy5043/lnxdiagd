@@ -3,7 +3,7 @@
 # graph of network usage
 
 # datafile
-ifname = "/tmp/sql13.csv"
+ifname = "/tmp/lnxdiagd/mysql/sql13h.csv"
 ofname = "/tmp/lnxdiagd/site/img/day13.png"
 
 # ******************************************************* General settings *****
