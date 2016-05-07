@@ -148,7 +148,7 @@ unset key
 
 # ***************************************************************** Output *****
 set lmargin at screen MRPOS+0.001
-set rmargin at -1
+set rmargin -1
 
 # ***** PLOT *****
 plot ifnameh \
