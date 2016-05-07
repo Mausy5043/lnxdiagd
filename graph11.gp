@@ -54,7 +54,7 @@ Yw_min = Y_min * 0.90
 Yw_max = Y_max * 1.10
 
 
-set multiplot 3, 1
+set multiplot layout 3, 1 title "CPU Temperature"
 
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,7 +63,7 @@ set multiplot 3, 1
 
 
 # ****************************************************************** Title *****
-set title "CPU Temperature"
+set
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
@@ -107,6 +107,10 @@ plot ifnameh \
 set title "CPU Temperature"
 
 
+# ***** PLOT *****
+plot ifnameh \
+      using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
+
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                       LEFT PLOT: past week
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -115,6 +119,10 @@ set title "CPU Temperature"
 set title "CPU Temperature"
 
 
+# ***** PLOT *****
+plot ifnameh \
+      using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
+      
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
