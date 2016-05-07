@@ -62,9 +62,6 @@ set multiplot layout 3, 1 title "CPU Temperature"
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-# ****************************************************************** Title *****
-set
-
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
@@ -122,7 +119,7 @@ set title "CPU Temperature"
 # ***** PLOT *****
 plot ifnameh \
       using ($2+utc_offset):4 title " Temperature [degC]" with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
-      
+
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
