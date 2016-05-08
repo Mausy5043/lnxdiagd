@@ -6,8 +6,25 @@
 ME=$(whoami)
 
 echo -n "Started installing LNXDIAGD on "; date
+
+# See if packages are installed and install them.
+python=$(dpkg-query -W -f='${Status} ${Version}\n' python 2>/dev/null | wc -l)
+git=$(dpkg-query -W -f='${Status} ${Version}\n' git 2>/dev/null | wc -l)
+lftp=$(dpkg-query -W -f='${Status} ${Version}\n' lftp 2>/dev/null | wc -l)
+if [ $python -eq 0 ]; then
+  sudo apt-get -yuV install python
+fi
+if [ $git -eq 0 ]; then
+  sudo apt-get -yuV install git
+fi
+if [ $lftp -eq 0 ]; then
+  sudo apt-get -yuV install lftp
+fi
+
 minit=$(echo $RANDOM/555 |bc)
 echo "MINIT = "$minit
+
+
 pushd "$HOME/lnxdiagd"
   # To suppress git detecting changes by chmod:
   git config core.fileMode false
