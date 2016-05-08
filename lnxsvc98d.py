@@ -67,10 +67,10 @@ def do_mv_data(flock, homedir, script):
 
   getsqldata(homedir, False)
 
-  cmnd = homedir + '/' + MYAPP + '/graphday.sh'
-  syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-  cmnd = subprocess.call(cmnd)
-  syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # cmnd = homedir + '/' + MYAPP + '/graphday.sh'
+  # syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # cmnd = subprocess.call(cmnd)
+  # syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
 
   if os.path.isfile('/tmp/' + MYAPP + '/site/text.md'):
     write_lftp(script)
