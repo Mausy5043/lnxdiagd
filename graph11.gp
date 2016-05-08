@@ -54,7 +54,7 @@ stats ifnamew using 4 name "Y" nooutput
 Yw_min = Y_min -1
 Yw_max = Y_max +1
 
-set multiplot layout 1, 3 title "CPU Temperature"
+set multiplot layout 1, 3 title "CPU Temperature -=- ".strftime("%Y-%m-%d %H:%M", time(0))
 
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -157,5 +157,5 @@ plot ifnameh \
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-set timestamp 'created: %Y-%m-%d %H:%M' bottom font "Vera,6"
+
 unset multiplot
