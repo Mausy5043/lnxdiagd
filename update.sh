@@ -12,6 +12,11 @@ if [ ! -d /tmp/lnxdiagd/site/img ]; then
   mkdir -p /tmp/lnxdiagd/site/img
   chmod -R 755 /tmp/lnxdiagd
 fi
+# make sure working tree exists
+if [ ! -d /tmp/lnxdiagd/mysql ]; then
+  mkdir -p /tmp/lnxdiagd/mysql
+  chmod -R 755 /tmp/lnxdiagd
+fi
 
 pushd "$HOME/lnxdiagd"
   source ./includes
