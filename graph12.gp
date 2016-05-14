@@ -68,9 +68,10 @@ set yrange [ 0 : 100 ]
 set y2range [ 0 : 2 ]
 
 # ***************************************************************** Legend *****
-set key inside top left box opaque
-set key samplen 1
-set key reverse  horizontal Left
+set key opaque box inside top left
+set key samplen 0.1
+set key reverse horizontal Left
+set key maxcols 4
 
 # ***************************************************************** Output *****
 # set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
