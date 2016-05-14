@@ -20,6 +20,9 @@ LMPOS = 0.40
 MRPOS = 0.75
 RMARG = 0.96
 
+min(x,y) = (x < y) ? x : y
+max(x,y) = (x > y) ? x : y
+
 # ********************************************************* Statistics (R) *****
 # stats to be calculated here of column 2 (UX-epoch)
 stats ifnameh using 2 name "X" nooutput
@@ -38,7 +41,7 @@ Xd_min = X_min + utc_offset - 946684800
 Xd_max = X_max + utc_offset - 946684800
 
 # stats to be calculated here for Y-axes
-stats ifnamed using 3 name "Yd" nooutpu4
+stats ifnamed using 4 name "Yd" nooutpu4
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 2 (UX-epoch)
