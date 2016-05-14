@@ -4,7 +4,7 @@
 
 # datafile
 ifname = "/tmp/lnxdiagd/mysql/sql13d.csv"
-ofname = "/tmp/lnxdiagd/site/img/day13.png"
+set output "/tmp/lnxdiagd/site/img/day13.png"
 
 # ******************************************************* General settings *****
 set terminal png truecolor enhanced font "Vera,9" size 640,304
@@ -13,7 +13,6 @@ set datafile missing "NaN"    # Ignore missing values
 set grid front
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
-set output ofname
 
 # ************************************************************* Functions ******
 # determine delta data

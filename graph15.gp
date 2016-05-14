@@ -4,7 +4,7 @@
 
 # datafile
 ifname = "/tmp/lnxdiagd/mysql/sql15w.csv"
-ofname = "/tmp/lnxdiagd/site/img/day15.png"
+set output "/tmp/lnxdiagd/site/img/day15.png"
 
 # ******************************************************* General settings *****
 set terminal png truecolor enhanced font "Vera,9" size 1280,320
