@@ -16,9 +16,10 @@ set grid
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
 # Positions of split between graphs
+LMARG = 0.06
 LMPOS = 0.40
-MRPOS = 0.75
-RMARG = 0.96
+MRPOS = 0.73
+RMARG = 0.94
 
 min(x,y) = (x < y) ? x : y
 max(x,y) = (x > y) ? x : y
@@ -89,6 +90,7 @@ set key reverse Left
 #set object 2 rect from graph 0,0 to graph 1,1 behind
 #set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
 
+set lmargin at screen LMARG
 set rmargin at screen LMPOS
 
 # ***** PLOT *****
