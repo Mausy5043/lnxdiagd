@@ -28,9 +28,7 @@ Xh_min = X_min + utc_offset - 946684800
 Xh_max = X_max + utc_offset - 946684800
 
 # stats to be calculated here for Y-axes
-#stats ifnameh using 4 name "Y" nooutput
-#Yh_min = Y_min * 0.90
-#Yh_max = Y_max * 1.10
+stats ifnameh using 4 name "Yh" nooutput
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 2 (UX-epoch)
@@ -40,9 +38,7 @@ Xd_min = X_min + utc_offset - 946684800
 Xd_max = X_max + utc_offset - 946684800
 
 # stats to be calculated here for Y-axes
-#stats ifnamed using 4 name "Y" nooutput
-#Yd_min = Y_min * 0.90
-#Yd_max = Y_max * 1.10
+stats ifnamed using 3 name "Yd" nooutpu4
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 2 (UX-epoch)
@@ -51,9 +47,10 @@ Xw_min = X_min + utc_offset - 946684800
 Xw_max = X_max + utc_offset - 946684800
 
 # stats for Y-axis
-stats ifnamew using 4 name "Y" nooutput
-Yw_min = Y_min -1
-Yw_max = Y_max +1
+stats ifnamew using 4 name "Yw" nooutput
+
+Ymax = max(max(Yd_max, Yh_max), Yw_max) +1
+Ymin = min(min(Yd_min, Yh_min), Yw_min) -1
 
 set multiplot layout 1, 3 title "CPU Temperature ".strftime("( %Y-%m-%dT%H:%M )", time(0)+utc_offset)
 
@@ -74,7 +71,7 @@ set xrange [ Xw_min : Xw_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel "Temperature [degC]"
-set yrange [ Yw_min : Yw_max ]
+set yrange [ Ymin : Ymax ]
 
 # ***************************************************************** Legend *****
 set key inside top left horizontal box
@@ -113,7 +110,7 @@ set xrange [ Xd_min : Xd_max ]
 # ***************************************************************** Y-axis *****
 set ylabel " "
 set ytics format " "
-set yrange [ Yw_min : Yw_max ]
+set yrange [ Ymin : Ymax ]
 
 # ***************************************************************** Legend *****
 unset key
@@ -143,7 +140,7 @@ set xtics textcolor rgb "red"
 # ***************************************************************** Y-axis *****
 set ylabel " "
 set ytics format " "
-set yrange [ Yw_min : Yw_max ]
+set yrange [ Ymin : Ymax ]
 
 # ***************************************************************** Legend *****
 unset key
