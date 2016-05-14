@@ -34,18 +34,18 @@ X_min = X_min + utc_offset - 946684800
 X_max = X_max + utc_offset - 946684800
 
 # ****************************************************************** Title *****
-set title "Logging"
+set title "System Logging Linecounts ".strftime("( %Y-%m-%dT%H:%M )", time(0)+utc_offset)
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
-set format x "%R"            # Display time in 24 hour notation on the X axis
+set format x "%a %d"            # Display time in 24 hour notation on the X axis
 set xtics rotate by 40 right
 set xrange [ X_min : X_max ]
 
 # ***************************************************************** Y-axis *****
-set ylabel "Lines []"
+set ylabel "Count [#]"
 set autoscale y
 set format y "%4.0s%c"
 set logscale y 10
