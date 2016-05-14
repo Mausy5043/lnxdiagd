@@ -13,7 +13,6 @@ set datafile missing "NaN"    # Ignore missing values
 set grid front
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
-set timestamp 'created: %Y-%m-%d %H:%M' bottom font "Vera,6"
 
 # Positions of split between graphs
 LMARG = 0.06
@@ -34,7 +33,7 @@ X_min = X_min + utc_offset - 946684800
 X_max = X_max + utc_offset - 946684800
 
 # ****************************************************************** Title *****
-set title "System Logging Linecounts ".strftime("( %Y-%m-%dT%H:%M )", time(0)+utc_offset)
+set title "System Logging Linecounts ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label

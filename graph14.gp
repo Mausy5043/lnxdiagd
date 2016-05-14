@@ -47,7 +47,7 @@ stats ifnamew using 2 name "X" nooutput
 Xw_min = X_min + utc_offset - 946684800
 Xw_max = X_max + utc_offset - 946684800
 
-set multiplot layout 1, 3 title "Memory Usage ".strftime("( %Y-%m-%dT%H:%M )", time(0)+utc_offset)
+set multiplot layout 1, 3 title "Memory Usage ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
 
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
