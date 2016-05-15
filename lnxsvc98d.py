@@ -61,9 +61,9 @@ class MyDaemon(Daemon):
         raise
 
 def do_mv_data(flock, homedir, script):
-  # wait 15 seconds for processes to finish
-  unlock(flock)  # remove stale lock
-  t0 = time.time()
+  # wait 4 seconds for processes to finish
+  # unlock(flock)  # remove stale lock
+  time.sleep(4)
 
   # Retrieve data from MySQL database
   getsqldata(homedir, False)
