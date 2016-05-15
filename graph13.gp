@@ -38,6 +38,7 @@ Xh_max = X_max + utc_offset - 946684800
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
 stats ifnameh using (delta($7)) name "Yh" nooutput
+old_x = NaN
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 2 (UX-epoch)
@@ -47,6 +48,7 @@ Xd_max = X_max + utc_offset - 946684800
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
 stats ifnamed using (delta($7)) name "Yd" nooutput
+old_x = NaN
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 2 (UX-epoch)
@@ -56,6 +58,7 @@ Xw_max = X_max + utc_offset - 946684800
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
 stats ifnameh using (delta($7)) name "Yw" nooutput
+old_x = NaN
 
 Ymax = max(max(Yd_max, Yh_max), Yw_max) * 8 / 60.
 Ymin = 1024 * 8 / 60.
@@ -64,14 +67,17 @@ Ymin = 1024 * 8 / 60.
 # ********************************************************* Statistics (R) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
 stats ifnameh using (delta($6)) name "Ybh" nooutput
+old_x = NaN
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
 stats ifnamed using (delta($6)) name "Ybd" nooutput
+old_x = NaN
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
 stats ifnameh using (delta($6)) name "Ybw" nooutput
+old_x = NaN
 
 
 set multiplot layout 2, 3 title "Network load ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
@@ -110,6 +116,7 @@ set rmargin at screen LMPOS
 # ***** PLOT *****
 plot ifnamew \
       using ($2+utc_offset):(delta($7)*8/60) title "Upload (eth0)" with lines lc rgb "#cc0000bb" lw 1\
+old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -138,6 +145,7 @@ set rmargin at screen MRPOS
 # ***** PLOT *****
 plot ifnamed \
       using ($2+utc_offset):(delta($7)*8/60) with lines lc rgb "#cc0000bb" lw 1\
+old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -166,7 +174,7 @@ set rmargin at screen RMARG
 # ***** PLOT *****
 plot ifnameh \
       using ($2+utc_offset):(delta($7)*8/60) with lines lc rgb "#cc0000bb" lw 1\
-
+old_x = NaN
 
 ################################################################################
 ################################################################################
@@ -214,6 +222,7 @@ set rmargin at screen LMPOS
 # ***** PLOT *****
 plot ifnamew \
       using ($2+utc_offset):(delta($6)*8/60) title "Download (eth0)" with lines lc rgb "#ccbb0000" lw 1\
+old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -243,6 +252,7 @@ set rmargin at screen MRPOS
 # ***** PLOT *****
 plot ifnamed \
       using ($2+utc_offset):(delta($6)*8/60) with lines lc rgb "#ccbb0000" lw 1\
+old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
