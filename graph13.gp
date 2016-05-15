@@ -115,7 +115,7 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($2+utc_offset):(delta($7)*8/60) title "Upload (eth0)" with lines lc rgb "#cc0000bb" lw 1\
+      using ($2+utc_offset):(delta($7)*8/60) title "Upload (eth0)" with lines lc rgb "#cc0000bb" lw 1
 old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -144,7 +144,7 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($2+utc_offset):(delta($7)*8/60) with lines lc rgb "#cc0000bb" lw 1\
+      using ($2+utc_offset):(delta($7)*8/60) with lines lc rgb "#cc0000bb" lw 1
 old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -173,7 +173,7 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($2+utc_offset):(delta($7)*8/60) with lines lc rgb "#cc0000bb" lw 1\
+      using ($2+utc_offset):(delta($7)*8/60) with lines lc rgb "#cc0000bb" lw 1
 old_x = NaN
 
 ################################################################################
@@ -221,7 +221,7 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($2+utc_offset):(delta($6)*8/60) title "Download (eth0)" with lines lc rgb "#ccbb0000" lw 1\
+      using ($2+utc_offset):(delta($6)*8/60) title "Download (eth0)" with lines lc rgb "#ccbb0000" lw 1
 old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -251,7 +251,7 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($2+utc_offset):(delta($6)*8/60) with lines lc rgb "#ccbb0000" lw 1\
+      using ($2+utc_offset):(delta($6)*8/60) with lines lc rgb "#ccbb0000" lw 1
 old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -282,7 +282,7 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($2+utc_offset):(delta($6)*8/60) with lines lc rgb "#ccbb0000" lw 1\
+      using ($2+utc_offset):(delta($6)*8/60) with lines lc rgb "#ccbb0000" lw 1
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
