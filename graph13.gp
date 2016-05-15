@@ -63,15 +63,15 @@ Ymin = 1024 * 8 / 60.
 # ********************** Statistics for the bottom graphs **********************
 # ********************************************************* Statistics (R) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnameh using (delta($6)) name "Yh" nooutput
+stats ifnameh using (delta($6)) name "Ybh" nooutput
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnamed using (delta($6)) name "Yd" nooutput
+stats ifnamed using (delta($6)) name "Ybd" nooutput
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnameh using (delta($6)) name "Yw" nooutput
+stats ifnameh using (delta($6)) name "Ybw" nooutput
 
 
 set multiplot layout 2, 3 title "Network load ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
@@ -150,7 +150,6 @@ set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x ""            # Display time in 24 hour notation on the X axis
 set xrange [ Xh_min : Xh_max ]
-set xtics textcolor rgb "red"
 
 # ***************************************************************** Y-axis *****
 set ylabel " "
@@ -174,8 +173,8 @@ plot ifnameh \
 ################################################################################
 
 
-Ymax = max(max(Yd_max, Yh_max), Yw_max) * 8 / 60.
-#Ymin = min(min(Yd_min, Yh_min), Yw_min) -1
+Ymax = max(max(Ybd_max, Ybh_max), Ybw_max) * 8 / 60.
+#Ymin = min(min(Ybd_min, Ybh_min), Ybw_min) -1
 Ymin = 1024 * 8 / 60.
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
