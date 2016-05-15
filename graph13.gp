@@ -12,7 +12,7 @@ set output "/tmp/lnxdiagd/site/img/day13.png"
 set terminal png truecolor enhanced font "Vera,9" size 1280,320
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
-set grid
+set grid front
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
 # Positions of split between graphs
