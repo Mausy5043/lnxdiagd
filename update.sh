@@ -7,6 +7,10 @@
 HOSTNAME=$(cat /etc/hostname)
 branch=$(cat "$HOME/.lnxdiagd.branch")
 
+# Wait for the daemons to finish their job. Prevents stale locks when restarting.
+echo "Waiting 30s..."
+sleep 30
+
 # make sure working tree exists
 if [ ! -d /tmp/lnxdiagd/site/img ]; then
   mkdir -p /tmp/lnxdiagd/site/img
