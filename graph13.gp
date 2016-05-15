@@ -202,7 +202,7 @@ set format x "%a %d"            # Display time in 24 hour notation on the X axis
 set xrange [ Xw_min : Xw_max ]
 
 # ***************************************************************** Y-axis *****
-set ylabel "Network load [bits/sec]"
+set ylabel " "
 set yrange [ Ymin : Ymax ] reverse
 set format y "%3.0s%c"
 # set autoscale y
