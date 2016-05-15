@@ -37,7 +37,7 @@ Xh_min = X_min + utc_offset - 946684800
 Xh_max = X_max + utc_offset - 946684800
 
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnameh using (delta($6)) name "Yh" nooutput
+stats ifnameh using (delta($7)) name "Yh" nooutput
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 2 (UX-epoch)
@@ -46,7 +46,7 @@ Xd_min = X_min + utc_offset - 946684800
 Xd_max = X_max + utc_offset - 946684800
 
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnamed using (delta($6)) name "Yd" nooutput
+stats ifnamed using (delta($7)) name "Yd" nooutput
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 2 (UX-epoch)
@@ -55,7 +55,7 @@ Xw_min = X_min + utc_offset - 946684800
 Xw_max = X_max + utc_offset - 946684800
 
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnameh using (delta($6)) name "Yw" nooutput
+stats ifnameh using (delta($7)) name "Yw" nooutput
 
 Ymax = max(max(Yd_max, Yh_max), Yw_max) * 8 / 60.
 #Ymin = min(min(Yd_min, Yh_min), Yw_min) -1
@@ -91,21 +91,13 @@ set key samplen 1
 set key reverse Left
 
 # ***************************************************************** Output *****
-# set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
-# set arrow from graph 1,graph 0 to graph 1,graph 1 nohead lc rgb "green" front
-#set object 1 rect from screen 0,0 to screen 1,1 behind
-#set object 1 rect fc rgb "#eeeeee" fillstyle solid 1.0 noborder
-#set object 2 rect from graph 0,0 to graph 1,1 behind
-#set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
 
 set lmargin at screen LMARG
 set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($2+utc_offset):(delta($7)*8/60) title "Upload   (eth0)" with lines lc rgb "#0000bb" lw 1\
-
-
+      using ($2+utc_offset):(delta($7)*8/60) title "Upload (eth0)" with lines lc rgb "#0000bb" lw 1\
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
