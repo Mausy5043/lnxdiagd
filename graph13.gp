@@ -1,6 +1,6 @@
 #!/usr/bin/env gnuplot
 
-# graph of CPU temperature
+# graph of network uasage
 
 # datafiles
 ifnameh = "/tmp/lnxdiagd/mysql/sql13h.csv"
