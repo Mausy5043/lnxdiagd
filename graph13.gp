@@ -36,7 +36,7 @@ stats ifnameh using 2 name "X" nooutput
 Xh_min = X_min + utc_offset - 946684800
 Xh_max = X_max + utc_offset - 946684800
 
-# stats to be calculated here of column 7 (Download bytes per minute)
+# stats to be calculated here of column 7 (Upload bytes per minute)
 stats ifnameh using (delta($7)) name "Yh" nooutput
 
 # ********************************************************* Statistics (M) *****
@@ -45,7 +45,7 @@ stats ifnamed using 2 name "X" nooutput
 Xd_min = X_min + utc_offset - 946684800
 Xd_max = X_max + utc_offset - 946684800
 
-# stats to be calculated here of column 7 (Download bytes per minute)
+# stats to be calculated here of column 7 (Upload bytes per minute)
 stats ifnamed using (delta($7)) name "Yd" nooutput
 
 # ********************************************************* Statistics (L) *****
@@ -54,11 +54,25 @@ stats ifnamew using 2 name "X" nooutput
 Xw_min = X_min + utc_offset - 946684800
 Xw_max = X_max + utc_offset - 946684800
 
-# stats to be calculated here of column 7 (Download bytes per minute)
+# stats to be calculated here of column 7 (Upload bytes per minute)
 stats ifnameh using (delta($7)) name "Yw" nooutput
 
 Ymax = max(max(Yd_max, Yh_max), Yw_max) * 8 / 60.
 Ymin = 1024 * 8 / 60.
+
+# ********************** Statistics for the bottom graphs **********************
+# ********************************************************* Statistics (R) *****
+# stats to be calculated here of column 6 (Download bytes per minute)
+stats ifnameh using (delta($6)) name "Yh" nooutput
+
+# ********************************************************* Statistics (M) *****
+# stats to be calculated here of column 6 (Download bytes per minute)
+stats ifnamed using (delta($6)) name "Yd" nooutput
+
+# ********************************************************* Statistics (L) *****
+# stats to be calculated here of column 6 (Download bytes per minute)
+stats ifnameh using (delta($6)) name "Yw" nooutput
+
 
 set multiplot layout 2, 3 title "Network load ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
 
@@ -159,18 +173,6 @@ plot ifnameh \
 ################################## BOTTOM PLOT #################################
 ################################################################################
 
-
-# ********************************************************* Statistics (R) *****
-# stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnameh using (delta($6)) name "Yh" nooutput
-
-# ********************************************************* Statistics (M) *****
-# stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnamed using (delta($6)) name "Yd" nooutput
-
-# ********************************************************* Statistics (L) *****
-# stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnameh using (delta($6)) name "Yw" nooutput
 
 Ymax = max(max(Yd_max, Yh_max), Yw_max) * 8 / 60.
 #Ymin = min(min(Yd_min, Yh_min), Yw_min) -1
