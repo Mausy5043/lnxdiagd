@@ -15,16 +15,18 @@ pushd "$HOME/lnxdiagd" >/dev/null
   if [ $(wc -l < /tmp/lnxdiagd/mysql/sql12d.csv) -gt 30 ]; then
     gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph12.gp &
   fi
+  wait
   if [ $(wc -l < /tmp/lnxdiagd/mysql/sql13d.csv) -gt 30 ]; then
     gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph13.gp &
   fi
   if [ $(wc -l < /tmp/lnxdiagd/mysql/sql14d.csv) -gt 30 ]; then
     gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph14.gp &
   fi
+  wait
   if [ $(wc -l < /tmp/lnxdiagd/mysql/sql15d.csv) -gt 30 ]; then
     gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph15.gp &
   fi
 
-wait
+  wait
 
 popd >/dev/null
