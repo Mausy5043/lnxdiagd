@@ -2,11 +2,6 @@
 
 # Pull data from MySQL server and graph them.
 
-LOCAL=$(date)
-LOCALSECONDS=$(date -d "$LOCAL" +%s)
-UTC=$(date -u -d "$LOCAL" +"%Y-%m-%d %H:%M:%S")  #remove timezone reference
-UTCSECONDS=$(date -d "$UTC" +%s)
-UTCOFFSET=$(($LOCALSECONDS-$UTCSECONDS))
 datastore="/tmp/lnxdiagd/mysql"
 
 if [ ! -d "$datastore" ]; then
@@ -16,7 +11,7 @@ fi
 interval="INTERVAL 25 HOUR "
 host=$(hostname)
 
-pushd $HOME/lnxdiagd >/dev/null
+pushd "$HOME/lnxdiagd" >/dev/null
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM systemp where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "$datastore/sql11d.csv"
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM sysload where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "$datastore/sql12d.csv"
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM sysnet  where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "$datastore/sql13d.csv"

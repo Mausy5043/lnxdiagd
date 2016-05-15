@@ -6,22 +6,22 @@ LOCAL=$(date)
 LOCALSECONDS=$(date -d "$LOCAL" +%s)
 UTC=$(date -u -d "$LOCAL" +"%Y-%m-%d %H:%M:%S")  #remove timezone reference
 UTCSECONDS=$(date -d "$UTC" +%s)
-UTCOFFSET=$(($LOCALSECONDS-$UTCSECONDS))
+UTCOFFSET=$((LOCALSECONDS - UTCSECONDS))
 
-pushd $HOME/lnxdiagd >/dev/null
-  if [ $(cat /tmp/lnxdiagd/mysql/sql11d.csv | wc -l) -gt 30 ]; then
+pushd "$HOME/lnxdiagd" >/dev/null
+  if [ $(wc -l < /tmp/lnxdiagd/mysql/sql11d.csv) -gt 30 ]; then
     gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph11.gp
   fi
-  if [ $(cat /tmp/lnxdiagd/mysql/sql12d.csv | wc -l) -gt 30 ]; then
+  if [ $(wc -l < /tmp/lnxdiagd/mysql/sql12d.csv) -gt 30 ]; then
     gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph12.gp
   fi
-  if [ $(cat /tmp/lnxdiagd/mysql/sql13d.csv | wc -l) -gt 30 ]; then
+  if [ $(wc -l < /tmp/lnxdiagd/mysql/sql13d.csv) -gt 30 ]; then
     gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph13.gp
   fi
-  if [ $(cat /tmp/lnxdiagd/mysql/sql14d.csv | wc -l) -gt 30 ]; then
+  if [ $(wc -l < /tmp/lnxdiagd/mysql/sql14d.csv) -gt 30 ]; then
     gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph14.gp
   fi
-  if [ $(cat /tmp/lnxdiagd/mysql/sql15d.csv | wc -l) -gt 30 ]; then
+  if [ $(wc -l < /tmp/lnxdiagd/mysql/sql15d.csv) -gt 30 ]; then
     gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph15.gp
   fi
 

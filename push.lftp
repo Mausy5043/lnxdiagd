@@ -1,7 +1,0 @@
-open hendrixnet.nl
-
-cd /public_html/grav/user/pages/04.status
-mkdir -p -f _rbian
-cd _rbian
-
-mirror --reverse --delete --verbose=3 -c /tmp/lnxdiagd/site/ .

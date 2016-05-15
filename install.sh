@@ -11,18 +11,18 @@ echo -n "Started installing LNXDIAGD on "; date
 python=$(dpkg-query -W -f='${Status} ${Version}\n' python 2>/dev/null | wc -l)
 git=$(dpkg-query -W -f='${Status} ${Version}\n' git 2>/dev/null | wc -l)
 lftp=$(dpkg-query -W -f='${Status} ${Version}\n' lftp 2>/dev/null | wc -l)
-if [ $python -eq 0 ]; then
+if [ "$python" -eq 0 ]; then
   sudo apt-get -yuV install python
 fi
-if [ $git -eq 0 ]; then
+if [ "$git" -eq 0 ]; then
   sudo apt-get -yuV install git
 fi
-if [ $lftp -eq 0 ]; then
+if [ "$lftp" -eq 0 ]; then
   sudo apt-get -yuV install lftp
 fi
 
 minit=$(echo $RANDOM/555 |bc)
-echo "MINIT = "$minit
+echo "MINIT = $minit"
 
 
 pushd "$HOME/lnxdiagd"

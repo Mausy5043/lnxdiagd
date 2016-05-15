@@ -4,7 +4,6 @@
 # a `*boot` repo.
 # The hostname is in /etc/hostname prior to running `install.sh` here!
 
-ME=$(whoami)
 HOSTNAME=$(cat /etc/hostname)
 
 echo -n "Started UNinstalling LNXDIAGD on "; date
