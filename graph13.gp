@@ -36,7 +36,7 @@ stats ifnameh using 2 name "X" nooutput
 Xh_min = X_min + utc_offset - 946684800
 Xh_max = X_max + utc_offset - 946684800
 
-# stats to be calculated here of column 6 (Download bytes per minute)
+# stats to be calculated here of column 7 (Download bytes per minute)
 stats ifnameh using (delta($7)) name "Yh" nooutput
 
 # ********************************************************* Statistics (M) *****
@@ -45,7 +45,7 @@ stats ifnamed using 2 name "X" nooutput
 Xd_min = X_min + utc_offset - 946684800
 Xd_max = X_max + utc_offset - 946684800
 
-# stats to be calculated here of column 6 (Download bytes per minute)
+# stats to be calculated here of column 7 (Download bytes per minute)
 stats ifnamed using (delta($7)) name "Yd" nooutput
 
 # ********************************************************* Statistics (L) *****
@@ -54,28 +54,26 @@ stats ifnamew using 2 name "X" nooutput
 Xw_min = X_min + utc_offset - 946684800
 Xw_max = X_max + utc_offset - 946684800
 
-# stats to be calculated here of column 6 (Download bytes per minute)
+# stats to be calculated here of column 7 (Download bytes per minute)
 stats ifnameh using (delta($7)) name "Yw" nooutput
 
 Ymax = max(max(Yd_max, Yh_max), Yw_max) * 8 / 60.
-#Ymin = min(min(Yd_min, Yh_min), Yw_min) -1
 Ymin = 1024 * 8 / 60.
 
-set multiplot layout 1, 3 title "Network load ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
+set multiplot layout 2, 3 title "Network load ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
 
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#                                                       LEFT PLOT: past week
+#                                                    TOP LEFT PLOT: past week
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 # ***************************************************************** X-axis *****
-set xlabel "past week"       # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
-set format x "%a %d"            # Display time in 24 hour notation on the X axis
+set format x ""            # Display time in 24 hour notation on the X axis
 set xrange [ Xw_min : Xw_max ]
 
 # ***************************************************************** Y-axis *****
@@ -83,7 +81,7 @@ set ylabel "Network load [bits/sec]"
 set yrange [ Ymin : Ymax ]
 set format y "%3.0s%c"
 # set autoscale y
-# set bmargin 0
+set bmargin 0
 
 # ***************************************************************** Legend *****
 set key inside top left horizontal box
@@ -97,19 +95,18 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($2+utc_offset):(delta($7)*8/60) title "Upload (eth0)" with lines lc rgb "#0000bb" lw 1\
+      using ($2+utc_offset):(delta($7)*8/60) title "Upload (eth0)" with lines lc rgb "#cc0000bb" lw 1\
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#                                                     MIDDLE PLOT:  past day
+#                                                 TOP MIDDLE PLOT:  past day
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 # ***************************************************************** X-axis *****
-set xlabel "past day"       # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
-set format x "%R"            # Display time in 24 hour notation on the X axis
+set format x ""            # Display time in 24 hour notation on the X axis
 set xrange [ Xd_min : Xd_max ]
 
 # ***************************************************************** Y-axis *****
@@ -126,19 +123,18 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($2+utc_offset):(delta($7)*8/60) with lines lc rgb "#0000bb" lw 1\
+      using ($2+utc_offset):(delta($7)*8/60) with lines lc rgb "#cc0000bb" lw 1\
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#                                                      RIGHT PLOT: past hour
+#                                                  TOP RIGHT PLOT: past hour
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 # ***************************************************************** X-axis *****
-set xlabel "past hour"       # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
-set format x "%R"            # Display time in 24 hour notation on the X axis
+set format x ""            # Display time in 24 hour notation on the X axis
 set xrange [ Xh_min : Xh_max ]
 set xtics textcolor rgb "red"
 
@@ -156,7 +152,124 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($2+utc_offset):(delta($7)*8/60) with lines lc rgb "#0000bb" lw 1\
+      using ($2+utc_offset):(delta($7)*8/60) with lines lc rgb "#cc0000bb" lw 1\
+
+
+################################################################################
+################################## BOTTOM PLOT #################################
+################################################################################
+
+
+# ********************************************************* Statistics (R) *****
+# stats to be calculated here of column 6 (Download bytes per minute)
+stats ifnameh using (delta($6)) name "Yh" nooutput
+
+# ********************************************************* Statistics (M) *****
+# stats to be calculated here of column 6 (Download bytes per minute)
+stats ifnamed using (delta($6)) name "Yd" nooutput
+
+# ********************************************************* Statistics (L) *****
+# stats to be calculated here of column 6 (Download bytes per minute)
+stats ifnameh using (delta($6)) name "Yw" nooutput
+
+Ymax = max(max(Yd_max, Yh_max), Yw_max) * 8 / 60.
+#Ymin = min(min(Yd_min, Yh_min), Yw_min) -1
+Ymin = 1024 * 8 / 60.
+
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                                    BTM LEFT PLOT: past week
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+# ***************************************************************** X-axis *****
+set xlabel "past week"       # X-axis label
+set xdata time               # Data on X-axis should be interpreted as time
+set timefmt "%s"             # Time in log-file is given in Unix format
+set format x "%a %d"            # Display time in 24 hour notation on the X axis
+set xrange [ Xw_min : Xw_max ]
+
+# ***************************************************************** Y-axis *****
+set ylabel "Network load [bits/sec]"
+set yrange [ Ymin : Ymax ] reverse
+set format y "%3.0s%c"
+# set autoscale y
+set tmargin 0
+unset bmargin
+
+# ***************************************************************** Legend *****
+set key inside top left horizontal box
+set key samplen 1
+set key reverse Left
+
+# ***************************************************************** Output *****
+
+set lmargin at screen LMARG
+set rmargin at screen LMPOS
+
+# ***** PLOT *****
+plot ifnamew \
+      using ($2+utc_offset):(delta($6)*8/60) title "Upload (eth0)" with lines lc rgb "#ccbb0000" lw 1\
+
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                                 BTM MIDDLE PLOT:  past day
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+# ***************************************************************** X-axis *****
+set xlabel "past day"       # X-axis label
+set xdata time               # Data on X-axis should be interpreted as time
+set timefmt "%s"             # Time in log-file is given in Unix format
+set format x "%R"            # Display time in 24 hour notation on the X axis
+set xrange [ Xd_min : Xd_max ]
+
+# ***************************************************************** Y-axis *****
+set ylabel " "
+set ytics format " "
+set yrange [ Ymin : Ymax ] reverse
+
+# ***************************************************************** Legend *****
+unset key
+
+# ***************************************************************** Output *****
+set lmargin at screen LMPOS+0.001
+set rmargin at screen MRPOS
+
+# ***** PLOT *****
+plot ifnamed \
+      using ($2+utc_offset):(delta($6)*8/60) with lines lc rgb "#ccbb0000" lw 1\
+
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                                  BTM RIGHT PLOT: past hour
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+# ***************************************************************** X-axis *****
+set xlabel "past hour"       # X-axis label
+set xdata time               # Data on X-axis should be interpreted as time
+set timefmt "%s"             # Time in log-file is given in Unix format
+set format x "%R"            # Display time in 24 hour notation on the X axis
+set xrange [ Xh_min : Xh_max ]
+set xtics textcolor rgb "red"
+
+# ***************************************************************** Y-axis *****
+set ylabel " "
+set ytics format " "
+set yrange [ Ymin : Ymax ] reverse
+
+# ***************************************************************** Legend *****
+unset key
+
+# ***************************************************************** Output *****
+set lmargin at screen MRPOS+0.001
+set rmargin at screen RMARG
+
+# ***** PLOT *****
+plot ifnameh \
+      using ($2+utc_offset):(delta($6)*8/60) with lines lc rgb "#ccbb0000" lw 1\
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
