@@ -1,6 +1,6 @@
 #!/usr/bin/env gnuplot
 
-# graph of network uasage
+# graph of network usage
 
 # datafiles
 ifnameh = "/tmp/lnxdiagd/mysql/sql13h.csv"
