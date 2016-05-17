@@ -7,19 +7,24 @@ ME=$(whoami)
 
 echo -n "Started installing LNXDIAGD on "; date
 
-# See if packages are installed and install them.
-python=$(dpkg-query -W -f='${Status} ${Version}\n' python 2>/dev/null | wc -l)
-git=$(dpkg-query -W -f='${Status} ${Version}\n' git 2>/dev/null | wc -l)
-lftp=$(dpkg-query -W -f='${Status} ${Version}\n' lftp 2>/dev/null | wc -l)
-if [ "$python" -eq 0 ]; then
-  sudo apt-get -yuV install python
-fi
-if [ "$git" -eq 0 ]; then
-  sudo apt-get -yuV install git
-fi
-if [ "$lftp" -eq 0 ]; then
-  sudo apt-get -yuV install lftp
-fi
+install_package()
+{
+  # See if packages are installed and install them.
+  package=$1
+  status=$(dpkg-query -W -f='${Status} ${Version}\n' $package 2>/dev/null | wc -l)
+  if [ "$status" -eq 0 ]; then
+    sudo apt-get -yuV install $package
+  fi
+}
+
+sudo apt-get update
+install_package(git)
+install_package(python)
+install_package(lftp)
+install_package(gnuplot)
+install_package(gnuplot-nox)
+install_package(mysql-client)
+install_package(python-mysqldb)
 
 minit=$(echo $RANDOM/555 |bc)
 echo "MINIT = $minit"
