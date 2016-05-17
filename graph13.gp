@@ -210,7 +210,7 @@ set tmargin 0
 unset bmargin
 
 # ***************************************************************** Legend *****
-set key inside top left horizontal box
+set key inside bottom left horizontal box
 set key samplen 1
 set key reverse Left
 
