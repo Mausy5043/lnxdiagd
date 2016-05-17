@@ -18,13 +18,13 @@ install_package()
 }
 
 sudo apt-get update
-install_package(git)
-install_package(python)
-install_package(lftp)
-install_package(gnuplot)
-install_package(gnuplot-nox)
-install_package(mysql-client)
-install_package(python-mysqldb)
+install_package "git"
+install_package "python"
+install_package "lftp"
+install_package "gnuplot"
+install_package "gnuplot-nox"
+install_package "mysql-client"
+install_package "python-mysqldb"
 
 minit=$(echo $RANDOM/555 |bc)
 echo "MINIT = $minit"
