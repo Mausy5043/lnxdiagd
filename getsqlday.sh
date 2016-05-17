@@ -8,7 +8,7 @@ if [ ! -d "$datastore" ]; then
   mkdir -p "$datastore"
 fi
 
-interval="INTERVAL 25 HOUR "
+interval="INTERVAL 30 HOUR "
 host=$(hostname)
 
 pushd "$HOME/lnxdiagd" >/dev/null
