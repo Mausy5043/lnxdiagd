@@ -3,9 +3,7 @@
 # daemon98.py file post-processor.
 
 import ConfigParser
-import glob
 import os
-import shutil
 import subprocess
 import sys
 import syslog
@@ -23,6 +21,7 @@ MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
 SQLMNT      = rnd(0, 59)
 SQLHR       = rnd(0, 23)
+SQLHRM      = rnd(0, 59)
 
 class MyDaemon(Daemon):
   def run(self):
@@ -33,7 +32,7 @@ class MyDaemon(Daemon):
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     syslog_trace("getsqlday.sh  runs every 30 minutes starting at minute {0}".format(SQLMNT), syslog.LOG_DEBUG, DEBUG)
-    syslog_trace("getsqlweek.sh runs every 4th hour  starting  at hour   {0}".format(SQLHR), syslog.LOG_DEBUG, DEBUG)
+    syslog_trace("getsqlweek.sh runs every 4th hour  starting  at hour   {0}:{1}".format(SQLHR, SQLHRM), syslog.LOG_DEBUG, DEBUG)
     reportTime      = iniconf.getint(inisection, "reporttime")
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
@@ -82,30 +81,6 @@ def do_mv_data(flock, homedir, script):
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
 
-  # waitTime = 15 - (time.time() - t0)
-  # if waitTime > 0:
-  #   time.sleep(waitTime)
-  # lock(flock)
-  # # wait for all other processes to release their locks.
-  # count_internal_locks = 2
-  # while (count_internal_locks > 1):
-  #   time.sleep(1)
-  #   count_internal_locks = 0
-  #   for fname in glob.glob(r'/tmp/' + MYAPP + '/*.lock'):
-  #     count_internal_locks += 1
-  #   syslog_trace("{0} internal locks exist".format(count_internal_locks), False, DEBUG)
-  # # endwhile
-  #
-  # for fname in glob.glob(r'/tmp/' + MYAPP + '/*.csv'):
-  #   syslog_trace("...moving data {0}".format(fname), False, DEBUG)
-  #   shutil.move(fname, fname+".DEAD")
-  #
-  # # for fname in glob.glob(r'/tmp/' + MYAPP + '/*.png'):
-  # #  syslog_trace("...moving graph {0}".format(fname), False, DEBUG)
-  # #  shutil.move(fname, fname+".DEAD")
-  #
-  # unlock(flock)
-
 def getsqldata(homedir, nu):
   minit = int(time.strftime('%M'))
   nowur = int(time.strftime('%H'))
@@ -115,17 +90,17 @@ def getsqldata(homedir, nu):
   cmnd = subprocess.call(cmnd)
   syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last day is updated every 30 minutes
-  if ((minit % 30) == (SQLMNT % 30)) or nu:
+  if nu or ((minit % 30) == (SQLMNT % 30)):
     cmnd = homedir + '/' + MYAPP + '/getsqlday.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    # dat of the last week is updated every 4 hours
-    if ((nowur % 4) == (SQLHR % 4)) or nu:
-      cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
-      syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-      cmnd = subprocess.call(cmnd)
-      syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # dat of the last week is updated every 4 hours
+  if nu or ((nowur % 4) == (SQLHR % 4) and (minit == SQLHRM)):
+    cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
+    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+    cmnd = subprocess.call(cmnd)
+    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
 
 def write_lftp(script):
   with open(script, 'w') as f:
