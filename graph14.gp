@@ -73,7 +73,7 @@ set xrange [ Xw_min : Xw_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel "Usage [%]"
-set autoscale y
+set yrange [ Ymax : ]
 set format y "%4.0s%c"
 
 # ***************************************************************** Legend *****
@@ -121,7 +121,7 @@ set xrange [ Xd_min : Xd_max ]
 # ***************************************************************** Y-axis *****
 set ylabel " "
 set ytics format " "
-set autoscale y
+set yrange [ Ymax : ]
 
 # ***************************************************************** Legend *****
 unset key
@@ -155,7 +155,7 @@ set xtics textcolor rgb "red"
 # ***************************************************************** Y-axis *****
 set ylabel " "
 set ytics format " "
-set autoscale y
+set yrange [ Ymax : ]
 
 # ***************************************************************** Legend *****
 unset key
