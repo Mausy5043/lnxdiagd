@@ -28,24 +28,31 @@ max(x,y) = (x > y) ? x : y
 # ********************************************************* Statistics (R) *****
 # stats to be calculated here of column 2 (UX-epoch)
 stats ifnameh using 2 name "X" nooutput
-
 Xh_min = X_min + utc_offset - 946684800
 Xh_max = X_max + utc_offset - 946684800
 
+# stats to be calculated here of column 11 (Swap memory used)
+stats ifnameh using 11 name "Yh" nooutput
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 2 (UX-epoch)
 stats ifnamed using 2 name "X" nooutput
-
 Xd_min = X_min + utc_offset - 946684800
 Xd_max = X_max + utc_offset - 946684800
 
+# stats to be calculated here of column 11 (Swap memory used)
+stats ifnameh using 11 name "Yd" nooutput
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 2 (UX-epoch)
 stats ifnamew using 2 name "X" nooutput
 Xw_min = X_min + utc_offset - 946684800
 Xw_max = X_max + utc_offset - 946684800
+
+# stats to be calculated here of column 11 (Swap memory used)
+stats ifnameh using 11 name "Yw" nooutput
+
+Ymax = max(max(Yd_max, Yh_max), Yw_max) * -1
 
 set multiplot layout 1, 3 title "Memory Usage ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
 
