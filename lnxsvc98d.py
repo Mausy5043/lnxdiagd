@@ -108,7 +108,7 @@ def write_lftp(script):
     f.write('# This file is created automatically by ' + MYAPP + '\n\n')
     f.write('# lftp script\n\n')
     f.write('open hendrixnet.nl;\n')
-    f.write('cd /public_html/grav/user/pages/04.status/;\n')
+    f.write('cd 04.status/;\n')
     f.write('mkdir -p -f _' + NODE + ' ;\n')
     f.write('cd _' + NODE + ' ;\n')
     f.write('mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;\n')
