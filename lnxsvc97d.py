@@ -6,7 +6,7 @@
 import ConfigParser
 import glob
 # import math
-import MySQLdb as mdb
+import MySQLdb as mdb  # PyMySQL to be used for python3 compatibility
 import os
 # import shutil
 # import subprocess
