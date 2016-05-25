@@ -87,14 +87,15 @@ def do_work():
     #       level or a lower (hence more important) log level are shown. If a range is specified, all messages within the range
     #       are shown, including both the start and the end value of the range. This will add "PRIORITY=" matches for the
     #       specified priorities.
-    p0 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "0..0"], stdout=subprocess.PIPE).stdout.read().splitlines())
-    p1 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "1..1"], stdout=subprocess.PIPE).stdout.read().splitlines())
-    p2 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "2..2"], stdout=subprocess.PIPE).stdout.read().splitlines())
-    p3 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "3..3"], stdout=subprocess.PIPE).stdout.read().splitlines())
-    p4 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "4..4"], stdout=subprocess.PIPE).stdout.read().splitlines())
-    p5 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "5..5"], stdout=subprocess.PIPE).stdout.read().splitlines())
-    p6 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "6..6"], stdout=subprocess.PIPE).stdout.read().splitlines())
-    p7 = len(subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p", "7..7"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    since = "--since=00:00:00"
+    p0 = len(subprocess.Popen(["journalctl", since, "--no-pager", "-p", "0..0"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p1 = len(subprocess.Popen(["journalctl", since, "--no-pager", "-p", "1..1"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p2 = len(subprocess.Popen(["journalctl", since, "--no-pager", "-p", "2..2"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p3 = len(subprocess.Popen(["journalctl", since, "--no-pager", "-p", "3..3"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p4 = len(subprocess.Popen(["journalctl", since, "--no-pager", "-p", "4..4"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p5 = len(subprocess.Popen(["journalctl", since, "--no-pager", "-p", "5..5"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p6 = len(subprocess.Popen(["journalctl", since, "--no-pager", "-p", "6..6"], stdout=subprocess.PIPE).stdout.read().splitlines())
+    p7 = len(subprocess.Popen(["journalctl", since, "--no-pager", "-p", "7..7"], stdout=subprocess.PIPE).stdout.read().splitlines())
   else:
     p0 = wc("/var/log/0emerg.log")
     p1 = wc("/var/log/1alert.log")
