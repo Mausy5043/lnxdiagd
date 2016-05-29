@@ -22,9 +22,10 @@ RMARG = 0.94
 
 # ************************************************************* Functions ******
 # determine delta data
-delta(x) = ( xD = x - old_x, old_x = x, xD <= 0 ? 0.1 : xD)
+#delta(x) = ( xD = x - old_x, old_x = x, xD <= 0 ? 0.1 : xD)
+#old_x = NaN
+
 nonull(x) = (x <= 0 ? 0.1 : x)
-old_x = NaN
 
 # ************************************************************* Statistics *****
 # stats to be calculated here of column 2 (UX-epoch)
