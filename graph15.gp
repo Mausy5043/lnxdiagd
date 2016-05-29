@@ -45,9 +45,9 @@ set xrange [ X_min : X_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel "Count [#]"
-set autoscale y
 set format y "%4.0s%c"
 set logscale y 10
+set yrange [ 0.5 : ]
 
 # ***************************************************************** Legend *****
 set key opaque box inside top left
