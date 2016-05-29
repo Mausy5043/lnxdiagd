@@ -47,7 +47,7 @@ class MyDaemon(Daemon):
       try:
         startTime   = time.time()
 
-        result      = do_work().split(',')
+        result      = do_work(reportTime).split(',')
 
         data        = map(int, result)
         syslog_trace("Data     : {0}".format(data),   False, DEBUG)
@@ -74,7 +74,7 @@ class MyDaemon(Daemon):
 def wc(filename):
     return int(subprocess.check_output(["wc", "-l", filename]).split()[0])
 
-def do_work():
+def do_work(interval):
   # 8 #datapoints gathered here
   p0 = p1 = p2 = p3 = p4 = p5 = p6 = p7 = 0
 
@@ -87,7 +87,7 @@ def do_work():
     #       level or a lower (hence more important) log level are shown. If a range is specified, all messages within the range
     #       are shown, including both the start and the end value of the range. This will add "PRIORITY=" matches for the
     #       specified priorities.
-    since = "--since=00:00:00"
+    since = "".join(["--since '", str(interval), " seconds ago'"])
     p0 = len(subprocess.Popen(["journalctl", since, "--no-pager", "-p", "0..0"], stdout=subprocess.PIPE).stdout.read().splitlines())
     p1 = len(subprocess.Popen(["journalctl", since, "--no-pager", "-p", "1..1"], stdout=subprocess.PIPE).stdout.read().splitlines())
     p2 = len(subprocess.Popen(["journalctl", since, "--no-pager", "-p", "2..2"], stdout=subprocess.PIPE).stdout.read().splitlines())
