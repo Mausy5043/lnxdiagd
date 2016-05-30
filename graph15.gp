@@ -22,8 +22,10 @@ RMARG = 0.94
 
 # ************************************************************* Functions ******
 # determine delta data
-delta(x) = ( xD = x - old_x, old_x = x, xD <= 0 ? 0.1 : xD)
-old_x = NaN
+#delta(x) = ( xD = x - old_x, old_x = x, xD <= 0 ? 0.1 : xD)
+#old_x = NaN
+
+nonull(x) = (x <= 0 ? 0.1 : x)
 
 # ************************************************************* Statistics *****
 # stats to be calculated here of column 2 (UX-epoch)
@@ -45,9 +47,9 @@ set xrange [ X_min : X_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel "Count [#]"
-set autoscale y
 set format y "%4.0s%c"
 set logscale y 10
+set yrange [ 0.5 : ]
 
 # ***************************************************************** Legend *****
 set key opaque box inside top left
@@ -64,9 +66,9 @@ set style data boxes
 set style fill solid noborder
 
 plot ifname \
-      using ($2+utc_offset):(delta($4+$5+$6+$7+$8+$9)) title "p5" fc "cyan"  \
-  ,'' using ($2+utc_offset):(delta($4+$5+$6+$7+$8))    title "p4" fc "green"   \
-  ,'' using ($2+utc_offset):(delta($4+$5+$6+$7))       title "p3" fc "orange" \
-  ,'' using ($2+utc_offset):(delta($4+$5+$6))          title "p2" fc "red"    \
-  ,'' using ($2+utc_offset):(delta($4+$5))             title "p1" fc "blue"   \
-  ,'' using ($2+utc_offset):(delta($4))                title "p0" fc "black"  \
+      using ($2+utc_offset):(nonull($4+$5+$6+$7+$8+$9)) title "p5" fc "cyan"  \
+  ,'' using ($2+utc_offset):(nonull($4+$5+$6+$7+$8))    title "p4" fc "green"   \
+  ,'' using ($2+utc_offset):(nonull($4+$5+$6+$7))       title "p3" fc "orange" \
+  ,'' using ($2+utc_offset):(nonull($4+$5+$6))          title "p2" fc "red"    \
+  ,'' using ($2+utc_offset):(nonull($4+$5))             title "p1" fc "blue"   \
+  ,'' using ($2+utc_offset):(nonull($4))                title "p0" fc "black"

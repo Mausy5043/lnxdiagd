@@ -89,12 +89,12 @@ pushd "$HOME/lnxdiagd"
         logger -p user.err -t lnxdiagd "  * Stale daemon $daemon pid-file found."
         rm "/tmp/lnxdiagd/$daemon.pid"
           echo "  * Start DIAG $daemon"
-        eval "./lnxdiag$daemon"d.py start
+        eval "./lnxdiag$daemon"d.py restart
       fi
     else
       logger -p user.notice -t lnxdiagd "Found daemon $daemon not running."
         echo "  * Start DIAG $daemon"
-      eval "./lnxdiag$daemon"d.py start
+      eval "./lnxdiag$daemon"d.py restart
     fi
   done
 
@@ -105,12 +105,12 @@ pushd "$HOME/lnxdiagd"
         logger -p user.err -t lnxdiagd "* Stale daemon $daemon pid-file found."
         rm "/tmp/lnxdiagd/$daemon.pid"
           echo "  * Start SVC $daemon"
-        eval "./lnxsvc$daemon"d.py start
+        eval "./lnxsvc$daemon"d.py restart
       fi
     else
       logger -p user.notice -t lnxdiagd "Found daemon $daemon not running."
         echo "  * Start SVC $daemon"
-      eval "./lnxsvc$daemon"d.py start
+      eval "./lnxsvc$daemon"d.py restart
     fi
   done
 
