@@ -62,6 +62,9 @@ old_x = NaN
 
 Ymax = max(max(Yd_max, Yh_max), Yw_max) * 8 / 60.
 Ymin = 1024 * 8 / 60.
+Ystd = max(max(Yd_stddev, Yh_stddev), Yw_stddev)
+Ymean = max(max(Yd_mean, Yh_mean), Yw_mean)
+Ymax = (Ymean + Ystd) * 3 * 8 /60.
 
 # ********************** Statistics for the bottom graphs **********************
 # ********************************************************* Statistics (R) *****
@@ -186,6 +189,9 @@ old_x = NaN
 Ymax = max(max(Ybd_max, Ybh_max), Ybw_max) * 8 / 60.
 #Ymin = min(min(Ybd_min, Ybh_min), Ybw_min) -1
 Ymin = 1024 * 8 / 60.
+Ystd = max(max(Ybd_stddev, Ybh_stddev), Ybw_stddev)
+Ymean = max(max(Ybd_mean, Ybh_mean), Ybw_mean)
+Ymax = (Ymean + Ystd) * 3 * 8 /60.
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
