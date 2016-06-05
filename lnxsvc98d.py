@@ -112,6 +112,7 @@ def write_lftp(script):
     f.write('cd 04.status/;\n')
     f.write('set cmd:fail-exit no;\n')
     f.write('mkdir -p -f _' + NODE + ' ;\n')
+    f.write('set cmd:fail-exit yes;\n')
     f.write('cd _' + NODE + ' ;\n')
     f.write('mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;\n')
     f.write('\n')
