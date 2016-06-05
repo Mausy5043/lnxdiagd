@@ -82,7 +82,7 @@ def do_work(fdev):
   # Read the CPU temperature
   with open(fdev, 'r') as f:
     Tcpu    = float(f.read().strip('\n'))/1000
-  if Tcpu > 75.000:
+  if Tcpu > 85.000:
     # can't believe my sensors. Probably a glitch. Wait a while then measure again
     syslog_trace("Tcpu (HIGH): {0}".format(Tcpu), syslog.LOG_WARNING, DEBUG)
     time.sleep(7)
