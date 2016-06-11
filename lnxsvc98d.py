@@ -63,15 +63,17 @@ def do_mv_data(flock, homedir, script):
   # wait 4 seconds for processes to finish
   # unlock(flock)  # remove stale lock
   time.sleep(4)
+  minit = int(time.strftime('%M'))
 
   # Retrieve data from MySQL database
   getsqldata(homedir, False)
 
-  # Create the graphs based on the MySQL data
-  cmnd = homedir + '/' + MYAPP + '/graphs.sh'
-  syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-  cmnd = subprocess.call(cmnd)
-  syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # Create the graphs based on the MySQL data every 3rd minute
+  if ((minit % 3) == 0):
+    cmnd = homedir + '/' + MYAPP + '/graphs.sh'
+    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+    cmnd = subprocess.call(cmnd)
+    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
 
   # Upload the webpage and graphs
   if os.path.isfile('/tmp/' + MYAPP + '/site/text.md'):
