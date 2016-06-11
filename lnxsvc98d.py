@@ -84,11 +84,12 @@ def do_mv_data(flock, homedir, script):
 def getsqldata(homedir, nu):
   minit = int(time.strftime('%M'))
   nowur = int(time.strftime('%H'))
-  # data of last hour is updated every minute
-  cmnd = homedir + '/' + MYAPP + '/getsqlhour.sh'
-  syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-  cmnd = subprocess.call(cmnd)
-  syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # data of last hour is updated every 3 minutes
+  if ((minit % 3) == 0):
+    cmnd = homedir + '/' + MYAPP + '/getsqlhour.sh'
+    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+    cmnd = subprocess.call(cmnd)
+    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last day is updated every 30 minutes
   if nu or ((minit % 30) == (SQLMNT % 30)):
     cmnd = homedir + '/' + MYAPP + '/getsqlday.sh'
