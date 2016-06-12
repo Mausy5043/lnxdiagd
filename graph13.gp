@@ -21,6 +21,8 @@ LMPOS = 0.40
 MRPOS = 0.73
 RMARG = 0.94
 
+BPS = 8. / (60. * 3.)
+
 # ************************************************************* Functions ******
 # determine delta data
 delta(x) = ( xD = x - old_x, old_x = x, xD <= 0 ? 0.1 : xD)
@@ -60,11 +62,11 @@ Xw_max = X_max + utc_offset - 946684800
 stats ifnameh using (delta($7)) name "Yw" nooutput
 old_x = NaN
 
-Ymax = max(max(Yd_max, Yh_max), Yw_max) * 8 / 60.
-Ymin = 1024 * 8 / 60.
+Ymax = max(max(Yd_max, Yh_max), Yw_max) * BPS
+Ymin = 1024 * BPS
 Ystd = max(max(Yd_stddev, Yh_stddev), Yw_stddev)
 Ymean = max(max(Yd_mean, Yh_mean), Yw_mean)
-Ymax = (Ymean + Ystd) * 3 * 8 /60.
+Ymax = (Ymean + Ystd) * 3 * BPS
 
 # ********************** Statistics for the bottom graphs **********************
 # ********************************************************* Statistics (R) *****
@@ -118,7 +120,7 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($2+utc_offset):(delta($7)*8/60.) title "Upload (eth0)" with lines lc rgb "#cc0000bb" lw 1
+      using ($2+utc_offset):(delta($7) * BPS) title "Upload (eth0)" with lines lc rgb "#cc0000bb" lw 1
 old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -147,7 +149,7 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($2+utc_offset):(delta($7)*8/60.) with lines lc rgb "#cc0000bb" lw 1
+      using ($2+utc_offset):(delta($7) * BPS) with lines lc rgb "#cc0000bb" lw 1
 old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -176,7 +178,7 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($2+utc_offset):(delta($7)*8/60.) with lines lc rgb "#cc0000bb" lw 1
+      using ($2+utc_offset):(delta($7) * BPS) with lines lc rgb "#cc0000bb" lw 1
 old_x = NaN
 
 ################################################################################
@@ -186,12 +188,12 @@ old_x = NaN
 ################################################################################
 
 
-Ymax = max(max(Ybd_max, Ybh_max), Ybw_max) * 8 / 60.
+Ymax = max(max(Ybd_max, Ybh_max), Ybw_max) * BPS
 #Ymin = min(min(Ybd_min, Ybh_min), Ybw_min) -1
-Ymin = 1024 * 8 / 60.
+Ymin = 1024 * BPS
 Ystd = max(max(Ybd_stddev, Ybh_stddev), Ybw_stddev)
 Ymean = max(max(Ybd_mean, Ybh_mean), Ybw_mean)
-Ymax = (Ymean + Ystd) * 3 * 8 /60.
+Ymax = (Ymean + Ystd) * 3 * BPS
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -227,7 +229,7 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($2+utc_offset):(delta($6)*8/60.) title "Download (eth0)" with lines lc rgb "#ccbb0000" lw 1
+      using ($2+utc_offset):(delta($6) * BPS) title "Download (eth0)" with lines lc rgb "#ccbb0000" lw 1
 old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -257,7 +259,7 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($2+utc_offset):(delta($6)*8/60.) with lines lc rgb "#ccbb0000" lw 1
+      using ($2+utc_offset):(delta($6) * BPS) with lines lc rgb "#ccbb0000" lw 1
 old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -288,7 +290,7 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($2+utc_offset):(delta($6)*8/60.) with lines lc rgb "#ccbb0000" lw 1
+      using ($2+utc_offset):(delta($6) * BPS) with lines lc rgb "#ccbb0000" lw 1
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
