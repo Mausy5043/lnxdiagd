@@ -212,7 +212,7 @@ set xrange [ Xw_min : Xw_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel " "
-set yrange [ Ymin : Ymax ] reverse
+set yrange [ Ymax : Ymin ] # reverse
 set format y "%3.0s%c"
 # set autoscale y
 set tmargin 0
@@ -249,7 +249,7 @@ set xrange [ Xd_min : Xd_max ]
 # ***************************************************************** Y-axis *****
 set ylabel " "
 set ytics format " "
-set yrange [ Ymin : Ymax ] reverse
+set yrange [ Ymax : Ymin ] # reverse
 
 # ***************************************************************** Legend *****
 unset key
@@ -280,7 +280,7 @@ set xtics textcolor rgb "red"
 # ***************************************************************** Y-axis *****
 set ylabel " "
 set ytics format " "
-set yrange [ Ymin : Ymax ] reverse
+set yrange [ Ymax : Ymin ] # reverse
 
 # ***************************************************************** Legend *****
 unset key
