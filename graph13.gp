@@ -9,7 +9,7 @@ ifnamew = "/tmp/lnxdiagd/mysql/sql13w.csv"
 set output "/tmp/lnxdiagd/site/img/day13.png"
 
 # ******************************************************* General settings *****
-set terminal png truecolor enhanced font "Vera,9" size 1280,320
+set terminal png enhanced font "Vera,9" size 1280,320
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
 set grid front
