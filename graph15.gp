@@ -13,7 +13,7 @@ set datafile missing "NaN"    # Ignore missing values
 set grid front
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
-
+if (GPVAL_VERSION == 4.6) {epoch_compensate = 946684800} else {if (GPVAL_VERSION == 5.0) {epoch_compensate = 0}}
 # Positions of split between graphs
 LMARG = 0.06
 LMPOS = 0.40
@@ -31,8 +31,8 @@ nonull(x) = (x <= 0 ? 0.1 : x)
 # stats to be calculated here of column 2 (UX-epoch)
 stats ifname using 2 name "X" nooutput
 
-X_min = X_min + utc_offset - 946684800
-X_max = X_max + utc_offset - 946684800
+X_min = X_min + utc_offset - epoch_compensate
+X_max = X_max + utc_offset - epoch_compensate
 
 # ****************************************************************** Title *****
 set title "System Logging Linecounts ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)

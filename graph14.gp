@@ -16,6 +16,7 @@ set datafile missing "NaN"    # Ignore missing values
 set grid front
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
+if (GPVAL_VERSION == 4.6) {epoch_compensate = 946684800} else {if (GPVAL_VERSION == 5.0) {epoch_compensate = 0}}
 # Positions of split between graphs
 LMARG = 0.06
 LMPOS = 0.40
@@ -28,8 +29,8 @@ max(x,y) = (x > y) ? x : y
 # ********************************************************* Statistics (R) *****
 # stats to be calculated here of column 2 (UX-epoch)
 stats ifnameh using 2 name "X" nooutput
-Xh_min = X_min + utc_offset - 946684800
-Xh_max = X_max + utc_offset - 946684800
+Xh_min = X_min + utc_offset - epoch_compensate
+Xh_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 11 (Swap memory used)
 stats ifnameh using 11 name "Yh" nooutput
@@ -37,8 +38,8 @@ stats ifnameh using 11 name "Yh" nooutput
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 2 (UX-epoch)
 stats ifnamed using 2 name "X" nooutput
-Xd_min = X_min + utc_offset - 946684800
-Xd_max = X_max + utc_offset - 946684800
+Xd_min = X_min + utc_offset - epoch_compensate
+Xd_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 11 (Swap memory used)
 stats ifnameh using 11 name "Yd" nooutput
@@ -46,8 +47,8 @@ stats ifnameh using 11 name "Yd" nooutput
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 2 (UX-epoch)
 stats ifnamew using 2 name "X" nooutput
-Xw_min = X_min + utc_offset - 946684800
-Xw_max = X_max + utc_offset - 946684800
+Xw_min = X_min + utc_offset - epoch_compensate
+Xw_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 11 (Swap memory used)
 stats ifnameh using 11 name "Yw" nooutput
