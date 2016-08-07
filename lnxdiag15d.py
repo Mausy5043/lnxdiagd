@@ -1,10 +1,9 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 # daemon15.py measures the size of selected logfiles.
 # These are all counters, therefore no averaging is needed.
 
-import ConfigParser
-# import math
+import configparser
 import os
 import sys
 import syslog
@@ -17,7 +16,7 @@ from libdaemon import Daemon
 # constants
 DEBUG       = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
-MYID        = filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])
+MYID        = "".join(list(filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])))
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
 
@@ -25,7 +24,7 @@ os.nice(15)
 
 class MyDaemon(Daemon):
   def run(self):
-    iniconf         = ConfigParser.ConfigParser()
+    iniconf         = configparser.ConfigParser()
     inisection      = MYID
     home            = os.path.expanduser('~')
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
@@ -49,7 +48,7 @@ class MyDaemon(Daemon):
 
         result      = do_work(reportTime).split(',')
 
-        data        = map(int, result)
+        data        = list(map(int, result))
         syslog_trace("Data     : {0}".format(data),   False, DEBUG)
 
         # report sample average
