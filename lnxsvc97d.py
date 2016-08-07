@@ -37,8 +37,8 @@ class MyDaemon(Daemon):
         syslog.syslog(syslog.LOG_INFO, logtext)
     except mdb.Error as e:
       syslog_trace("Unexpected MySQL error in run(init)", syslog.LOG_CRIT, DEBUG)
-      syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
-      syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
+      # syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
+      # syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
       syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
       if consql.open:    # attempt to close connection to MySQLdb
         consql.close()
@@ -73,8 +73,8 @@ class MyDaemon(Daemon):
           time.sleep(waitTime)
       except Exception as e:
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
-        syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
-        syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
+        # syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
+        # syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         # attempt to close connection to MySQLdb
         if consql.open:
@@ -144,9 +144,9 @@ def do_sql_data(flock, inicnfg, cnsql):
           # endfor
         # endif
       except ConfigParser.NoOptionError as e:  # no sqlcmd
-        syslog_trace("** {0}".format(e.message), False, DEBUG)
+        syslog_trace("** {0}".format(sys.exc_info()[0]), False, DEBUG)
     except ConfigParser.NoOptionError as e:  # no ifile
-      syslog_trace("** {0}".format(e.message), False, DEBUG)
+      syslog_trace("** {0}".format(sys.exc_info()[0]), False, DEBUG)
 
     try:
       if not errsql:                     # SQL-job was successful or non-existing
@@ -154,7 +154,7 @@ def do_sql_data(flock, inicnfg, cnsql):
           syslog_trace("Deleting {0}".format(ifile), False, DEBUG)
           os.remove(ifile)
     except ConfigParser.NoOptionError as e:  # no ofile
-      syslog_trace("** {0}".format(e.message), False, DEBUG)
+      syslog_trace("** {0}".format(sys.exc_info()[0]), False, DEBUG)
 
   # endfor
   unlock(flock)

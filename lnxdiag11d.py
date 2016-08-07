@@ -41,7 +41,7 @@ class MyDaemon(Daemon):
     try:
       hwdevice      = iniconf.get(inisection, NODE+".hwdevice")
     except configparser.NoOptionError as e:  # no hwdevice
-      syslog_trace("** {0}".format(e.message), False, DEBUG)
+      syslog_trace("** {0}".format(sys.exc_info()[0]), False, DEBUG)
       sys.exit(0)
     if not os.path.isfile(hwdevice):
       syslog_trace("** Device not found: {0}".format(hwdevice), syslog.LOG_INFO, DEBUG)
@@ -72,8 +72,8 @@ class MyDaemon(Daemon):
           time.sleep(waitTime)
       except Exception as e:
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
-        syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
-        syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
+        # syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
+        # syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
 
