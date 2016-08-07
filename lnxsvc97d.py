@@ -135,7 +135,8 @@ def do_sql_data(flock, inicnfg, cnsql):
       try:
         sqlcmd = []
         sqlcmd = inicnfg.get(inisect, "sqlcmd")
-        syslog_trace("   {0}".format(sqlcmd), False, DEBUG)
+	sqlcmd = sqlcmd.replace("%%s","%s") # use python3 compatible `config.ini` with python2.7 code
+        syslog_trace("   CMD : {0}".format(sqlcmd), False, DEBUG)
 
         data = cat(ifile).splitlines()
         if data:
@@ -144,9 +145,9 @@ def do_sql_data(flock, inicnfg, cnsql):
           # endfor
         # endif
       except ConfigParser.NoOptionError as e:  # no sqlcmd
-        syslog_trace("** {0}".format(sys.exc_info()[0]), False, DEBUG)
+        syslog_trace("** {0}".format(e.__str__), False, DEBUG)
     except ConfigParser.NoOptionError as e:  # no ifile
-      syslog_trace("** {0}".format(sys.exc_info()[0]), False, DEBUG)
+      syslog_trace("** {0}".format(e.__str__), False, DEBUG)
 
     try:
       if not errsql:                     # SQL-job was successful or non-existing
@@ -154,7 +155,7 @@ def do_sql_data(flock, inicnfg, cnsql):
           syslog_trace("Deleting {0}".format(ifile), False, DEBUG)
           os.remove(ifile)
     except ConfigParser.NoOptionError as e:  # no ofile
-      syslog_trace("** {0}".format(sys.exc_info()[0]), False, DEBUG)
+      syslog_trace("** {0}".format(e.__str__), False, DEBUG)
 
   # endfor
   unlock(flock)
