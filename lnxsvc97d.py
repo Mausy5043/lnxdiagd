@@ -132,7 +132,6 @@ def do_sql_data(flock, inicnfg, cnsql):
       try:
         sqlcmd = []
         sqlcmd = inicnfg.get(inisect, "sqlcmd")
-	# sqlcmd = sqlcmd.replace("%%s","%s") # use python3 compatible `config.ini` with python2.7 code
         syslog_trace("   CMD : {0}".format(sqlcmd), False, DEBUG)
 
         data = cat(ifile).splitlines()
