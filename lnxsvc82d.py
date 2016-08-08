@@ -81,15 +81,15 @@ def do_markdown(flock, fdata, hwdevice):
   with open(fi, 'r') as f:
     lnxdiagdbranch  = f.read().strip('\n')
 
-  uptime            = subprocess.check_output(["uptime"])
-  dfh               = subprocess.check_output(["df", "-h"])
-  freeh             = subprocess.check_output(["free", "-h"])
+  uptime            = str(subprocess.check_output(["uptime"]), 'utf-8')
+  dfh               = str(subprocess.check_output(["df", "-h"]), 'utf-8')
+  freeh             = str(subprocess.check_output(["free", "-h"]), 'utf-8')
   p1                = subprocess.Popen(["ps", "-e", "-o", "pcpu,args"],           stdout=subprocess.PIPE)
   p2                = subprocess.Popen(["cut", "-c", "-132"],   stdin=p1.stdout,  stdout=subprocess.PIPE)
   p3                = subprocess.Popen(["awk", "NR>2"],         stdin=p2.stdout,  stdout=subprocess.PIPE)
   p4                = subprocess.Popen(["sort", "-nr"],         stdin=p3.stdout,  stdout=subprocess.PIPE)
   p5                = subprocess.Popen(["head", "-10"],         stdin=p4.stdout,  stdout=subprocess.PIPE)
-  psout             = p5.stdout.read()
+  psout             = str(p5.stdout.read(), 'utf-8')
 
   lock(flock)
 
@@ -114,7 +114,7 @@ def do_markdown(flock, fdata, hwdevice):
     # System Uptime
     f.write('### Server Uptime:  \n')
     f.write('!!! ')
-    f.write(str(uptime))
+    f.write(uptime)
     f.write('\n')
 
     # CPU temperature and frequency
@@ -132,19 +132,19 @@ def do_markdown(flock, fdata, hwdevice):
     # Disk usage
     f.write('## Disk Usage\n')
     f.write('```\n')
-    f.write(str(dfh))      # dfh comes with its own built-in '/n'
+    f.write(dfh)      # dfh comes with its own built-in '/n'
     f.write('```\n\n')
 
     # Memory usage
     f.write('## Memory Usage\n')
     f.write('```\n')
-    f.write(str(freeh))    # freeh comes with its own built-in '/n'
+    f.write(freeh)    # freeh comes with its own built-in '/n'
     f.write('```\n\n')
 
     # Top 10 processes
     f.write('## Top 10 processes:\n')
     f.write('```\n')
-    f.write(str(psout))    # psout comes with its own built-in '/n'
+    f.write(psout)    # psout comes with its own built-in '/n'
     f.write('```\n\n')
 
   unlock(flock)
