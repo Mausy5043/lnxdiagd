@@ -19,12 +19,16 @@ install_package()
 
 sudo apt-get update
 install_package "git"
-install_package "python"
+# install_package "python"
 install_package "lftp"
 install_package "gnuplot"
 install_package "gnuplot-nox"
 install_package "mysql-client"
-install_package "python-mysqldb"
+# python 2 requires: install_package "python-mysqldb"
+install_package "python3"
+install_package "python3-pip"
+install_package "libmysqlclient-dev"
+sudo pip3 install mysqlclient
 
 minit=$(echo $RANDOM/555 |bc)
 echo "MINIT = $minit"
