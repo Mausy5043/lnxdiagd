@@ -1,9 +1,9 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 # daemon11.py measures the CPU temperature.
 # uses moving averages
 
-import ConfigParser
+import configparser
 import os
 import sys
 import syslog
@@ -15,13 +15,13 @@ from libdaemon import Daemon
 # constants
 DEBUG       = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
-MYID        = filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])
+MYID        = "".join(list(filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])))
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
 
 class MyDaemon(Daemon):
   def run(self):
-    iniconf         = ConfigParser.ConfigParser()
+    iniconf         = configparser.ConfigParser()
     inisection      = MYID
     home            = os.path.expanduser('~')
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
@@ -40,8 +40,8 @@ class MyDaemon(Daemon):
 
     try:
       hwdevice      = iniconf.get(inisection, NODE+".hwdevice")
-    except ConfigParser.NoOptionError as e:  # no hwdevice
-      syslog_trace("** {0}".format(e.message), False, DEBUG)
+    except configparser.NoOptionError as e:  # no hwdevice
+      syslog_trace("** {0}".format(sys.exc_info()[0]), False, DEBUG)
       sys.exit(0)
     if not os.path.isfile(hwdevice):
       syslog_trace("** Device not found: {0}".format(hwdevice), syslog.LOG_INFO, DEBUG)
@@ -72,8 +72,8 @@ class MyDaemon(Daemon):
           time.sleep(waitTime)
       except Exception as e:
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
-        syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
-        syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
+        # syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
+        # syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
 
