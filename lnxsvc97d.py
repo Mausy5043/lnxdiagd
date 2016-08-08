@@ -1,15 +1,12 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 # daemon97.py pushes data to the MySQL-server.
 # daemon23 support
 
-import ConfigParser
+import configparser
 import glob
-# import math
 import MySQLdb as mdb  # PyMySQL to be used for python3 compatibility
 import os
-# import shutil
-# import subprocess
 import sys
 import syslog
 import time
@@ -20,7 +17,7 @@ from libdaemon import Daemon
 # constants
 DEBUG       = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
-MYID        = filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])
+MYID        = "".join(list(filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])))
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
 
@@ -37,15 +34,15 @@ class MyDaemon(Daemon):
         syslog.syslog(syslog.LOG_INFO, logtext)
     except mdb.Error as e:
       syslog_trace("Unexpected MySQL error in run(init)", syslog.LOG_CRIT, DEBUG)
-      syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
-      syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
+      # syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
+      # syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
       syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
       if consql.open:    # attempt to close connection to MySQLdb
         consql.close()
         syslog_trace(" ** Closed MySQL connection in run() **", syslog.LOG_CRIT, DEBUG)
       raise
 
-    iniconf         = ConfigParser.ConfigParser()
+    iniconf         = configparser.ConfigParser()
     inisection      = MYID
     home            = os.path.expanduser('~')
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
@@ -73,8 +70,8 @@ class MyDaemon(Daemon):
           time.sleep(waitTime)
       except Exception as e:
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
-        syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
-        syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
+        # syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
+        # syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         # attempt to close connection to MySQLdb
         if consql.open:
@@ -135,7 +132,8 @@ def do_sql_data(flock, inicnfg, cnsql):
       try:
         sqlcmd = []
         sqlcmd = inicnfg.get(inisect, "sqlcmd")
-        syslog_trace("   {0}".format(sqlcmd), False, DEBUG)
+	# sqlcmd = sqlcmd.replace("%%s","%s") # use python3 compatible `config.ini` with python2.7 code
+        syslog_trace("   CMD : {0}".format(sqlcmd), False, DEBUG)
 
         data = cat(ifile).splitlines()
         if data:
@@ -143,18 +141,18 @@ def do_sql_data(flock, inicnfg, cnsql):
             errsql = do_writesample(cnsql, sqlcmd, data[entry])
           # endfor
         # endif
-      except ConfigParser.NoOptionError as e:  # no sqlcmd
-        syslog_trace("** {0}".format(e.message), False, DEBUG)
-    except ConfigParser.NoOptionError as e:  # no ifile
-      syslog_trace("** {0}".format(e.message), False, DEBUG)
+      except configparser.NoOptionError as e:  # no sqlcmd
+        syslog_trace("*1* {0}".format(e.__str__), False, DEBUG)
+    except configparser.NoOptionError as e:  # no ifile
+      syslog_trace("*2* {0}".format(e.__str__), False, DEBUG)
 
     try:
       if not errsql:                     # SQL-job was successful or non-existing
         if os.path.isfile(ifile):        # IF resultfile exists
           syslog_trace("Deleting {0}".format(ifile), False, DEBUG)
           os.remove(ifile)
-    except ConfigParser.NoOptionError as e:  # no ofile
-      syslog_trace("** {0}".format(e.message), False, DEBUG)
+    except configparser.NoOptionError as e:  # no ofile
+      syslog_trace("*3* {0}".format(e.__str__), False, DEBUG)
 
   # endfor
   unlock(flock)

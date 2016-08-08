@@ -1,10 +1,9 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 # daemon12.py measures the CPU load.
 # uses moving averages
 
-import ConfigParser
-# import math
+import configparser
 import os
 import sys
 import syslog
@@ -16,13 +15,13 @@ from libdaemon import Daemon
 # constants
 DEBUG       = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
-MYID        = filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])
+MYID        = "".join(list(filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])))
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
 
 class MyDaemon(Daemon):
   def run(self):
-    iniconf         = ConfigParser.ConfigParser()
+    iniconf         = configparser.ConfigParser()
     inisection      = MYID
     home            = os.path.expanduser('~')
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
@@ -49,14 +48,14 @@ class MyDaemon(Daemon):
         result        = result.split(',')
         syslog_trace("Result   : {0}".format(result), False, DEBUG)
 
-        data.append(map(float, result))
+        data.append(list(map(float, result)))
         if (len(data) > samples):
           data.pop(0)
         syslog_trace("Data     : {0}".format(data),   False, DEBUG)
 
         # report sample average
         if (startTime % reportTime < sampleTime):
-          somma       = map(sum, zip(*data))
+          somma       = list(map(sum, list(zip(*data))))
           # not all entries should be float
           # 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
           averages    = [format(sm / len(data), '.3f') for sm in somma]
@@ -74,8 +73,8 @@ class MyDaemon(Daemon):
           time.sleep(waitTime)
       except Exception as e:
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
-        syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
-        syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
+        # syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
+        # syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
 
@@ -103,7 +102,7 @@ def do_work(stat1):
     # (**)  since linux 2.6.24
     # (***) since linux 2.6.33
 
-  stat2 = map(int, stat2[1:])
+  stat2 = list(map(int, stat2[1:]))
   diff0 = [x - y for x, y in zip(stat2, stat1)]
   sum0 = sum(diff0)
   perc = [x / float(sum0) * 100. for x in diff0]

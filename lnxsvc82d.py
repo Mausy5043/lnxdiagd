@@ -1,8 +1,8 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 # daemon8d.py creates an MD-file.
 
-import ConfigParser
+import configparser
 import os
 import platform
 import subprocess
@@ -16,13 +16,13 @@ from libdaemon import Daemon
 # constants
 DEBUG       = False
 IS_JOURNALD = os.path.isfile('/bin/journalctl')
-MYID        = filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])
+MYID        = "".join(list(filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])))
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
 
 class MyDaemon(Daemon):
   def run(self):
-    iniconf         = ConfigParser.ConfigParser()
+    iniconf         = configparser.ConfigParser()
     inisection      = MYID
     home            = os.path.expanduser('~')
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
@@ -40,7 +40,7 @@ class MyDaemon(Daemon):
 
     try:
       hwdevice      = iniconf.get("11", NODE + ".hwdevice")
-    except ConfigParser.NoOptionError as e:  # no hwdevice
+    except configparser.NoOptionError as e:  # no hwdevice
       hwdevice      = "nohwdevice"
       pass
 
@@ -57,8 +57,8 @@ class MyDaemon(Daemon):
           time.sleep(waitTime)
       except Exception as e:
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
-        syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
-        syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
+        # syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
+        # syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
 
@@ -81,15 +81,15 @@ def do_markdown(flock, fdata, hwdevice):
   with open(fi, 'r') as f:
     lnxdiagdbranch  = f.read().strip('\n')
 
-  uptime            = subprocess.check_output(["uptime"])
-  dfh               = subprocess.check_output(["df", "-h"])
-  freeh             = subprocess.check_output(["free", "-h"])
+  uptime            = str(subprocess.check_output(["uptime"]), 'utf-8')
+  dfh               = str(subprocess.check_output(["df", "-h"]), 'utf-8')
+  freeh             = str(subprocess.check_output(["free", "-h"]), 'utf-8')
   p1                = subprocess.Popen(["ps", "-e", "-o", "pcpu,args"],           stdout=subprocess.PIPE)
   p2                = subprocess.Popen(["cut", "-c", "-132"],   stdin=p1.stdout,  stdout=subprocess.PIPE)
   p3                = subprocess.Popen(["awk", "NR>2"],         stdin=p2.stdout,  stdout=subprocess.PIPE)
   p4                = subprocess.Popen(["sort", "-nr"],         stdin=p3.stdout,  stdout=subprocess.PIPE)
   p5                = subprocess.Popen(["head", "-10"],         stdin=p4.stdout,  stdout=subprocess.PIPE)
-  psout             = p5.stdout.read()
+  psout             = str(p5.stdout.read(), 'utf-8')
 
   lock(flock)
 
@@ -114,7 +114,8 @@ def do_markdown(flock, fdata, hwdevice):
     # System Uptime
     f.write('### Server Uptime:  \n')
     f.write('!!! ')
-    f.write(uptime + '\n')
+    f.write(uptime)
+    f.write('\n')
 
     # CPU temperature and frequency
     f.write('### Server Temperature:  \n')

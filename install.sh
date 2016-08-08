@@ -19,12 +19,16 @@ install_package()
 
 sudo apt-get update
 install_package "git"
-install_package "python"
+# install_package "python"
 install_package "lftp"
 install_package "gnuplot"
 install_package "gnuplot-nox"
 install_package "mysql-client"
-install_package "python-mysqldb"
+# python 2 requires: install_package "python-mysqldb"
+install_package "python3"
+install_package "python3-pip"
+install_package "libmysqlclient-dev"
+sudo pip3 install mysqlclient
 
 minit=$(echo $RANDOM/555 |bc)
 echo "MINIT = $minit"
@@ -35,7 +39,7 @@ pushd "$HOME/lnxdiagd"
   git config core.fileMode false
   # set the branch
   if [ ! -e "$HOME/.lnxdiagd.branch" ]; then
-    echo "v2_0" > "$HOME/.lnxdiagd.branch"
+    echo "v3_0" > "$HOME/.lnxdiagd.branch"
   fi
 
   # Create the /etc/cron.d directory if it doesn't exist
