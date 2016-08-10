@@ -81,7 +81,7 @@ def do_mv_data(flock, homedir, script):
       write_lftp(script)
       cmnd = ['lftp', '-f', script]
       syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-      cmnd = subprocess.call(cmnd, timeout=20)
+      cmnd = subprocess.check_output(cmnd, timeout=20)
       syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   except subprocess.TimeoutExpired:
     syslog_trace("***:  {0}".format(cmnd), syslog.LOG_CRIT, DEBUG)
