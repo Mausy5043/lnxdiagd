@@ -75,13 +75,16 @@ def do_mv_data(flock, homedir, script):
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
 
-  # Upload the webpage and graphs
-  if os.path.isfile('/tmp/' + MYAPP + '/site/text.md'):
-    write_lftp(script)
-    cmnd = ['lftp', '-f', script]
-    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd, timeout=20)
-    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  try:
+    # Upload the webpage and graphs
+    if os.path.isfile('/tmp/' + MYAPP + '/site/text.md'):
+      write_lftp(script)
+      cmnd = ['lftp', '-f', script]
+      syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+      cmnd = subprocess.call(cmnd, timeout=20)
+      syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  except subprocess.TimeoutExpired:
+    syslog_trace("***:  {0}".format(cmnd), syslog.LOG_CRIT, DEBUG)
 
 def getsqldata(homedir, nu):
   minit = int(time.strftime('%M'))
