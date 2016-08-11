@@ -40,8 +40,8 @@ class MyDaemon(Daemon):
 
     try:
       hwdevice      = iniconf.get(inisection, NODE+".hwdevice")
-    except configparser.NoOptionError as e:  # no hwdevice
-      syslog_trace("** {0}".format(sys.exc_info()[0]), False, DEBUG)
+    except configparser.NoOptionError:  # no hwdevice
+      syslog_trace(traceback.format_exc(), False, DEBUG)
       sys.exit(0)
     if not os.path.isfile(hwdevice):
       syslog_trace("** Device not found: {0}".format(hwdevice), syslog.LOG_INFO, DEBUG)
