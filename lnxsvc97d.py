@@ -32,10 +32,8 @@ class MyDaemon(Daemon):
         cursql.close()
         logtext = "{0} : {1}".format("Attached to MySQL server", versql)
         syslog.syslog(syslog.LOG_INFO, logtext)
-    except mdb.Error as e:
+    except mdb.Error:
       syslog_trace("Unexpected MySQL error in run(init)", syslog.LOG_CRIT, DEBUG)
-      # syslog_trace("e.message : {0}".format(e.message), syslog.LOG_CRIT, DEBUG)
-      # syslog_trace("e.__doc__ : {0}".format(e.__doc__), syslog.LOG_CRIT, DEBUG)
       syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
       if consql.open:    # attempt to close connection to MySQLdb
         consql.close()
@@ -94,7 +92,7 @@ def do_writesample(cnsql, cmd, sample):
     cnsql.commit()
     cursql.close()
   except mdb.IntegrityError as e:
-    syslog_trace("e.__str__ : {0}".format(e.__str__), False,  DEBUG)
+    syslog_trace("DB error : {0}".format(e.__str__), syslog.LOG_ERR,  DEBUG)
     if cursql:
       cursql.close()
       syslog_trace(" *** Closed MySQL connection in do_writesample() ***", syslog.LOG_ERR, DEBUG)
