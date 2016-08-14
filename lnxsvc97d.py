@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
 # daemon97.py pushes data to the MySQL-server.
-# daemon23 support
 
 import configparser
 import glob
-import MySQLdb as mdb  # PyMySQL to be used for python3 compatibility
+import MySQLdb as mdb
 import os
 import sys
 import syslog
@@ -91,8 +90,8 @@ def do_writesample(cnsql, cmd, sample):
     cursql.execute(cmd, dat)
     cnsql.commit()
     cursql.close()
-  except mdb.IntegrityError as e:
-    syslog_trace("DB error : {0}".format(e.__str__), syslog.LOG_ERR,  DEBUG)
+  except mdb.IntegrityError:
+    syslog_trace("DB error : {0}".format(sys.exc_info()[1]), syslog.LOG_ERR,  DEBUG)
     if cursql:
       cursql.close()
       syslog_trace(" *** Closed MySQL connection in do_writesample() ***", syslog.LOG_ERR, DEBUG)
@@ -136,18 +135,18 @@ def do_sql_data(flock, inicnfg, cnsql):
             errsql = do_writesample(cnsql, sqlcmd, data[entry])
           # endfor
         # endif
-      except configparser.NoOptionError as e:  # no sqlcmd
-        syslog_trace("*1* {0}".format(e.__str__), False, DEBUG)
-    except configparser.NoOptionError as e:  # no ifile
-      syslog_trace("*2* {0}".format(e.__str__), False, DEBUG)
+      except configparser.NoOptionError:  # no sqlcmd
+        syslog_trace("*1* {0}".format(sys.exc_info()[1]), False, DEBUG)
+    except configparser.NoOptionError:  # no ifile
+      syslog_trace("*2* {0}".format(sys.exc_info()[1]), False, DEBUG)
 
     try:
       if not errsql:                     # SQL-job was successful or non-existing
         if os.path.isfile(ifile):        # IF resultfile exists
           syslog_trace("Deleting {0}".format(ifile), False, DEBUG)
           os.remove(ifile)
-    except configparser.NoOptionError as e:  # no ofile
-      syslog_trace("*3* {0}".format(e.__str__), False, DEBUG)
+    except configparser.NoOptionError:  # no ofile
+      syslog_trace("*3* {0}".format(sys.exc_info()[1]), False, DEBUG)
 
   # endfor
   unlock(flock)
