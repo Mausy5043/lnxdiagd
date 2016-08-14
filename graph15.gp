@@ -35,7 +35,7 @@ X_min = X_min + utc_offset - epoch_compensate
 X_max = X_max + utc_offset - epoch_compensate
 
 # ****************************************************************** Title *****
-set title "System Logging Linecounts ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
+set title "System Logging Linecounts ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0) + utc_offset)
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
@@ -68,7 +68,7 @@ set style fill solid noborder
 plot ifname \
       using ($2+utc_offset):(nonull($4+$5+$6+$7+$8+$9)) title "p5" fc "green"  \
   ,'' using ($2+utc_offset):(nonull($4+$5+$6+$7+$8))    title "p4" fc "cyan"   \
-  ,'' using ($2+utc_offset):(nonull($4+$5+$6+$7))       title "p3" fc "blue" \
-  ,'' using ($2+utc_offset):(nonull($4+$5+$6))          title "p2" fc "orange"    \
-  ,'' using ($2+utc_offset):(nonull($4+$5))             title "p1" fc "red"   \
+  ,'' using ($2+utc_offset):(nonull($4+$5+$6+$7))       title "p3" fc "blue"   \
+  ,'' using ($2+utc_offset):(nonull($4+$5+$6))          title "p2" fc "orange" \
+  ,'' using ($2+utc_offset):(nonull($4+$5))             title "p1" fc "red"    \
   ,'' using ($2+utc_offset):(nonull($4))                title "p0" fc "black"
