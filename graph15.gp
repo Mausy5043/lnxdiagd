@@ -66,9 +66,9 @@ set style data boxes
 set style fill solid noborder
 
 plot ifname \
-      using ($2+utc_offset):(nonull($4+$5+$6+$7+$8+$9)) title "p5" fc "cyan"  \
-  ,'' using ($2+utc_offset):(nonull($4+$5+$6+$7+$8))    title "p4" fc "green"   \
-  ,'' using ($2+utc_offset):(nonull($4+$5+$6+$7))       title "p3" fc "orange" \
-  ,'' using ($2+utc_offset):(nonull($4+$5+$6))          title "p2" fc "red"    \
-  ,'' using ($2+utc_offset):(nonull($4+$5))             title "p1" fc "blue"   \
+      using ($2+utc_offset):(nonull($4+$5+$6+$7+$8+$9)) title "p5" fc "green"  \
+  ,'' using ($2+utc_offset):(nonull($4+$5+$6+$7+$8))    title "p4" fc "cyan"   \
+  ,'' using ($2+utc_offset):(nonull($4+$5+$6+$7))       title "p3" fc "blue" \
+  ,'' using ($2+utc_offset):(nonull($4+$5+$6))          title "p2" fc "orange"    \
+  ,'' using ($2+utc_offset):(nonull($4+$5))             title "p1" fc "red"   \
   ,'' using ($2+utc_offset):(nonull($4))                title "p0" fc "black"

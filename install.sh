@@ -18,19 +18,32 @@ install_package()
 }
 
 sudo apt-get update
-install_package "git"
-# install_package "python"
+
+# install_package "git"  # already installed by `mod-rasbian-netinst`
+# LFTP package
 install_package "lftp"
-install_package "gnuplot"
-install_package "gnuplot-nox"
-install_package "mysql-client"
-# python 2 requires: install_package "python-mysqldb"
-install_package "build-essential"
+
+# Python 3 package and associates
 install_package "python3"
+install_package "build-essential"
 install_package "python3-dev"
 install_package "python3-pip"
+
+# Support for serial port
+install_package "picocom"
+install_package "python3-serial"
+
+# gnuPlot packages
+#install_package "python-numpy"
+install_package "gnuplot"
+install_package "gnuplot-nox"
+
+# MySQL support (python3)
+install_package "mysql-client"
 install_package "libmysqlclient-dev"
+# install_package "python-mysqldb"  # only required by python 2
 sudo pip3 install mysqlclient
+
 
 minit=$(echo $RANDOM/555 |bc)
 echo "MINIT = $minit"
