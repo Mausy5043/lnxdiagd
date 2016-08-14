@@ -40,7 +40,7 @@ class MyDaemon(Daemon):
 
     try:
       hwdevice      = iniconf.get("11", NODE + ".hwdevice")
-    except configparser.NoOptionError as e:  # no hwdevice
+    except configparser.NoOptionError:  # no hwdevice
       hwdevice      = "nohwdevice"
       pass
 
