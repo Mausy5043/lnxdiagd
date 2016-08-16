@@ -29,10 +29,6 @@ install_package "build-essential"
 install_package "python3-dev"
 install_package "python3-pip"
 
-# Support for serial port
-install_package "picocom"
-install_package "python3-serial"
-
 # gnuPlot packages
 #install_package "python-numpy"
 install_package "gnuplot"
