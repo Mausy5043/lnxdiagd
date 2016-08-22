@@ -9,7 +9,7 @@ CREATE TABLE `disktemp` (
   `sample_time`   datetime,
   `sample_epoch`  bigint(20) unsigned,
   `host`          varchar(24),
-  `diskid`        int(11) unsigned,
+  `diskid`        varchar(24),
   `diskt`         int(11) signed,
   `id`            varchar(48),
   PRIMARY KEY (`id`)
