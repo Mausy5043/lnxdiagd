@@ -5,7 +5,7 @@ USE domotica;
 
 DROP TABLE IF EXISTS disktemp;
 
-CREATE TABLE `syslog` (
+CREATE TABLE `disktemp` (
   `sample_time`   datetime,
   `sample_epoch`  bigint(20) unsigned,
   `host`          varchar(24),
