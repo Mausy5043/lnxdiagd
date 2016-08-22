@@ -116,15 +116,15 @@ def do_report(result, flock, fdata):
   outEpoch      = int(time.strftime('%s'))
   # round to current minute to ease database JOINs
   outEpoch      = outEpoch - (outEpoch % 60)
-  ident            = NODE + '@' + str(outEpoch)
+  # ident            = NODE + '@' + str(outEpoch)
   syslog_trace(">>> ID : {0}  -  {1}".format(ident, outDate), False, DEBUG)
   lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sda.id, result[0], ident))
-    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sdb.id, result[1], ident))
-    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sdc.id, result[2], ident))
-    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sdd.id, result[3], ident))
-    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sde.id, result[4], ident))
+    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sda.id, result[0], sda.id + '@' + str(outEpoch)))
+    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sdb.id, result[1], sdb.id + '@' + str(outEpoch)))
+    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sdc.id, result[2], sdc.id + '@' + str(outEpoch)))
+    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sdd.id, result[3], sdd.id + '@' + str(outEpoch)))
+    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sde.id, result[4], sde.id + '@' + str(outEpoch)))
   unlock(flock)
 
 def lock(fname):

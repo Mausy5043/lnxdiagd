@@ -11,7 +11,7 @@ CREATE TABLE `disktemp` (
   `host`          varchar(24),
   `diskid`        int(11) unsigned,
   `diskt`         int(11) signed,
-  `id`            varchar(24),
+  `id`            varchar(48),
   PRIMARY KEY (`id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
