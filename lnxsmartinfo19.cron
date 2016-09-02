@@ -7,3 +7,4 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
 #
 # m     h       dom     mon     dow     command
 */5     *       *       *       *       root  ( /home/beheer/lnxdiagd/lnxsmartinfo19.sh |logger -p info -t lnxsmartinfo19 )
+@reboot                                 root  ( /home/beheer/lnxdiagd/lnxsmartinfo19.sh |logger -p info -t lnxsmartinfo19 )
