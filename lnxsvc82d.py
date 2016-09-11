@@ -126,6 +126,8 @@ def do_markdown(flock, fdata, hwdevice):
     f.write('![A GNUplot image should be here: day14.png](img/day14.png)\n')
     f.write('![A GNUplot image should be here: day13.png](img/day13.png)\n')
     f.write('![A GNUplot image should be here: day15.png](img/day15.png)\n')
+    if (NODE == "boson"):
+      f.write('![A GNUplot image should be here: day19.png](img/day19.png)\n')
 
     # Disk usage
     f.write('## Disk Usage\n')
