@@ -134,12 +134,12 @@ pushd "$HOME/lnxdiagd"
                   logger -p user.err -t lnxdiagd "* Stale daemon 19 pid-file found."
                   rm /tmp/lnxdiagd/19.pid
                   echo "  * Start DIAG 19"
-                  eval ./lnxsvc19d.py restart
+                  eval ./lnxdiag19d.py restart
                 fi
               else
                 logger -p user.notice -t lnxdiagd "Found daemon 19 not running."
                 echo "  * Start DIAG 19"
-                eval ./lnxsvc19d.py start
+                eval ./lnxdiag19d.py start
               fi
               ;;
     neutron ) echo "NEUTRON"
