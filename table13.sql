@@ -21,7 +21,9 @@ CREATE TABLE `sysnet` (
   `wlIn`          bigint(20) unsigned,
   `wlOut`         bigint(20) unsigned,
   `id`            varchar(24),
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX (`sample_epoch`),
+  INDEX (`host`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
 # example to retrieve data:

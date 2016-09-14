@@ -18,7 +18,9 @@ CREATE TABLE `syslog` (
   `p6`            int(11) unsigned,
   `p7`            int(11) unsigned,
   `id`            varchar(24),
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX (`sample_epoch`),
+  INDEX (`host`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
 # example to retrieve data:

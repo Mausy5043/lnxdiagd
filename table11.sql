@@ -17,7 +17,9 @@ CREATE TABLE `systemp` (
   `host`          varchar(24),
   `temperature`   decimal(6,3),
   `id`            varchar(24),
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX (`sample_epoch`),
+  INDEX (`host`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
 # example to retrieve data:
