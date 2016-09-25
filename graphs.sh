@@ -26,7 +26,9 @@ pushd "$HOME/lnxdiagd" >/dev/null
   if [ $(wc -l < /tmp/lnxdiagd/mysql/sql15d.csv) -gt 5 ]; then
     gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph15.gp &
   fi
-
+  if [ $(wc -l < /tmp/lnxdiagd/mysql/sql19d.csv) -gt 5 ]; then
+    gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph19.gp &
+  fi
   wait
 
 popd >/dev/null
