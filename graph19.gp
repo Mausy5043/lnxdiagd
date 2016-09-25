@@ -138,11 +138,11 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($1+utc_offset):2 title " SDD [degC]" with points pt 5 ps 0.2 fc rgb "black" \
-  ,'' using ($1+utc_offset):3 title " disk.1" with points pt 5 ps 0.2 fc rgb "red" \
-  ,'' using ($1+utc_offset):4 title " .2" with points pt 5 ps 0.2 fc rgb "green" \
-  ,'' using ($1+utc_offset):5 title " .3" with points pt 5 ps 0.2 fc rgb "purple" \
-  ,'' using ($1+utc_offset):6 title " .4" with points pt 5 ps 0.2 fc rgb "blue" \
+      using ($1+utc_offset):2 title "SDD [degC]" with lines lw 0.1 fc rgb "black" \
+  ,'' using ($1+utc_offset):3 title "disk.1" with lines lw 0.1 fc rgb "red" \
+  ,'' using ($1+utc_offset):4 title ".2" with lines lw 0.1 fc rgb "green" \
+  ,'' using ($1+utc_offset):5 title ".3" with lines lw 0.1 fc rgb "purple" \
+  ,'' using ($1+utc_offset):6 title ".4" with lines lw 0.1 fc rgb "blue" \
 
 
 
@@ -173,11 +173,11 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($1+utc_offset):2 title " SDD [degC]" with points pt 5 ps 0.2 fc rgb "black" \
-  ,'' using ($1+utc_offset):3 title " disk.1" with points pt 5 ps 0.2 fc rgb "red" \
-  ,'' using ($1+utc_offset):4 title " .2" with points pt 5 ps 0.2 fc rgb "green" \
-  ,'' using ($1+utc_offset):5 title " .3" with points pt 5 ps 0.2 fc rgb "purple" \
-  ,'' using ($1+utc_offset):6 title " .4" with points pt 5 ps 0.2 fc rgb "blue" \
+      using ($1+utc_offset):2 with lines lw 0.1 fc rgb "black" \
+  ,'' using ($1+utc_offset):3 with lines lw 0.1 fc rgb "red" \
+  ,'' using ($1+utc_offset):4 with lines lw 0.1 fc rgb "green" \
+  ,'' using ($1+utc_offset):5 with lines lw 0.1 fc rgb "purple" \
+  ,'' using ($1+utc_offset):6 with lines lw 0.1 fc rgb "blue" \
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -207,11 +207,11 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($1+utc_offset):2 title " SDD [degC]" with points pt 5 ps 0.2 fc rgb "black" \
-  ,'' using ($1+utc_offset):3 title " disk.1" with points pt 5 ps 0.2 fc rgb "red" \
-  ,'' using ($1+utc_offset):4 title " .2" with points pt 5 ps 0.2 fc rgb "green" \
-  ,'' using ($1+utc_offset):5 title " .3" with points pt 5 ps 0.2 fc rgb "purple" \
-  ,'' using ($1+utc_offset):6 title " .4" with points pt 5 ps 0.2 fc rgb "blue" \
+      using ($1+utc_offset):2 with lines lw 0.1 fc rgb "black" \
+  ,'' using ($1+utc_offset):3 with lines lw 0.1 fc rgb "red" \
+  ,'' using ($1+utc_offset):4 with lines lw 0.1 fc rgb "green" \
+  ,'' using ($1+utc_offset):5 with lines lw 0.1 fc rgb "purple" \
+  ,'' using ($1+utc_offset):6 with lines lw 0.1 fc rgb "blue" \
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
