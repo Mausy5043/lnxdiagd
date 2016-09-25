@@ -23,7 +23,7 @@ WHERE
 	AND d1.sample_epoch = d3.sample_epoch
 	AND d1.sample_epoch = d4.sample_epoch
 	AND d1.sample_epoch = d5.sample_epoch
-	  AND d1.diskid LIKE '%d6dd5'
+	AND (d1.diskid LIKE '%d6dd5'
 		AND d2.diskid LIKE '%20fce'
 		AND d3.diskid LIKE '%043e2'
 		AND d4.diskid LIKE '%a237b'
