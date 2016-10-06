@@ -104,7 +104,7 @@ def do_markdown(flock, fdata, hwdevice):
 
     # System ID
     f.write('!!! ')
-    f.write(uname[0] + ' ' + uname[1] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '  \n')
+    f.write(uname[0] + ' ' + uname[2] + ' ' + uname[3] + ' ' + uname[4] + ' ' + platform.platform() + '  \n')
 
     # lnxdiagd branch
     f.write('!!! lnxdiagd   on: ' + lnxdiagdbranch + '\n\n')
@@ -126,6 +126,8 @@ def do_markdown(flock, fdata, hwdevice):
     f.write('![A GNUplot image should be here: day14.png](img/day14.png)\n')
     f.write('![A GNUplot image should be here: day13.png](img/day13.png)\n')
     f.write('![A GNUplot image should be here: day15.png](img/day15.png)\n')
+    if (NODE == "boson"):
+      f.write('![A GNUplot image should be here: day19.png](img/day19.png)\n')
 
     # Disk usage
     f.write('## Disk Usage\n')

@@ -129,6 +129,18 @@ pushd "$HOME/lnxdiagd"
     osmc )    echo "OSMC Media Center"
               ;;
     boson )   echo "BOSON"
+              if [ -e /tmp/lnxdiagd/19.pid ]; then
+                if ! kill -0 $(cat /tmp/lnxdiagd/19.pid)  > /dev/null 2>&1; then
+                  logger -p user.err -t lnxdiagd "* Stale daemon 19 pid-file found."
+                  rm /tmp/lnxdiagd/19.pid
+                  echo "  * Start DIAG 19"
+                  eval ./lnxdiag19d.py restart
+                fi
+              else
+                logger -p user.notice -t lnxdiagd "Found daemon 19 not running."
+                echo "  * Start DIAG 19"
+                eval ./lnxdiag19d.py start
+              fi
               ;;
     neutron ) echo "NEUTRON"
               ;;
