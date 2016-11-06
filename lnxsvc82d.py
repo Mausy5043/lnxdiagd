@@ -251,7 +251,7 @@ def do_markdown(flock, fdata, hwdevice):
       if not(RBCsde == "0") or not(OUsde == "0"):
         f.write('              Retired Block Count (5) = ' + RBCsde + ' - Offline Uncorrectable (198) = ' + OUsde + '\n')
       f.write(' ')
-    f.write('```\n\n')
+      f.write('```\n\n')
 
     # Memory usage
     f.write('## Memory Usage\n')
