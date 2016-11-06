@@ -79,6 +79,8 @@ def do_markdown(flock, fdata, hwdevice):
   with open(fi, 'r') as f:
     lnxdiagdbranch  = f.read().strip('\n')
 
+  if (NODE == "boson"):
+    mds               = str(subprocess.check_output(["cat", "/proc/mdstat"]), 'utf-8')
   uptime            = str(subprocess.check_output(["uptime"]), 'utf-8')
   dfh               = str(subprocess.check_output(["df", "-h"]), 'utf-8')
   freeh             = str(subprocess.check_output(["free", "-h"]), 'utf-8')
@@ -133,6 +135,8 @@ def do_markdown(flock, fdata, hwdevice):
     f.write('## Disk Usage\n')
     f.write('```\n')
     f.write(dfh)      # dfh comes with its own built-in '/n'
+    if (NODE == "boson"):
+      f.write(mds)    # mds comes with its own built-in '/n'
     f.write('```\n\n')
 
     # Memory usage
