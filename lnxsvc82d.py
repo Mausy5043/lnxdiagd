@@ -65,6 +65,7 @@ def do_markdown(flock, fdata, hwdevice):
   uname             = os.uname()
   Tcpu              = "(no T-sensor)"
   fcpu              = "(no f-sensor)"
+  mds               = ""
   if os.path.isfile(hwdevice):
     fi = hwdevice
     with open(fi, 'r') as f:
@@ -79,7 +80,7 @@ def do_markdown(flock, fdata, hwdevice):
   with open(fi, 'r') as f:
     lnxdiagdbranch  = f.read().strip('\n')
 
-  if (NODE == "boson"):
+  if os.path.isfile("/proc/mdstat"):
     mds               = str(subprocess.check_output(["cat", "/proc/mdstat"]), 'utf-8')
   uptime            = str(subprocess.check_output(["uptime"]), 'utf-8')
   dfh               = str(subprocess.check_output(["df", "-h"]), 'utf-8')
