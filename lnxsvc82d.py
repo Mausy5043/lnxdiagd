@@ -20,6 +20,24 @@ MYID        = "".join(list(filter(str.isdigit, os.path.realpath(__file__).split(
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
 
+if (NODE == "boson"):
+  from libsmart3 import SmartDisk
+  # BEWARE
+  # The disks identified here as `sda`, `sdb` etc. may not necessarily
+  # be called `/dev/sda`, `/dev/sdb` etc. on the system!!
+  sda = SmartDisk("wwn-0x50026b723c0d6dd5")  # SSD 50026B723C0D6DD5
+  sda.smart()
+  sdb = SmartDisk("wwn-0x50014ee261020fce")  # WD-WCC4N5PF96KD
+  sdb.smart()
+  sdc = SmartDisk("wwn-0x50014ee605a043e2")  # WD-WMC4N0K01249
+  sdc.smart()
+  sdd = SmartDisk("wwn-0x50014ee6055a237b")  # WD-WMC4N0J6Y6LW
+  sdd.smart()
+  sde = SmartDisk("wwn-0x50014ee60507b79c")  # WD-WMC4N0E24DVU
+  sde.smart()
+  # sdf =
+  # sdg =
+
 class MyDaemon(Daemon):
   def run(self):
     iniconf         = configparser.ConfigParser()
@@ -81,7 +99,7 @@ def do_markdown(flock, fdata, hwdevice):
     lnxdiagdbranch  = f.read().strip('\n')
 
   if os.path.isfile("/proc/mdstat"):
-    mds               = str(subprocess.check_output(["cat", "/proc/mdstat"]), 'utf-8')
+    mds               = "-\n" + str(subprocess.check_output(["cat", "/proc/mdstat"]), 'utf-8')
   uptime            = str(subprocess.check_output(["uptime"]), 'utf-8')
   dfh               = str(subprocess.check_output(["df", "-h"]), 'utf-8')
   freeh             = str(subprocess.check_output(["free", "-h"]), 'utf-8')
@@ -138,6 +156,98 @@ def do_markdown(flock, fdata, hwdevice):
     f.write(dfh)      # dfh comes with its own built-in '/n'
     if (NODE == "boson"):
       f.write(mds)    # mds comes with its own built-in '/n'
+    f.write('```\n\n')
+
+    if (NODE == "boson"):
+      RBCsda = sda.getdata('5')
+      RBCsdb = sdb.getdata('5')
+      RBCsdc = sdc.getdata('5')
+      RBCsdd = sdd.getdata('5')
+      RBCsde = sde.getdata('5')
+      # OUsda = sda.getdata('198')
+      OUsdb = sdb.getdata('198')
+      OUsdc = sdc.getdata('198')
+      OUsdd = sdd.getdata('198')
+      OUsde = sde.getdata('198')
+      # disktemperature
+      Tsda = sda.getdata('194')
+      Tsdb = sdb.getdata('194')
+      Tsdc = sdc.getdata('194')
+      Tsdd = sdd.getdata('194')
+      Tsde = sde.getdata('194')
+      # disk power-on time
+      Pta = sda.getdata('9')
+      Ptb = sdb.getdata('9')
+      Ptc = sdc.getdata('9')
+      Ptd = sdd.getdata('9')
+      Pte = sde.getdata('9')
+      # disk health
+      Hda = sda.gethealth()
+      Hdb = sdb.gethealth()
+      Hdc = sdc.gethealth()
+      Hdd = sdd.gethealth()
+      Hde = sde.gethealth()
+      # Self-test info
+      Testa = sda.getlasttest()
+      Testb = sdb.getlasttest()
+      Testc = sdc.getlasttest()
+      Testd = sdd.getlasttest()
+      Teste = sde.getlasttest()
+      # Disk info
+      Infoa = sda.getinfo()
+      Infob = sdb.getinfo()
+      Infoc = sdc.getinfo()
+      Infod = sdd.getinfo()
+      Infoe = sde.getinfo()
+      f.write('```\n')
+      f.write('SSD: ' + Tsda + ' || disk1: ' + Tsdb + ' || disk2: ' + Tsdc + ' || disk3: ' + Tsdd + ' || disk4: ' + Tsde + ' [degC]\n')
+      f.write('\n')
+      f.write('---SSD---\n')
+      f.write(' Name      : ' + Infoa + '\n')
+      f.write(' PowerOn   : ' + Pta + '\n')
+
+      # f.write(' Last test : ' + 'Not available\n')
+      if "PASSED" not in Hda:
+        f.write('             ' + Hda + '\n')
+      if not(RBCsda == "0"):
+        f.write('              Retired Block Count (5) = ' + RBCsda + '\n')
+      f.write('---disk1---\n')
+      f.write(' Name      : ' + Infob + '\n')
+      f.write(' PowerOn   : ' + Ptb + '\n')
+      if "without" not in Testb:
+        f.write(' Last test : ' + Testb + '\n')
+      if "PASSED" not in Hdb:
+        f.write('             ' + Hdb + '\n')
+      if not(RBCsdb == "0") or not(OUsdb == "0"):
+        f.write('              Retired Block Count (5) = ' + RBCsdb + ' - Offline Uncorrectable (198) = ' + OUsdb + '\n')
+      f.write('---disk2---\n')
+      f.write(' Name      : ' + Infoc + '\n')
+      f.write(' PowerOn   : ' + Ptc + '\n')
+      if "without" not in Testc:
+        f.write(' Last test : ' + Testc + '\n')
+      if "PASSED" not in Hdc:
+        f.write('             ' + Hdc + '\n')
+      if not(RBCsdc == "0") or not(OUsdc == "0"):
+        f.write('              Retired Block Count (5) = ' + RBCsdc + ' - Offline Uncorrectable (198) = ' + OUsdc + '\n')
+      f.write('---disk3---\n')
+      f.write(' Name      : ' + Infod + '\n')
+      f.write(' PowerOn   : ' + Ptd + '\n')
+      if "without" not in Testd:
+        f.write(' Last test : ' + Testd + '\n')
+      if "PASSED" not in Hdd:
+        f.write('             ' + Hdd + '\n')
+      if not(RBCsdd == "0") or not(OUsdd == "0"):
+        f.write('              Retired Block Count (5) = ' + RBCsdd + ' - Offline Uncorrectable (198) = ' + OUsdd + '\n')
+      f.write('---disk4---\n')
+      f.write(' Name      : ' + Infoe + '\n')
+      f.write(' PowerOn   : ' + Pte + '\n')
+      if "without" not in Teste:
+        f.write(' Last test : ' + Teste + '\n')
+      if "PASSED" not in Hde:
+        f.write('             ' + Hde + '\n')
+      if not(RBCsde == "0") or not(OUsde == "0"):
+        f.write('              Retired Block Count (5) = ' + RBCsde + ' - Offline Uncorrectable (198) = ' + OUsde + '\n')
+      f.write(' ')
     f.write('```\n\n')
 
     # Memory usage
