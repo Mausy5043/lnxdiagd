@@ -205,21 +205,22 @@ def do_markdown(flock, fdata, hwdevice):
       f.write('---SSD---\n')
       f.write(' Name      : ' + Infoa + '\n')
       f.write(' PowerOn   : ' + Pta + '\n')
-
-      # f.write(' Last test : ' + 'Not available\n')
+      f.write(' Last test : ' + Testa + '\n')
       if "PASSED" not in Hda:
         f.write('             ' + Hda + '\n')
       if not(RBCsda == "0"):
         f.write('              Retired Block Count (5) = ' + RBCsda + '\n')
+
       f.write('---disk1---\n')
       f.write(' Name      : ' + Infob + '\n')
       f.write(' PowerOn   : ' + Ptb + '\n')
-      if "without" not in Testb:
-        f.write(' Last test : ' + Testb + '\n')
-      if "PASSED" not in Hdb:
+      # if "without" not in Testb:
+      f.write(' Last test : ' + Testb + '\n')
+      # if "PASSED" not in Hdb:
         f.write('             ' + Hdb + '\n')
       if not(RBCsdb == "0") or not(OUsdb == "0"):
         f.write('              Retired Block Count (5) = ' + RBCsdb + ' - Offline Uncorrectable (198) = ' + OUsdb + '\n')
+
       f.write('---disk2---\n')
       f.write(' Name      : ' + Infoc + '\n')
       f.write(' PowerOn   : ' + Ptc + '\n')
@@ -229,6 +230,7 @@ def do_markdown(flock, fdata, hwdevice):
         f.write('             ' + Hdc + '\n')
       if not(RBCsdc == "0") or not(OUsdc == "0"):
         f.write('              Retired Block Count (5) = ' + RBCsdc + ' - Offline Uncorrectable (198) = ' + OUsdc + '\n')
+
       f.write('---disk3---\n')
       f.write(' Name      : ' + Infod + '\n')
       f.write(' PowerOn   : ' + Ptd + '\n')
@@ -238,6 +240,7 @@ def do_markdown(flock, fdata, hwdevice):
         f.write('             ' + Hdd + '\n')
       if not(RBCsdd == "0") or not(OUsdd == "0"):
         f.write('              Retired Block Count (5) = ' + RBCsdd + ' - Offline Uncorrectable (198) = ' + OUsdd + '\n')
+
       f.write('---disk4---\n')
       f.write(' Name      : ' + Infoe + '\n')
       f.write(' PowerOn   : ' + Pte + '\n')
