@@ -188,7 +188,7 @@ def do_markdown(flock, fdata, hwdevice):
       Hdd = sdd.gethealth()
       Hde = sde.gethealth()
       # Self-test info
-      Testa = sda.getlasttest()
+      Testa = sda.getlasttest()   # noqa
       Testb = sdb.getlasttest()
       Testc = sdc.getlasttest()
       Testd = sdd.getlasttest()
