@@ -15,7 +15,7 @@ from libdaemon import Daemon
 
 # constants
 DEBUG       = False
-IS_JOURNALD = os.path.isfile('/bin/journalctl')
+IS_Jou_RNALD = os.path.isfile('/bin/journalctl')
 MYID        = "".join(list(filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])))
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
@@ -159,97 +159,97 @@ def do_markdown(flock, fdata, hwdevice):
     f.write('```\n\n')
 
     if (NODE == "boson"):
-      RBCsda = sda.getdata('5')
-      RBCsdb = sdb.getdata('5')
-      RBCsdc = sdc.getdata('5')
-      RBCsdd = sdd.getdata('5')
-      RBCsde = sde.getdata('5')
-      # OUsda = sda.getdata('198')
-      OUsdb = sdb.getdata('198')
-      OUsdc = sdc.getdata('198')
-      OUsdd = sdd.getdata('198')
-      OUsde = sde.getdata('198')
+      rbc_sda = sda.getdata('5')
+      rbc_sdb = sdb.getdata('5')
+      rbc_sdc = sdc.getdata('5')
+      rbc_sdd = sdd.getdata('5')
+      rbc_sde = sde.getdata('5')
+      # ou_sda = sda.getdata('198')
+      ou_sdb = sdb.getdata('198')
+      ou_sdc = sdc.getdata('198')
+      ou_sdd = sdd.getdata('198')
+      ou_sde = sde.getdata('198')
       # disktemperature
-      Tsda = sda.getdata('194')
-      Tsdb = sdb.getdata('194')
-      Tsdc = sdc.getdata('194')
-      Tsdd = sdd.getdata('194')
-      Tsde = sde.getdata('194')
+      temperature_sda = sda.getdata('194')
+      temperature_sdb = sdb.getdata('194')
+      temperature_sdc = sdc.getdata('194')
+      temperature_sdd = sdd.getdata('194')
+      temperature_sde = sde.getdata('194')
       # disk power-on time
-      Pta = sda.getdata('9')
-      Ptb = sdb.getdata('9')
-      Ptc = sdc.getdata('9')
-      Ptd = sdd.getdata('9')
-      Pte = sde.getdata('9')
+      pwron_time_a = sda.getdata('9')
+      pwron_time_b = sdb.getdata('9')
+      pwron_time_c = sdc.getdata('9')
+      pwron_time_d = sdd.getdata('9')
+      pwron_time_e = sde.getdata('9')
       # disk health
-      Hda = sda.gethealth()
-      Hdb = sdb.gethealth()
-      Hdc = sdc.gethealth()
-      Hdd = sdd.gethealth()
-      Hde = sde.gethealth()
+      health_sda = sda.gethealth()
+      health_sdb = sdb.gethealth()
+      health_sdc = sdc.gethealth()
+      health_sdd = sdd.gethealth()
+      health_sde = sde.gethealth()
       # Self-test info
-      Testa = sda.getlasttest()   # noqa
-      Testb = sdb.getlasttest()
-      Testc = sdc.getlasttest()
-      Testd = sdd.getlasttest()
-      Teste = sde.getlasttest()
+      test_sda = sda.getlasttest()   # noqa
+      test_sdb = sdb.getlasttest()
+      test_sdc = sdc.getlasttest()
+      test_sdd = sdd.getlasttest()
+      test_sde = sde.getlasttest()
       # Disk info
-      Infoa = sda.getinfo()
-      Infob = sdb.getinfo()
-      Infoc = sdc.getinfo()
-      Infod = sdd.getinfo()
-      Infoe = sde.getinfo()
+      info_sda = sda.getinfo()
+      info_sdb = sdb.getinfo()
+      info_sdc = sdc.getinfo()
+      info_sdd = sdd.getinfo()
+      info_sde = sde.getinfo()
       f.write('```\n')
-      f.write('SSD: ' + Tsda + ' || disk1: ' + Tsdb + ' || disk2: ' + Tsdc + ' || disk3: ' + Tsdd + ' || disk4: ' + Tsde + ' [degC]\n')
+      f.write('SSD: ' + temperature_sda + ' || disk1: ' + temperature_sdb + ' || disk2: ' + temperature_sdc + ' || disk3: ' + temperature_sdd + ' || disk4: ' + temperature_sde + ' [degC]\n')
       f.write('\n')
       f.write('---SSD---\n')
-      f.write(' Name      : ' + Infoa + '\n')
-      f.write(' PowerOn   : ' + Pta + '\n')
-      # f.write(' Last test : ' + Testa + '\n')
-      if "PASSED" not in Hda:
-        f.write('             ' + Hda + '\n')
-      if not(RBCsda == "0"):
-        f.write('              Retired Block Count (5) = ' + RBCsda + '\n')
+      f.write(' Name      : ' + info_sda + '\n')
+      f.write(' PowerOn   : ' + pwron_time_a + '\n')
+      # f.write(' Last test : ' + test_sda + '\n')
+      if "PASSED" not in health_sda:
+        f.write('             ' + health_sda + '\n')
+      if not(rbc_sda == "0"):
+        f.write('              Retired Block Count (5) = ' + rbc_sda + '\n')
 
       f.write('---disk1---\n')
-      f.write(' Name      : ' + Infob + '\n')
-      f.write(' PowerOn   : ' + Ptb + '\n')
-      if "without" not in Testb:
-        f.write(' Last test : ' + Testb + '\n')
-      if "PASSED" not in Hdb:
-        f.write('             ' + Hdb + '\n')
-      if not(RBCsdb == "0") or not(OUsdb == "0"):
-        f.write('              Retired Block Count (5) = ' + RBCsdb + ' - Offline Uncorrectable (198) = ' + OUsdb + '\n')
+      f.write(' Name      : ' + info_sdb + '\n')
+      f.write(' PowerOn   : ' + pwron_time_b + '\n')
+      if "without" not in test_sdb:
+        f.write(' Last test : ' + test_sdb + '\n')
+      if "PASSED" not in health_sdb:
+        f.write('             ' + health_sdb + '\n')
+      if not(rbc_sdb == "0") or not(ou_sdb == "0"):
+        f.write('              Retired Block Count (5) = ' + rbc_sdb + ' - Offline Uncorrectable (198) = ' + ou_sdb + '\n')
 
       f.write('---disk2---\n')
-      f.write(' Name      : ' + Infoc + '\n')
-      f.write(' PowerOn   : ' + Ptc + '\n')
-      if "without" not in Testc:
-        f.write(' Last test : ' + Testc + '\n')
-      if "PASSED" not in Hdc:
-        f.write('             ' + Hdc + '\n')
-      if not(RBCsdc == "0") or not(OUsdc == "0"):
-        f.write('              Retired Block Count (5) = ' + RBCsdc + ' - Offline Uncorrectable (198) = ' + OUsdc + '\n')
+      f.write(' Name      : ' + info_sdc + '\n')
+      f.write(' PowerOn   : ' + pwron_time_c + '\n')
+      if "without" not in test_sdc:
+        f.write(' Last test : ' + test_sdc + '\n')
+      if "PASSED" not in health_sdc:
+        f.write('             ' + health_sdc + '\n')
+      if not(rbc_sdc == "0") or not(ou_sdc == "0"):
+        f.write('              Retired Block Count (5) = ' + rbc_sdc + ' - Offline Uncorrectable (198) = ' + ou_sdc + '\n')
 
       f.write('---disk3---\n')
-      f.write(' Name      : ' + Infod + '\n')
-      f.write(' PowerOn   : ' + Ptd + '\n')
-      if "without" not in Testd:
-        f.write(' Last test : ' + Testd + '\n')
-      if "PASSED" not in Hdd:
-        f.write('             ' + Hdd + '\n')
-      if not(RBCsdd == "0") or not(OUsdd == "0"):
-        f.write('              Retired Block Count (5) = ' + RBCsdd + ' - Offline Uncorrectable (198) = ' + OUsdd + '\n')
+      f.write(' Name      : ' + info_sdd + '\n')
+      f.write(' PowerOn   : ' + pwron_time_d + '\n')
+      if "without" not in test_sdd:
+        f.write(' Last test : ' + test_sdd + '\n')
+      if "PASSED" not in health_sdd:
+        f.write('             ' + health_sdd + '\n')
+      if not(rbc_sdd == "0") or not(ou_sdd == "0"):
+        f.write('              Retired Block Count (5) = ' + rbc_sdd + ' - Offline Uncorrectable (198) = ' + ou_sdd + '\n')
 
       f.write('---disk4---\n')
-      f.write(' Name      : ' + Infoe + '\n')
-      f.write(' PowerOn   : ' + Pte + '\n')
-      if "without" not in Teste:
-        f.write(' Last test : ' + Teste + '\n')
-      if "PASSED" not in Hde:
-        f.write('             ' + Hde + '\n')
-      if not(RBCsde == "0") or not(OUsde == "0"):
-        f.write('              Retired Block Count (5) = ' + RBCsde + ' - Offline Uncorrectable (198) = ' + OUsde + '\n')
+      f.write(' Name      : ' + info_sde + '\n')
+      f.write(' PowerOn   : ' + pwron_time_e + '\n')
+      if "without" not in test_sde:
+        f.write(' Last test : ' + test_sde + '\n')
+      if "PASSED" not in health_sde:
+        f.write('             ' + health_sde + '\n')
+      if not(rbc_sde == "0") or not(ou_sde == "0"):
+        f.write('              Retired Block Count (5) = ' + rbc_sde + ' - Offline Uncorrectable (198) = ' + ou_sde + '\n')
       f.write(' ')
       f.write('```\n\n')
 
