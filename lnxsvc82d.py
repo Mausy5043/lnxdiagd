@@ -15,7 +15,7 @@ from libdaemon import Daemon
 
 # constants
 DEBUG       = False
-IS_Jou_RNALD = os.path.isfile('/bin/journalctl')
+IS_JOURNALD = os.path.isfile('/bin/journalctl')
 MYID        = "".join(list(filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])))
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
