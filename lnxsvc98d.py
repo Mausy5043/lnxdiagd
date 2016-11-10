@@ -85,6 +85,8 @@ def do_mv_data(flock, homedir, script):
     syslog_trace("***:  {0}".format(cmnd), syslog.LOG_CRIT, DEBUG)
     pass
 
+  return
+
 def getsqldata(homedir, nu):
   minit = int(time.strftime('%M'))
   nowur = int(time.strftime('%H'))
