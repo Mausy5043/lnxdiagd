@@ -139,7 +139,7 @@ pushd "$HOME/lnxdiagd"
               else
                 logger -p user.notice -t lnxdiagd "Found daemon 19 not running."
                 echo "  * Start DIAG 19"
-                eval ./lnxsmartinfo19.sh |logger -p info -t lnxsmartinfo19
+                sudo ./lnxsmartinfo19.sh |logger -p info -t lnxsmartinfo19
                 eval ./lnxdiag19d.py start
               fi
               ;;
