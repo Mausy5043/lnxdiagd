@@ -58,30 +58,32 @@ class MyDaemon(Daemon):
         startTime = time.time()
 
         result        = do_work()
-        if result is not "":
-          result        = result.split(',')
-          syslog_trace("Result   : {0}".format(result), False, DEBUG)
+        result        = result.split(',')
+        syslog_trace("Result   : {0}".format(result), False, DEBUG)
 
-          data.append(list(map(float, result)))
-          if (len(data) > samples):
-            data.pop(0)
-          syslog_trace("Data     : {0}".format(data),   False, DEBUG)
+        data.append(list(map(float, result)))
+        if (len(data) > samples):
+          data.pop(0)
+        syslog_trace("Data     : {0}".format(data),   False, DEBUG)
 
-          # report sample average
-          if (startTime % reportTime < sampleTime):
-            somma       = list(map(sum, list(zip(*data))))
-            # not all entries should be float
-            # 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
-            averages    = [format(sm / len(data), '.3f') for sm in somma]
-            # Report the last measurement for these parameters:
-            syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
-            do_report(averages, flock, fdata)
+        # report sample average
+        if (startTime % reportTime < sampleTime):
+          somma       = list(map(sum, list(zip(*data))))
+          # not all entries should be float
+          # 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
+          averages    = [format(sm / len(data), '.3f') for sm in somma]
+          # Report the last measurement for these parameters:
+          syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
+          do_report(averages, flock, fdata)
 
-          waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
-          if (waitTime > 0):
-            syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
-            syslog_trace("................................", False, DEBUG)
-            time.sleep(waitTime)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
+        if (waitTime > 0):
+          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
+          syslog_trace("................................", False, DEBUG)
+          time.sleep(waitTime)
+      except ValueError:
+        time.sleep(60)
+        pass
       except Exception:
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
