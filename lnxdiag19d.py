@@ -82,6 +82,7 @@ class MyDaemon(Daemon):
           syslog_trace("................................", False, DEBUG)
           time.sleep(waitTime)
       except ValueError:
+        syslog_trace("Waiting for S.M.A.R.T. data..", syslog.LOG_DEBUG, DEBUG)
         time.sleep(60)
         pass
       except Exception:
