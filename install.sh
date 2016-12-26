@@ -29,6 +29,8 @@ sudo apt-get update
 # install_package "git"  # already installed by `mod-rasbian-netinst`
 # LFTP package
 install_package "lftp"
+# CPUfreq
+install_package "cpufrequtils"
 
 # Python 3 package and associates
 install_package "python3"
