@@ -38,16 +38,16 @@ Ymax = Yh_max
 Ymin = Yh_min
 stats ifnameh using 3 name "Yh" nooutput
 Ymax = max(Yh_max, Ymax)
-Ymin = max(Yh_min, Ymin)
+Ymin = min(Yh_min, Ymin)
 stats ifnameh using 4 name "Yh" nooutput
 Ymax = max(Yh_max, Ymax)
-Ymin = max(Yh_min, Ymin)
+Ymin = min(Yh_min, Ymin)
 stats ifnameh using 5 name "Yh" nooutput
 Ymax = max(Yh_max, Ymax)
-Ymin = max(Yh_min, Ymin)
+Ymin = min(Yh_min, Ymin)
 stats ifnameh using 6 name "Yh" nooutput
 Yh_max = max(Yh_max, Ymax)
-Yh_min = max(Yh_min, Ymin)
+Yh_min = min(Yh_min, Ymin)
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 2 (UX-epoch)
@@ -62,16 +62,16 @@ Ymax = Yd_max
 Ymin = Yd_min
 stats ifnamed using 3 name "Yd" nooutput
 Ymax = max(Yd_max, Ymax)
-Ymin = max(Yd_min, Ymin)
+Ymin = min(Yd_min, Ymin)
 stats ifnamed using 4 name "Yd" nooutput
 Ymax = max(Yd_max, Ymax)
-Ymin = max(Yd_min, Ymin)
+Ymin = min(Yd_min, Ymin)
 stats ifnamed using 5 name "Yd" nooutput
 Ymax = max(Yd_max, Ymax)
-Ymin = max(Yd_min, Ymin)
+Ymin = min(Yd_min, Ymin)
 stats ifnamed using 6 name "Yd" nooutput
 Yd_max = max(Yd_max, Ymax)
-Yd_min = max(Yd_min, Ymin)
+Yd_min = min(Yd_min, Ymin)
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 2 (UX-epoch)
@@ -85,16 +85,16 @@ Ymax = Yw_max
 Ymin = Yw_min
 stats ifnamew using 3 name "Yw" nooutput
 Ymax = max(Yw_max, Ymax)
-Ymin = max(Yw_min, Ymin)
+Ymin = min(Yw_min, Ymin)
 stats ifnamew using 4 name "Yw" nooutput
 Ymax = max(Yw_max, Ymax)
-Ymin = max(Yw_min, Ymin)
+Ymin = min(Yw_min, Ymin)
 stats ifnamew using 5 name "Yw" nooutput
 Ymax = max(Yw_max, Ymax)
-Ymin = max(Yw_min, Ymin)
+Ymin = min(Yw_min, Ymin)
 stats ifnamew using 6 name "Yw" nooutput
 Yw_max = max(Yw_max, Ymax)
-Yw_min = max(Yw_min, Ymin)
+Yw_min = min(Yw_min, Ymin)
 
 Ymax = max(max(Yd_max, Yh_max), Yw_max) +1
 Ymin = min(min(Yd_min, Yh_min), Yw_min) -1
