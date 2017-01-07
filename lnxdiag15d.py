@@ -20,7 +20,7 @@ MYID        = "".join(list(filter(str.isdigit, os.path.realpath(__file__).split(
 MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
 
-os.nice(15)
+os.nice(5)
 
 class MyDaemon(Daemon):
   def run(self):
