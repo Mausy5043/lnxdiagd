@@ -100,7 +100,11 @@ def do_writesample(cnsql, cmd, sample):
     pass
   except mdb.OperationalError:
     syslog_trace("DB error : {0}".format(sys.exc_info()[1]), syslog.LOG_ERR,  DEBUG)
-    pass
+    fail2write = True
+    if cursql:
+      cursql.close()
+      syslog_trace(" *** Closed MySQL connection in do_writesample() ***", syslog.LOG_ERR, DEBUG)
+    raise
 
   return fail2write
 
