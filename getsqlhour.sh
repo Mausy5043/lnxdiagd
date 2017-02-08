@@ -39,7 +39,7 @@ pushd "$HOME/lnxdiagd" >/dev/null
   "USE domotica; \
    SELECT MIN(sample_time), AVG(temperature) \
    FROM systemp \
-   WHERE (sample_time >= NOW() - ${interval}) \
+   WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
    GROUP BY (sample_time) DIV ${divider};" \
   | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11h.csv"
 

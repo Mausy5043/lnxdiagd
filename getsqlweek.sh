@@ -37,9 +37,9 @@ pushd "$HOME/lnxdiagd" >/dev/null
   mysql -h sql.lan --skip-column-names -e \
   "USE domotica; \
    SELECT MIN(sample_time), MIN(temperature), AVG(temperature), MAX(temperature) \
-   FROM sysemp` \
-   WHERE (sample_time >= NOW() - ${interval}) \
-   GROUP BY (sample_time DIV ${divider});" \
+   FROM systemp \
+   WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
+   GROUP BY (sample_time) DIV ${divider};" \
   | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql21w.csv"
 
 popd >/dev/null
