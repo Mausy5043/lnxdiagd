@@ -24,7 +24,6 @@ pushd "$HOME/lnxdiagd" >/dev/null
     mysql -h sql.lan --skip-column-names < data19w.sql | sed 's/\t/;/g;s/\n//g' > "$datastore/sql19w.csv"
   fi
 
-
   datastore="/tmp/lnxdiagd/mysql4python"
 
   if [ ! -d "${datastore}" ]; then
@@ -40,6 +39,6 @@ pushd "$HOME/lnxdiagd" >/dev/null
    FROM systemp \
    WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
    GROUP BY (sample_time) DIV ${divider};" \
-  | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql21w.csv"
+  | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11w.csv"
 
 popd >/dev/null

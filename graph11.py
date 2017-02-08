@@ -25,7 +25,7 @@ def makegraph11():
   # LMPOS = 0.403
   # MRPOS = 0.75
   RMARG = 0.96
-  datapath = '/tmp/domog/mysql4python'
+  datapath = '/tmp/lnxdiagd/mysql4python'
   hrdata   = 'sql11h.csv'
   dydata   = 'sql11d.csv'
   wkdata   = 'sql11w.csv'
