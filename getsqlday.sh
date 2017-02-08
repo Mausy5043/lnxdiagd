@@ -4,8 +4,8 @@
 
 datastore="/tmp/lnxdiagd/mysql"
 
-if [ ! -d "$datastore" ]; then
-  mkdir -p "$datastore"
+if [ ! -d "${datastore}" ]; then
+  mkdir -p "${datastore}"
 fi
 
 interval="INTERVAL 30 HOUR "
@@ -23,4 +23,22 @@ pushd "$HOME/lnxdiagd" >/dev/null
   if [ "$host" == "boson" ]; then
     mysql -h sql.lan --skip-column-names  < data19d.sql | sed 's/\t/;/g;s/\n//g' > "$datastore/sql19d.csv"
   fi
+
+  datastore="/tmp/lnxdiagd/mysql4python"
+
+  if [ ! -d "${datastore}" ]; then
+    mkdir -p "${datastore}"
+  fi
+
+  # Get day data for system temperature (systemp; graph11)
+  # DIV t : t/100 minutes
+  divider=3000
+  mysql -h sql.lan --skip-column-names -e \
+  "USE domotica; \
+   SELECT MIN(sample_time), MIN(temperature), AVG(temperature), MAX(temperature) \
+   FROM systemp \
+   WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
+   GROUP BY (sample_time DIV ${divider});" \
+  | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11d.csv"
+
 popd >/dev/null

@@ -93,7 +93,7 @@ def do_markdown(flock, fdata, hwdevice):
     fi = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
     with open(fi, 'r') as f:
       fcpu            = float(f.read().strip('\n'))/1000
-  fcpu_stats        = str(subprocess.check_output(["cpufreq-info", "-sm"]), 'utf-8') 
+  fcpu_stats        = str(subprocess.check_output(["cpufreq-info", "-sm"]), 'utf-8')
 
   fi = home + "/.lnxdiagd.branch"
   with open(fi, 'r') as f:
@@ -142,14 +142,19 @@ def do_markdown(flock, fdata, hwdevice):
     f.write('!! ' + str(Tcpu) + ' degC @ ' + str(fcpu) + ' MHz    stats: ' + fcpu_stats + '\n\n')
     f.write('### Server Graphs:  \n')
     if (hwdevice != "nohwdevice"):
-      # f.write('![A GNUplot image should be here: day11.svg](img/day11.svg)\n')
       f.write('![A GNUplot image should be here: day11.png](img/day11.png)\n')
+      f.write('![A GNUplot image should be here: day11.png](img/day11.old.png)\n')
     f.write('![A GNUplot image should be here: day12.png](img/day12.png)\n')
+    f.write('![A GNUplot image should be here: day12.png](img/day12.old.png)\n')
     f.write('![A GNUplot image should be here: day14.png](img/day14.png)\n')
+    f.write('![A GNUplot image should be here: day14.png](img/day14.old.png)\n')
     f.write('![A GNUplot image should be here: day13.png](img/day13.png)\n')
+    f.write('![A GNUplot image should be here: day13.png](img/day13.old.png)\n')
     f.write('![A GNUplot image should be here: day15.png](img/day15.png)\n')
+    f.write('![A GNUplot image should be here: day15.png](img/day15.old.png)\n')
     if (NODE == "boson"):
       f.write('![A GNUplot image should be here: day19.png](img/day19.png)\n')
+      f.write('![A GNUplot image should be here: day19.png](img/day19.old.png)\n')
 
     # Disk usage
     f.write('## Disk Usage\n')
@@ -283,6 +288,7 @@ def syslog_trace(trace, logerr, out2console):
       syslog.syslog(logerr, line)
     if line and out2console:
       print(line)
+
 
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + MYAPP + '/' + MYID + '.pid')

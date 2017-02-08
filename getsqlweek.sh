@@ -23,4 +23,23 @@ pushd "$HOME/lnxdiagd" >/dev/null
   if [ "$host" == "boson" ]; then
     mysql -h sql.lan --skip-column-names < data19w.sql | sed 's/\t/;/g;s/\n//g' > "$datastore/sql19w.csv"
   fi
+
+
+  datastore="/tmp/lnxdiagd/mysql4python"
+
+  if [ ! -d "${datastore}" ]; then
+    mkdir -p "${datastore}"
+  fi
+
+  # Get week data for system temperature (systemp; graph11)
+  # DIV t : t/100 minutes
+  divider=12000
+  mysql -h sql.lan --skip-column-names -e \
+  "USE domotica; \
+   SELECT MIN(sample_time), MIN(temperature), AVG(temperature), MAX(temperature) \
+   FROM sysemp` \
+   WHERE (sample_time >= NOW() - ${interval}) \
+   GROUP BY (sample_time DIV ${divider});" \
+  | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql21w.csv"
+
 popd >/dev/null
