@@ -6,6 +6,7 @@
 datastore="/tmp/lnxdiagd/mysql4python"
 
 interval="INTERVAL 370 DAY "
+host=$(hostname)
 
 if [ ! -d "${datastore}" ]; then
   mkdir -p "${datastore}"

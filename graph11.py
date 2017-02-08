@@ -152,7 +152,7 @@ def makegraph11():
     s = nmp.array(HR[:, 1])
     line04, = ax4.plot(t, s, marker='.', linestyle='', color='red', lw=2)
 
-    plt.savefig('/tmp/domog/site/img/day11.png', format='png')
+    plt.savefig('/tmp/lnxdiagd/site/img/day11.png', format='png')
 
 
 if __name__ == "__main__":
