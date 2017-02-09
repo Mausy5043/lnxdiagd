@@ -14,8 +14,6 @@ fi
 
 pushd "$HOME/lnxdiagd" >/dev/null
   # Get year data for system temperature (systemp; graph11)
-  # DIV t : t/100 minutes
-  # t=18000 3h
   mysql -h sql.lan --skip-column-names -e \
   "USE domotica; \
    SELECT MIN(sample_time), MIN(temperature), AVG(temperature), MAX(temperature) \

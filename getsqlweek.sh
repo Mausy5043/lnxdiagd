@@ -31,14 +31,13 @@ pushd "$HOME/lnxdiagd" >/dev/null
   fi
 
   # Get week data for system temperature (systemp; graph11)
-  # DIV t : t/100 minutes
-  divider=12000
+  divider=14400
   mysql -h sql.lan --skip-column-names -e \
   "USE domotica; \
    SELECT MIN(sample_time), MIN(temperature), AVG(temperature), MAX(temperature) \
    FROM systemp \
    WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
-   GROUP BY (sample_time) DIV ${divider};" \
+   GROUP BY (sample_epoch DIV ${divider});" \
   | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11w.csv"
 
 popd >/dev/null
