@@ -105,7 +105,7 @@ def makegraph11():
     slo = nmp.array(WK[:, 1])
     shi = nmp.array(WK[:, 3])
     #
-    line02, = ax2.plot(t, s, linestyle='-', color='red', lw=2)
+    line02, = ax2.plot(t, s, linestyle='-', color='red', lw=1)
     ax2.fill_between(t, slo, shi, interpolate=True, color='red', alpha=0.2)
 
     # #######################
