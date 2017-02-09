@@ -190,7 +190,7 @@ def makegraph12():
     s = nmp.array(HR[:, 1])
     ar4.plot(t, s, marker='', linestyle='-', color='black', lw=1)
 
-    plt.savefig('/tmp/lnxdiagd/site/img/day11.png', format='png')
+    plt.savefig('/tmp/lnxdiagd/site/img/day12.png', format='png')
 
 
 if __name__ == "__main__":
