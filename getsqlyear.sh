@@ -22,4 +22,13 @@ pushd "$HOME/lnxdiagd" >/dev/null
    GROUP BY YEAR(sample_time), MONTH(sample_time), DAY(sample_time);" \
   | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11y.csv"
 
+  # Get year data for system load (sysload; graph12)
+  mysql -h sql.lan --skip-column-names -e \
+  "USE domotica; \
+   SELECT MIN(sample_time), AVG(load5min), \
+          AVG(user),  AVG(system),  AVG(idle),  AVG(waiting) \
+   FROM sysload \
+   WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
+   GROUP BY YEAR(sample_time), MONTH(sample_time), DAY(sample_time);" \
+  | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql12h.csv"
 popd >/dev/null
