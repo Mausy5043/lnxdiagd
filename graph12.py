@@ -20,7 +20,7 @@ def bytespdate2num(fmt, encoding='utf-8'):
       return strconverter(s)
   return bytesconverter
 
-def makegraph11():
+def makegraph12():
   LMARG = 0.056
   # LMPOS = 0.403
   # MRPOS = 0.75
@@ -85,13 +85,13 @@ def makegraph11():
     s3 = nmp.array(YR[:, 4])
     s4 = 100 - nmp.sum([s1, s2, s3], axis=0)
     #
-    bar11, = ax1.bar(t, s1, color='red', label='user')
-    bar12, = ax1.bar(t, s2, color='yellow', label='system')
-    bar13, = ax1.bar(t, s3, color='blue', label='waiting')
-    bar14, = ax1.bar(t, s4, color='green', label='idle')
+    ax1.bar(t, s1, color='red', label='user')
+    ax1.bar(t, s2, color='yellow', label='system')
+    ax1.bar(t, s3, color='blue', label='waiting')
+    ax1.bar(t, s4, color='green', label='idle')
     ar1 = ax1.twinx()
-    s = nmp.array(HR[:, 1])
-    line01, = ar1.plot(t, s, marker='', linestyle='-', color='black', lw=1)
+    s = nmp.array(YR[:, 1])
+    ar1.plot(t, s, marker='', linestyle='-', color='black', lw=1)
     ax1.legend(loc='upper left', fontsize='x-small')
 
     # #######################
@@ -115,15 +115,15 @@ def makegraph11():
     s3 = nmp.array(WK[:, 4])
     s4 = 100 - nmp.sum([s1, s2, s3], axis=0)
     #
-    bar21, = ax2.bar(t, s1, color='red', label='user')
-    bar22, = ax2.bar(t, s2, color='yellow', label='system')
-    bar23, = ax2.bar(t, s3, color='blue', label='waiting')
-    bar24, = ax2.bar(t, s4, color='green', label='idle')
+    ax2.bar(t, s1, color='red', label='user')
+    ax2.bar(t, s2, color='yellow', label='system')
+    ax2.bar(t, s3, color='blue', label='waiting')
+    ax2.bar(t, s4, color='green', label='idle')
     ar2 = ax2.twinx()
-    s = nmp.array(HR[:, 1])
+    s = nmp.array(WK[:, 1])
     ar2.set_ylim([Y2min, Y2max])
     ar2.set_yticklabels([])
-    line02, = ar2.plot(t, s, marker='', linestyle='-', color='black', lw=1)
+    ar2.plot(t, s, marker='', linestyle='-', color='black', lw=1)
 
     # #######################
     # [DAY]
@@ -147,15 +147,15 @@ def makegraph11():
     s3 = nmp.array(DY[:, 4])
     s4 = 100 - nmp.sum([s1, s2, s3], axis=0)
     #
-    bar31, = ax3.bar(t, s1, color='red', label='user')
-    bar32, = ax3.bar(t, s2, color='yellow', label='system')
-    bar33, = ax3.bar(t, s3, color='blue', label='waiting')
-    bar34, = ax3.bar(t, s4, color='green', label='idle')
+    ax3.bar(t, s1, color='red', label='user')
+    ax3.bar(t, s2, color='yellow', label='system')
+    ax3.bar(t, s3, color='blue', label='waiting')
+    ax3.bar(t, s4, color='green', label='idle')
     ar3 = ax3.twinx()
     ar3.set_ylim([Y2min, Y2max])
     ar3.set_yticklabels([])
     s = nmp.array(DY[:, 1])
-    line03, = ar3.plot(t, s, marker='', linestyle='-', color='black', lw=1)
+    ar3.plot(t, s, marker='', linestyle='-', color='black', lw=1)
 
     # #######################
     # AX4 [HOUR]
@@ -180,15 +180,15 @@ def makegraph11():
     s3 = nmp.array(HR[:, 4])
     s4 = 100 - nmp.sum([s1, s2, s3], axis=0)
     #
-    bar41, = ax4.bar(t, s1, color='red', label='user')
-    bar42, = ax4.bar(t, s2, color='yellow', label='system')
-    bar43, = ax4.bar(t, s3, color='blue', label='waiting')
-    bar44, = ax4.bar(t, s4, color='green', label='idle')
+    ax4.bar(t, s1, color='red', label='user')
+    ax4.bar(t, s2, color='yellow', label='system')
+    ax4.bar(t, s3, color='blue', label='waiting')
+    ax4.bar(t, s4, color='green', label='idle')
     ar4 = ax4.twinx()
     ar4.set_ylim([Y2min, Y2max])
     ar4.set_yticklabels([])
     s = nmp.array(HR[:, 1])
-    line04, = ar4.plot(t, s, marker='', linestyle='-', color='black', lw=1)
+    ar4.plot(t, s, marker='', linestyle='-', color='black', lw=1)
 
     plt.savefig('/tmp/lnxdiagd/site/img/day11.png', format='png')
 
@@ -198,7 +198,7 @@ if __name__ == "__main__":
   startTime = datetime.datetime.now()
   print("")
 
-  makegraph11()
+  makegraph12()
 
   # For debugging and profiling
   elapsed = datetime.datetime.now() - startTime
