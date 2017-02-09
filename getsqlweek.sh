@@ -44,7 +44,7 @@ pushd "$HOME/lnxdiagd" >/dev/null
   mysql -h sql.lan --skip-column-names -e \
   "USE domotica; \
    SELECT MIN(sample_time), AVG(load5min), \
-          AVG(user),  AVG(system),  AVG(idle),  AVG(waiting) \
+          AVG(user),  AVG(system),  AVG(waiting) \
    FROM sysload \
    WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
    GROUP BY (sample_epoch DIV ${divider});" \
