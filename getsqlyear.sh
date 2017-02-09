@@ -30,5 +30,5 @@ pushd "$HOME/lnxdiagd" >/dev/null
    FROM sysload \
    WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
    GROUP BY YEAR(sample_time), MONTH(sample_time), DAY(sample_time);" \
-  | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql12h.csv"
+  | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql12y.csv"
 popd >/dev/null

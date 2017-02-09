@@ -48,5 +48,5 @@ pushd "$HOME/lnxdiagd" >/dev/null
    FROM sysload \
    WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
    GROUP BY (sample_epoch DIV ${divider});" \
-  | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql12h.csv"
+  | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql12w.csv"
 popd >/dev/null
