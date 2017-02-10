@@ -120,7 +120,7 @@ def makegraph12():
     s3 = np.sum([s2, np.array(WK[:, 4])], axis=0)
     s4 = np.full_like(s1, 100)
     #
-    ax2.bar(t, s1, color='red', width=1/48, label='user')
+    ax2.bar(t, s1, color='red', width=0.2, label='user')
     #ax2.bar(t, s2, color='yellow', label='system')
     #ax2.bar(t, s3, color='blue', label='waiting')
     #ax2.bar(t, s4, color='green', label='idle')
@@ -152,7 +152,7 @@ def makegraph12():
     s3 = np.sum([s2, np.array(DY[:, 4])], axis=0)
     s4 = np.full_like(s1, 100)
     #
-    ax3.bar(t, s1, color='red', label='user')
+    ax3.bar(t, s1, width=0.02, color='red', label='user')
     #ax3.bar(t, s2, color='yellow', label='system')
     #ax3.bar(t, s3, color='blue', label='waiting')
     #ax3.bar(t, s4, color='green', label='idle')
@@ -185,7 +185,7 @@ def makegraph12():
     s3 = np.sum([s2, np.array(HR[:, 4])], axis=0)
     s4 = np.full_like(s1, 100)
     #
-    ax4.bar(t, s1, color='red', label='user')
+    ax4.bar(t, s1, width=0.02, color='red', label='user')
     #ax4.bar(t, s2, color='yellow', label='system')
     #ax4.bar(t, s3, color='blue', label='waiting')
     #ax4.bar(t, s4, color='green', label='idle')
