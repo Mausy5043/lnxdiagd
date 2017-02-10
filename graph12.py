@@ -89,14 +89,11 @@ def makegraph12():
     s2 = np.sum([s1, np.array(YR[:, 3])], axis=0)
     s3 = np.sum([s2, np.array(YR[:, 4])], axis=0)
     s4 = np.full_like(s1, 100)
-    # s4 = 100 - np.sum([s1, s2, s3], axis=0)
     #
     ax1.bar(t, s4, width=1, linewidth=0, color='green', label='idle')
-    ax1.bar(t, s3, width=0.9, linewidth=0, color='blue', label='waiting')
-    ax1.bar(t, s2, width=0.8, linewidth=0, color='yellow', label='system')
-    ax1.bar(t, s1, width=0.7, linewidth=0, color='red', label='user')
-    #ax1.bar(t, s3, color='blue', label='waiting')
-    #ax1.bar(t, s4, color='green', label='idle')
+    ax1.bar(t, s3, width=1, linewidth=0, color='blue', label='waiting')
+    ax1.bar(t, s2, width=1, linewidth=0, color='yellow', label='system')
+    ax1.bar(t, s1, width=1, linewidth=0, color='red', label='user')
     ar1 = ax1.twinx()
     s = np.array(YR[:, 1])
     ar1.plot(t, s, marker='', linestyle='-', color='black', lw=1)
@@ -119,9 +116,9 @@ def makegraph12():
     ax2.grid(which='minor', alpha=0.2)
     #
     s1 = np.array(WK[:, 2])
-    #s2 = np.array(WK[:, 3])
-    #s3 = np.array(WK[:, 4])
-    #s4 = 100 - np.sum([s1, s2, s3], axis=0)
+    s2 = np.sum([s1, np.array(WK[:, 3])], axis=0)
+    s3 = np.sum([s2, np.array(WK[:, 4])], axis=0)
+    s4 = np.full_like(s1, 100)
     #
     ax2.bar(t, s1, color='red', width=1/len(s1), label='user')
     #ax2.bar(t, s2, color='yellow', label='system')
@@ -151,9 +148,9 @@ def makegraph12():
     ax3.grid(which='minor', alpha=0.2)
     #
     s1 = np.array(DY[:, 2])
-    #s2 = np.array(DY[:, 3])
-    #s3 = np.array(DY[:, 4])
-    #s4 = 100 - np.sum([s1, s2, s3], axis=0)
+    s2 = np.sum([s1, np.array(DY[:, 3])], axis=0)
+    s3 = np.sum([s2, np.array(DY[:, 4])], axis=0)
+    s4 = np.full_like(s1, 100)
     #
     ax3.bar(t, s1, color='red', label='user')
     #ax3.bar(t, s2, color='yellow', label='system')
@@ -184,9 +181,9 @@ def makegraph12():
     ax4.grid(which='minor', alpha=0.2)
     #
     s1 = np.array(HR[:, 2])
-    #s2 = np.array(HR[:, 3])
-    #s3 = np.array(HR[:, 4])
-    #s4 = 100 - np.sum([s1, s2, s3], axis=0)
+    s2 = np.sum([s1, np.array(HR[:, 3])], axis=0)
+    s3 = np.sum([s2, np.array(HR[:, 4])], axis=0)
+    s4 = np.full_like(s1, 100)
     #
     ax4.bar(t, s1, color='red', label='user')
     #ax4.bar(t, s2, color='yellow', label='system')
