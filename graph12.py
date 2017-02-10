@@ -88,7 +88,7 @@ def makegraph12():
     s1 = nmp.array(YR[:, 2])
     s2 = nmp.sum([s1, nmp.array(YR[:, 3])], axis=0)
     s3 = nmp.sum([s2, nmp.array(YR[:, 4])], axis=0)
-    s4 np.full_like(s1, 100)
+    s4 = nmp.full_like(s1, 100)
     # s4 = 100 - nmp.sum([s1, s2, s3], axis=0)
     #
     ax1.bar(t, s4, width=0.3, linewidth=0, color='green', label='idle')
