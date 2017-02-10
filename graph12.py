@@ -6,7 +6,7 @@ import matplotlib as mpl
 mpl.use("Agg")                              # activate Anti-Grain Geometry library
 
 import matplotlib.pyplot as plt             # noqa
-import numpy as nmp                         # noqa
+import numpy as np                         # noqa
 
 # following import is for debugging and profiling
 import datetime                             # noqa
@@ -30,21 +30,21 @@ def makegraph12():
   dydata   = 'sql12d.csv'
   wkdata   = 'sql12w.csv'
   yrdata   = 'sql12y.csv'
-  HR = nmp.loadtxt(datapath + '/' + hrdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
-  DY = nmp.loadtxt(datapath + '/' + dydata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
-  WK = nmp.loadtxt(datapath + '/' + wkdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
-  YR = nmp.loadtxt(datapath + '/' + yrdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
+  HR = np.loadtxt(datapath + '/' + hrdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
+  DY = np.loadtxt(datapath + '/' + dydata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
+  WK = np.loadtxt(datapath + '/' + wkdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
+  YR = np.loadtxt(datapath + '/' + yrdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
 
-  t1 = nmp.array(YR[:, 0])
-  t2 = nmp.array(WK[:, 0])
-  t3 = nmp.array(DY[:, 0])
-  t4 = nmp.array(HR[:, 0])
+  t1 = np.array(YR[:, 0])
+  t2 = np.array(WK[:, 0])
+  t3 = np.array(DY[:, 0])
+  t4 = np.array(HR[:, 0])
 
   Ymin = 0
   Ymax = 100
 
   Y2min = 0
-  Y2max = max(nmp.nanmax(WK[:, 1], 0), nmp.nanmax(DY[:, 1], 0), nmp.nanmax(HR[:, 1], 0)) * 1.05
+  Y2max = max(np.nanmax(WK[:, 1], 0), np.nanmax(DY[:, 1], 0), np.nanmax(HR[:, 1], 0)) * 1.05
 
   locatedmondays = mpl.dates.WeekdayLocator(mpl.dates.MONDAY)      # find all mondays
   locatedmonths  = mpl.dates.MonthLocator()                        # find all months
@@ -77,7 +77,7 @@ def makegraph12():
     ax1.set_xlabel('past year')
     ax1.set_xlim([YR[1, 0], YR[-1, 0]])
     #
-    t = nmp.array(YR[:, 0])
+    t = np.array(YR[:, 0])
     ax1.set_xticklabels(t)
     ax1.xaxis.set_major_locator(locatedmonths)
     ax1.xaxis.set_major_formatter(mpl.dates.DateFormatter('%b %Y'))
@@ -85,11 +85,11 @@ def makegraph12():
     ax1.xaxis.set_minor_locator(locatedmondays)
     ax1.grid(which='minor', alpha=0.2)
     #
-    s1 = nmp.array(YR[:, 2])
-    s2 = nmp.sum([s1, nmp.array(YR[:, 3])], axis=0)
-    s3 = nmp.sum([s2, nmp.array(YR[:, 4])], axis=0)
-    s4 = nmp.full_like(s1, 100)
-    # s4 = 100 - nmp.sum([s1, s2, s3], axis=0)
+    s1 = np.array(YR[:, 2])
+    s2 = np.sum([s1, np.array(YR[:, 3])], axis=0)
+    s3 = np.sum([s2, np.array(YR[:, 4])], axis=0)
+    s4 = np.full_like(s1, 100)
+    # s4 = 100 - np.sum([s1, s2, s3], axis=0)
     #
     ax1.bar(t, s4, width=0.3, linewidth=0, color='green', label='idle')
     ax1.bar(t, s3, width=1, linewidth=0, color='blue', label='waiting')
@@ -98,19 +98,19 @@ def makegraph12():
     #ax1.bar(t, s3, color='blue', label='waiting')
     #ax1.bar(t, s4, color='green', label='idle')
     ar1 = ax1.twinx()
-    s = nmp.array(YR[:, 1])
+    s = np.array(YR[:, 1])
     ar1.plot(t, s, marker='', linestyle='-', color='black', lw=1)
     ax1.legend(loc='upper left', fontsize='x-small')
 
     # #######################
     # [WEEK]
-    minor_ticks = nmp.arange(nmp.ceil(WK[1, 0]/fourhours)*fourhours, WK[-1, 0], fourhours)
+    minor_ticks = np.arange(np.ceil(WK[1, 0]/fourhours)*fourhours, WK[-1, 0], fourhours)
     ax2.set_ylabel('Temperature [degC]')
     ax2.set_xlabel('past week')
     ax2.set_ylim([Ymin, Ymax])
     ax2.set_xlim([WK[1, 0], WK[-1, 0]])
     #
-    t = nmp.array(WK[:, 0])
+    t = np.array(WK[:, 0])
     ax2.set_xticklabels(t, size='small')
     ax2.xaxis.set_major_locator(locateddays)
     ax2.xaxis.set_major_formatter(mpl.dates.DateFormatter('%a %d'))
@@ -118,30 +118,30 @@ def makegraph12():
     ax2.set_xticks(minor_ticks, minor=True)
     ax2.grid(which='minor', alpha=0.2)
     #
-    s1 = nmp.array(WK[:, 2])
-    #s2 = nmp.array(WK[:, 3])
-    #s3 = nmp.array(WK[:, 4])
-    #s4 = 100 - nmp.sum([s1, s2, s3], axis=0)
+    s1 = np.array(WK[:, 2])
+    #s2 = np.array(WK[:, 3])
+    #s3 = np.array(WK[:, 4])
+    #s4 = 100 - np.sum([s1, s2, s3], axis=0)
     #
     ax2.bar(t, s1, color='red', width=1/len(s1), label='user')
     #ax2.bar(t, s2, color='yellow', label='system')
     #ax2.bar(t, s3, color='blue', label='waiting')
     #ax2.bar(t, s4, color='green', label='idle')
     ar2 = ax2.twinx()
-    s = nmp.array(WK[:, 1])
+    s = np.array(WK[:, 1])
     ar2.set_ylim([Y2min, Y2max])
     ar2.set_yticklabels([])
     ar2.plot(t, s, marker='', linestyle='-', color='black', lw=1)
 
     # #######################
     # [DAY]
-    major_ticks = nmp.arange(nmp.ceil(DY[1, 0]/fourhours)*fourhours, DY[-1, 0], fourhours)
+    major_ticks = np.arange(np.ceil(DY[1, 0]/fourhours)*fourhours, DY[-1, 0], fourhours)
     ax3.set_xlabel('past day')
     ax3.grid(True)
     ax3.set_ylim([Ymin, Ymax])
     ax3.set_xlim([DY[1, 0], DY[-1, 0]])
     #
-    t = nmp.array(DY[:, 0])
+    t = np.array(DY[:, 0])
     ax3.set_xticklabels(t, size='small')
     ax3.set_yticklabels([])
     ax3.set_xticks(major_ticks)
@@ -150,10 +150,10 @@ def makegraph12():
     ax3.xaxis.set_minor_locator(locatedhours)
     ax3.grid(which='minor', alpha=0.2)
     #
-    s1 = nmp.array(DY[:, 2])
-    #s2 = nmp.array(DY[:, 3])
-    #s3 = nmp.array(DY[:, 4])
-    #s4 = 100 - nmp.sum([s1, s2, s3], axis=0)
+    s1 = np.array(DY[:, 2])
+    #s2 = np.array(DY[:, 3])
+    #s3 = np.array(DY[:, 4])
+    #s4 = 100 - np.sum([s1, s2, s3], axis=0)
     #
     ax3.bar(t, s1, color='red', label='user')
     #ax3.bar(t, s2, color='yellow', label='system')
@@ -162,19 +162,19 @@ def makegraph12():
     ar3 = ax3.twinx()
     ar3.set_ylim([Y2min, Y2max])
     ar3.set_yticklabels([])
-    s = nmp.array(DY[:, 1])
+    s = np.array(DY[:, 1])
     ar3.plot(t, s, marker='', linestyle='-', color='black', lw=1)
 
     # #######################
     # AX4 [HOUR]
-    major_ticks = nmp.arange(nmp.ceil(HR[1, 0]/tenminutes)*tenminutes, HR[-1, 0], tenminutes)
+    major_ticks = np.arange(np.ceil(HR[1, 0]/tenminutes)*tenminutes, HR[-1, 0], tenminutes)
     ax4.set_xlabel('past hour')
     # ax4.grid(which='minor', alpha=0.2)
     ax4.grid(which='major', alpha=0.5)
     ax4.set_ylim([Ymin, Ymax])
     ax4.set_xlim([HR[1, 0], HR[-1, 0]])
     #
-    t = nmp.array(HR[:, 0])
+    t = np.array(HR[:, 0])
     ax4.set_xticklabels(t, size='small')
     ax4.set_yticklabels([])
     ax4.set_xticks(major_ticks)
@@ -183,10 +183,10 @@ def makegraph12():
     ax4.xaxis.set_minor_locator(locatedminutes)
     ax4.grid(which='minor', alpha=0.2)
     #
-    s1 = nmp.array(HR[:, 2])
-    #s2 = nmp.array(HR[:, 3])
-    #s3 = nmp.array(HR[:, 4])
-    #s4 = 100 - nmp.sum([s1, s2, s3], axis=0)
+    s1 = np.array(HR[:, 2])
+    #s2 = np.array(HR[:, 3])
+    #s3 = np.array(HR[:, 4])
+    #s4 = 100 - np.sum([s1, s2, s3], axis=0)
     #
     ax4.bar(t, s1, color='red', label='user')
     #ax4.bar(t, s2, color='yellow', label='system')
@@ -195,7 +195,7 @@ def makegraph12():
     ar4 = ax4.twinx()
     ar4.set_ylim([Y2min, Y2max])
     ar4.set_yticklabels([])
-    s = nmp.array(HR[:, 1])
+    s = np.array(HR[:, 1])
     ar4.plot(t, s, marker='', linestyle='-', color='black', lw=1)
 
     plt.savefig('/tmp/lnxdiagd/site/img/day12.png', format='png')
