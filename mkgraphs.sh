@@ -18,22 +18,22 @@ pushd "$HOME/lnxdiagd" >/dev/null
   #fi
   wait
   if [ $(wc -l < /tmp/lnxdiagd/mysql/sql13d.csv) -gt 5 ]; then
-    time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph13.gp &
+    time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph13.gp ;#&
   fi
   if [ $(wc -l < /tmp/lnxdiagd/mysql/sql14d.csv) -gt 5 ]; then
-    time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph14.gp &
+    time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph14.gp ;#&
   fi
   wait
   if [ $(wc -l < /tmp/lnxdiagd/mysql/sql15d.csv) -gt 5 ]; then
-    time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph15.gp &
+    time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph15.gp ;#&
   fi
 
   if [ "$host" == "boson" ]; then
     if [ $(wc -l < /tmp/lnxdiagd/mysql/sql19d.csv) -gt 5 ]; then
-      time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph19.gp &
+      time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph19.gp ;#&
 		fi
   fi
-  wait
+  #wait
 
   time ./graph11.py
   time ./graph12.py

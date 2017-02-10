@@ -35,6 +35,11 @@ def makegraph12():
   WK = nmp.loadtxt(datapath + '/' + wkdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
   YR = nmp.loadtxt(datapath + '/' + yrdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
 
+  t1 = nmp.array(YR[:, 0])
+  t2 = nmp.array(WK[:, 0])
+  t3 = nmp.array(DY[:, 0])
+  t4 = nmp.array(HR[:, 0])
+
   Ymin = 0
   Ymax = 100
 
