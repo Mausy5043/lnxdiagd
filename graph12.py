@@ -88,11 +88,13 @@ def makegraph12():
     s1 = nmp.array(YR[:, 2])
     s2 = nmp.sum([s1, nmp.array(YR[:, 3])], axis=0)
     s3 = nmp.sum([s2, nmp.array(YR[:, 4])], axis=0)
+    s4 np.full_like(s1, 100)
     # s4 = 100 - nmp.sum([s1, s2, s3], axis=0)
     #
+    ax1.bar(t, s4, width=0.3, linewidth=0, color='green', label='idle')
     ax1.bar(t, s3, width=1, linewidth=0, color='blue', label='waiting')
     ax1.bar(t, s2, width=1, linewidth=0, color='yellow', label='system')
-    ax1.bar(t, s1, width=1, linewidth=0, color='red', label='user')
+    ax1.bar(t, s1, width=0.5, linewidth=0, color='red', label='user')
     #ax1.bar(t, s3, color='blue', label='waiting')
     #ax1.bar(t, s4, color='green', label='idle')
     ar1 = ax1.twinx()
@@ -121,7 +123,7 @@ def makegraph12():
     #s3 = nmp.array(WK[:, 4])
     #s4 = 100 - nmp.sum([s1, s2, s3], axis=0)
     #
-    ax2.bar(t, s1, color='red', label='user')
+    ax2.bar(t, s1, color='red', width=1/len(s1), label='user')
     #ax2.bar(t, s2, color='yellow', label='system')
     #ax2.bar(t, s3, color='blue', label='waiting')
     #ax2.bar(t, s4, color='green', label='idle')
