@@ -39,15 +39,10 @@ def makegraph12():
   WK = np.loadtxt(datapath + '/' + wkdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
   YR = np.loadtxt(datapath + '/' + yrdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
 
-  nu = mpl.dates.date2num(datetime.datetime.now())
-  t1 = np.array(YR[:, 0])
-  w1 = np.ediff1d(np.append(t1, nu))
-  t2 = np.array(WK[:, 0])
-  w2 = np.ediff1d(np.append(t2, nu))
-  t3 = np.array(DY[:, 0])
-  w3 = np.ediff1d(np.append(t3, nu))
-  t4 = np.array(HR[:, 0])
-  w4 = np.ediff1d(np.append(t4, nu))
+  t1, w1 = timeaxis(YR[:, 0])
+  t2, w2 = timeaxis(WK[:, 0])
+  t3, w3 = timeaxis(DY[:, 0])
+  t4, w4 = timeaxis(HR[:, 0])
 
   Ymin = 0
   Ymax = 100
