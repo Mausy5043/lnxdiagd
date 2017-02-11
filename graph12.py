@@ -79,7 +79,7 @@ def makegraph12():
     # [YEAR]
     ax1.set_ylabel('Usage')
     ax1.set_xlabel('past year')
-    ax2.set_ylim([Ymin, Ymax])
+    ax1.set_ylim([Ymin, Ymax])
     ax1.set_xlim([YR[1, 0], YR[-1, 0]])
     #
     # t = np.array(YR[:, 0])
