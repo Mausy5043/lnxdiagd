@@ -35,10 +35,10 @@ def makegraph12():
   WK = np.loadtxt(datapath + '/' + wkdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
   YR = np.loadtxt(datapath + '/' + yrdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
 
-  t1 = np.array(YR[:, 0])
-  t2 = np.array(WK[:, 0])
-  t3 = np.array(DY[:, 0])
-  t4 = np.array(HR[:, 0])
+  #t1 = np.array(YR[:, 0])
+  #t2 = np.array(WK[:, 0])
+  #t3 = np.array(DY[:, 0])
+  #t4 = np.array(HR[:, 0])
 
   Ymin = 0
   Ymax = 100
@@ -123,7 +123,7 @@ def makegraph12():
     ax2.bar(t, s4, width=0.16, linewidth=0, color='green', label='idle')
     ax2.bar(t, s3, width=0.17, linewidth=0, color='blue', label='waiting')
     ax2.bar(t, s2, width=0.18, linewidth=0, color='yellow', label='system')
-    ax2.bar(t, s1, width=0.19, linewidth=0, color='red', label='user')
+    ax2.bar(t, s1, width=0.18, linewidth=0, color='red', label='user')
     ar2 = ax2.twinx()
     s = np.array(WK[:, 1])
     ar2.set_ylim([Y2min, Y2max])
@@ -188,6 +188,7 @@ def makegraph12():
     ax4.bar(t, s4, width=0.002, linewidth=0, color='green', label='idle')
     ax4.bar(t, s3, width=0.003, linewidth=0, color='blue', label='waiting')
     ax4.bar(t, s2, width=0.004, linewidth=0, color='yellow', label='system')
+    ax4.bar(t, s1, width=0.003, linewidth=0, color='red', label='user')
     ar4 = ax4.twinx()
     ar4.set_ylim([Y2min, Y2max])
     ar4.set_yticklabels([])
