@@ -79,6 +79,7 @@ def makegraph12():
     # [YEAR]
     ax1.set_ylabel('Usage')
     ax1.set_xlabel('past year')
+    ax2.set_ylim([Ymin, Ymax])
     ax1.set_xlim([YR[1, 0], YR[-1, 0]])
     #
     # t = np.array(YR[:, 0])
@@ -102,12 +103,14 @@ def makegraph12():
     ar1 = ax1.twinx()
     s = np.array(YR[:, 1])
     ar1.plot(t1, s, marker='', linestyle='-', color='black', lw=1)
+    ar1.set_ylabel('Load')
+    ar1.tick_params('y')
     ax1.legend(loc='upper left', fontsize='x-small')
 
     # #######################
     # [WEEK]
     minor_ticks = np.arange(np.ceil(WK[1, 0]/fourhours)*fourhours, WK[-1, 0], fourhours)
-    ax2.set_ylabel('Temperature [degC]')
+    ax2.set_ylabel('Usage')
     ax2.set_xlabel('past week')
     ax2.set_ylim([Ymin, Ymax])
     ax2.set_xlim([WK[1, 0], WK[-1, 0]])
@@ -199,9 +202,10 @@ def makegraph12():
     ax4.bar(t4, s1, w4, linewidth=0, color='red', label='user')
     ar4 = ax4.twinx()
     ar4.set_ylim([Y2min, Y2max])
-    ar4.set_yticklabels([])
     s = np.array(HR[:, 1])
     ar4.plot(t4, s, marker='', linestyle='-', color='black', lw=1)
+    ar4.set_ylabel('Load')
+    ar4.tick_params('y')
 
     plt.savefig('/tmp/lnxdiagd/site/img/day12.png', format='png')
 
