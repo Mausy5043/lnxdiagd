@@ -18,6 +18,11 @@ def bytespdate2num(fmt, encoding='utf-8'):
       return strconverter(s)
   return bytesconverter
 
+def timeaxis(arr):
+  n = mpl.dates.date2num(datetime.datetime.now())
+  t = np.array(arr)
+  w = np.ediff1d(np.append(t, n))
+  return t, w
 
 def makegraph12():
   LMARG = 0.056
