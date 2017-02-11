@@ -8,6 +8,8 @@ mpl.use("Agg")                              # activate Anti-Grain Geometry libra
 import matplotlib.pyplot as plt             # noqa
 import numpy as np                          # noqa
 import datetime                             # noqa
+# URL:https://www.tutorialspoint.com/python/python_database_access.htm
+import MySQLdb as mdb                       # noqa
 
 def bytespdate2num(fmt, encoding='utf-8'):
   # convert datestring to proper format for numpy.loadtext()
