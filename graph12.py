@@ -6,7 +6,7 @@ import matplotlib as mpl
 mpl.use("Agg")                              # activate Anti-Grain Geometry library
 
 import matplotlib.pyplot as plt             # noqa
-import numpy as np                         # noqa
+import numpy as np                          # noqa
 
 # following import is for debugging and profiling
 import datetime                             # noqa
@@ -187,7 +187,7 @@ def makegraph12():
     #
     ax4.bar(t, s4, width=0.002, linewidth=0, color='green', label='idle')
     ax4.bar(t, s3, width=0.003, linewidth=0, color='blue', label='waiting')
-    ax4.bar(t, s2, width=0.004, linewidth=0, color='yellow', label='system
+    ax4.bar(t, s2, width=0.004, linewidth=0, color='yellow', label='system')
     ar4 = ax4.twinx()
     ar4.set_ylim([Y2min, Y2max])
     ar4.set_yticklabels([])
