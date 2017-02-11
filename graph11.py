@@ -164,7 +164,7 @@ if __name__ == "__main__":
 
   # For debugging and profiling
   elapsed = datetime.datetime.now() - startTime
-  print(" Graphing completed in {0}").format(elapsed)
+  print(" Graphing completed in {0}".format(elapsed))
   print("")
 
   # Anatomy of a graph:
