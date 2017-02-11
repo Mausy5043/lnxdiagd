@@ -7,8 +7,6 @@ mpl.use("Agg")                              # activate Anti-Grain Geometry libra
 
 import matplotlib.pyplot as plt             # noqa
 import numpy as np                          # noqa
-
-# following import is for debugging and profiling
 import datetime                             # noqa
 
 def bytespdate2num(fmt, encoding='utf-8'):
@@ -19,6 +17,7 @@ def bytespdate2num(fmt, encoding='utf-8'):
       s = b.decode(encoding)
       return strconverter(s)
   return bytesconverter
+
 
 def makegraph12():
   LMARG = 0.056
@@ -35,10 +34,15 @@ def makegraph12():
   WK = np.loadtxt(datapath + '/' + wkdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
   YR = np.loadtxt(datapath + '/' + yrdata, delimiter=';', converters={0: bytespdate2num("%Y-%m-%d %H:%M:%S")})
 
-  #t1 = np.array(YR[:, 0])
-  #t2 = np.array(WK[:, 0])
-  #t3 = np.array(DY[:, 0])
-  #t4 = np.array(HR[:, 0])
+  nu = mpl.dates.date2num(datetime.datetime.now())
+  t1 = np.array(YR[:, 0])
+  w1 = np.ediff1d(np.append(t1, nu))
+  t2 = np.array(WK[:, 0])
+  w2 = np.ediff1d(np.append(t2, nu))
+  t3 = np.array(DY[:, 0])
+  w3 = np.ediff1d(np.append(t3, nu))
+  t4 = np.array(HR[:, 0])
+  w4 = np.ediff1d(np.append(t4, nu))
 
   Ymin = 0
   Ymax = 100
@@ -77,8 +81,9 @@ def makegraph12():
     ax1.set_xlabel('past year')
     ax1.set_xlim([YR[1, 0], YR[-1, 0]])
     #
-    t = np.array(YR[:, 0])
-    ax1.set_xticklabels(t)
+    # t = np.array(YR[:, 0])
+    # w = np.ediff1d(t)
+    ax1.set_xticklabels(t1)
     ax1.xaxis.set_major_locator(locatedmonths)
     ax1.xaxis.set_major_formatter(mpl.dates.DateFormatter('%b %Y'))
     ax1.grid(which='major', alpha=0.5)
@@ -90,13 +95,13 @@ def makegraph12():
     s3 = np.sum([s2, np.array(YR[:, 4])], axis=0)
     s4 = np.full_like(s1, 100)
     #
-    ax1.bar(t, s4, width=1, linewidth=0, color='green', label='idle')
-    ax1.bar(t, s3, width=1, linewidth=0, color='blue', label='waiting')
-    ax1.bar(t, s2, width=1, linewidth=0, color='yellow', label='system')
-    ax1.bar(t, s1, width=1, linewidth=0, color='red', label='user')
+    ax1.bar(t1, s4, w1, linewidth=0, color='green', label='idle')
+    ax1.bar(t1, s3, w1, linewidth=0, color='blue', label='waiting')
+    ax1.bar(t1, s2, w1, linewidth=0, color='yellow', label='system')
+    ax1.bar(t1, s1, w1, linewidth=0, color='red', label='user')
     ar1 = ax1.twinx()
     s = np.array(YR[:, 1])
-    ar1.plot(t, s, marker='', linestyle='-', color='black', lw=1)
+    ar1.plot(t1, s, marker='', linestyle='-', color='black', lw=1)
     ax1.legend(loc='upper left', fontsize='x-small')
 
     # #######################
@@ -107,8 +112,9 @@ def makegraph12():
     ax2.set_ylim([Ymin, Ymax])
     ax2.set_xlim([WK[1, 0], WK[-1, 0]])
     #
-    t = np.array(WK[:, 0])
-    ax2.set_xticklabels(t, size='small')
+    # t = np.array(WK[:, 0])
+    # w = np.ediff1d(t)
+    ax2.set_xticklabels(t2, size='small')
     ax2.xaxis.set_major_locator(locateddays)
     ax2.xaxis.set_major_formatter(mpl.dates.DateFormatter('%a %d'))
     ax2.grid(which='major', alpha=0.5)
@@ -120,15 +126,15 @@ def makegraph12():
     s3 = np.sum([s2, np.array(WK[:, 4])], axis=0)
     s4 = np.full_like(s1, 100)
     #
-    ax2.bar(t, s4, width=0.15, linewidth=0, color='green', label='idle')
-    ax2.bar(t, s3, width=0.155, linewidth=0, color='blue', label='waiting')
-    ax2.bar(t, s2, width=0.16, linewidth=0, color='yellow', label='system')
-    ax2.bar(t, s1, width=0.166, linewidth=0, color='red', label='user')
+    ax2.bar(t2, s4, w2, linewidth=0, color='green', label='idle')
+    ax2.bar(t2, s3, w2, linewidth=0, color='blue', label='waiting')
+    ax2.bar(t2, s2, w2, linewidth=0, color='yellow', label='system')
+    ax2.bar(t2, s1, w2, linewidth=0, color='red', label='user')
     ar2 = ax2.twinx()
     s = np.array(WK[:, 1])
     ar2.set_ylim([Y2min, Y2max])
     ar2.set_yticklabels([])
-    ar2.plot(t, s, marker='', linestyle='-', color='black', lw=1)
+    ar2.plot(t2, s, marker='', linestyle='-', color='black', lw=1)
 
     # #######################
     # [DAY]
@@ -138,8 +144,9 @@ def makegraph12():
     ax3.set_ylim([Ymin, Ymax])
     ax3.set_xlim([DY[1, 0], DY[-1, 0]])
     #
-    t = np.array(DY[:, 0])
-    ax3.set_xticklabels(t, size='small')
+    # t = np.array(DY[:, 0])
+    # w = np.ediff1d(t)
+    ax3.set_xticklabels(t3, size='small')
     ax3.set_yticklabels([])
     ax3.set_xticks(major_ticks)
     ax3.xaxis.set_major_formatter(mpl.dates.DateFormatter('%R'))
@@ -152,15 +159,15 @@ def makegraph12():
     s3 = np.sum([s2, np.array(DY[:, 4])], axis=0)
     s4 = np.full_like(s1, 100)
     #
-    ax3.bar(t, s4, width=0.016, linewidth=0, color='green', label='idle')
-    ax3.bar(t, s3, width=0.017, linewidth=0, color='blue', label='waiting')
-    ax3.bar(t, s2, width=0.018, linewidth=0, color='yellow', label='system')
-    ax3.bar(t, s1, width=0.019, linewidth=0, color='red', label='user')
+    ax3.bar(t3, s4, w3, linewidth=0, color='green', label='idle')
+    ax3.bar(t3, s3, w3, linewidth=0, color='blue', label='waiting')
+    ax3.bar(t3, s2, w3, linewidth=0, color='yellow', label='system')
+    ax3.bar(t3, s1, w3, linewidth=0, color='red', label='user')
     ar3 = ax3.twinx()
     ar3.set_ylim([Y2min, Y2max])
     ar3.set_yticklabels([])
     s = np.array(DY[:, 1])
-    ar3.plot(t, s, marker='', linestyle='-', color='black', lw=1)
+    ar3.plot(t3, s, marker='', linestyle='-', color='black', lw=1)
 
     # #######################
     # AX4 [HOUR]
@@ -171,8 +178,9 @@ def makegraph12():
     ax4.set_ylim([Ymin, Ymax])
     ax4.set_xlim([HR[1, 0], HR[-1, 0]])
     #
-    t = np.array(HR[:, 0])
-    ax4.set_xticklabels(t, size='small')
+    # t = np.array(HR[:, 0])
+    # w = np.ediff1d(t)
+    ax4.set_xticklabels(t4, size='small')
     ax4.set_yticklabels([])
     ax4.set_xticks(major_ticks)
     ax4.xaxis.set_major_formatter(mpl.dates.DateFormatter('%R'))
@@ -185,15 +193,15 @@ def makegraph12():
     s3 = np.sum([s2, np.array(HR[:, 4])], axis=0)
     s4 = np.full_like(s1, 100)
     #
-    ax4.bar(t, s4, width=0.003, linewidth=0, color='green', label='idle')
-    ax4.bar(t, s3, width=0.003, linewidth=0, color='blue', label='waiting')
-    ax4.bar(t, s2, width=0.003, linewidth=0, color='yellow', label='system')
-    ax4.bar(t, s1, width=0.003, linewidth=0, color='red', label='user')
+    ax4.bar(t4, s4, w4, linewidth=0, color='green', label='idle')
+    ax4.bar(t4, s3, w4, linewidth=0, color='blue', label='waiting')
+    ax4.bar(t4, s2, w4, linewidth=0, color='yellow', label='system')
+    ax4.bar(t4, s1, w4, linewidth=0, color='red', label='user')
     ar4 = ax4.twinx()
     ar4.set_ylim([Y2min, Y2max])
     ar4.set_yticklabels([])
     s = np.array(HR[:, 1])
-    ar4.plot(t, s, marker='', linestyle='-', color='black', lw=1)
+    ar4.plot(t4, s, marker='', linestyle='-', color='black', lw=1)
 
     plt.savefig('/tmp/lnxdiagd/site/img/day12.png', format='png')
 
