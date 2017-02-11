@@ -11,7 +11,7 @@ fi
 interval="INTERVAL 70 MINUTE "
 host=$(hostname)
 
-sleep $(echo $RANDOM/555 |bc)
+#sleep $(echo $RANDOM/555 |bc)
 
 pushd "$HOME/lnxdiagd" >/dev/null
   # mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM systemp where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "$datastore/sql11h.csv"

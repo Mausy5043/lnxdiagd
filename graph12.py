@@ -185,9 +185,9 @@ def makegraph12():
     s3 = np.sum([s2, np.array(HR[:, 4])], axis=0)
     s4 = np.full_like(s1, 100)
     #
-    ax4.bar(t, s4, width=0.002, linewidth=0, color='green', label='idle')
+    ax4.bar(t, s4, width=0.003, linewidth=0, color='green', label='idle')
     ax4.bar(t, s3, width=0.003, linewidth=0, color='blue', label='waiting')
-    ax4.bar(t, s2, width=0.004, linewidth=0, color='yellow', label='system')
+    ax4.bar(t, s2, width=0.003, linewidth=0, color='yellow', label='system')
     ax4.bar(t, s1, width=0.003, linewidth=0, color='red', label='user')
     ar4 = ax4.twinx()
     ar4.set_ylim([Y2min, Y2max])
