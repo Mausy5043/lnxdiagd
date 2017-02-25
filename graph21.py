@@ -18,7 +18,7 @@ from libdaemon import Daemon
 import numpy as np
 import matplotlib as mpl
 mpl.use("Agg", warn=True)         # activate Anti-Grain Geometry library before importing pyplot
-import matplotlib.pyplot as plt   #noqa
+import matplotlib.pyplot as plt   # noqa
 
 # constants
 PLOT_TITLE      = "System Temperature"

@@ -23,6 +23,7 @@ NODE        = os.uname()[1]
 os.nice(5)
 
 class MyDaemon(Daemon):
+  """Definition of daemon."""
   @staticmethod
   def run():
     iniconf         = configparser.ConfigParser()

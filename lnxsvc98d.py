@@ -24,6 +24,7 @@ SQLHR       = rnd(0, 23)
 SQLHRM      = rnd(0, 59)
 
 class MyDaemon(Daemon):
+  """Definition of daemon."""
   def run(self):
     iniconf         = configparser.ConfigParser()
     inisection      = MYID

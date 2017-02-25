@@ -35,6 +35,7 @@ DEBUG = False
 leaf = os.path.realpath(__file__).split('/')[-2]
 
 class MyDaemon(Daemon):
+  """Definition of daemon."""
   @staticmethod
   def run():
     iniconf         = configparser.ConfigParser()

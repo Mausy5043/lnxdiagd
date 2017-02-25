@@ -39,6 +39,7 @@ if (NODE == "boson"):
   # sdg =
 
 class MyDaemon(Daemon):
+  """Definition of daemon."""
   def run(self):
     iniconf         = configparser.ConfigParser()
     inisection      = MYID

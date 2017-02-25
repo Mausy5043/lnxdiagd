@@ -21,6 +21,7 @@ MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
 
 class MyDaemon(Daemon):
+  """Definition of daemon."""
   def run(self):
     try:                 # Initialise MySQLdb
       consql    = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
