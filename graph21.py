@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# daemon71d.py creates a graph.
+# daemon21d.py creates a graph.
 
 import configparser
 import datetime
@@ -432,7 +432,7 @@ def do_main(flock, nu, consql):
   # graph of last hour is updated every minute
   update_hour_graph(minimum_y, maximum_y)
 
-  plt.savefig('/tmp/domog/site/img/day21.png', format='png')
+  plt.savefig('/tmp/lnxdiagd/site/img/day21.png', format='png')
   syslog_trace("* Unlock", False, DEBUG)
   unlock(flock)
   syslog_trace("* Main Loop end", False, DEBUG)
