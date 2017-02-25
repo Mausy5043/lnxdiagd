@@ -423,12 +423,12 @@ def do_main(flock, nu, consql):
 
   # YEAR graph
   # graph of the last year is updated at 01:11
-  if (currenthour == 1) and (currentminute == 11) or nu:
+  if (currenthour == 1) and (currentminute == 12) or nu:
     update_year_graph(minimum_y, maximum_y)
 
   # WEEK data
   # graph of the last week is updated every 4 hours
-  if (currenthour % 4) == 0 and (currentminute == 1) or nu:
+  if (currenthour % 4) == 0 and (currentminute == 2) or nu:
     update_week_graph(minimum_y, maximum_y)
 
   # DAY data
@@ -438,9 +438,11 @@ def do_main(flock, nu, consql):
 
   # HOUR graph
   # graph of last hour is updated every minute
-  update_hour_graph(minimum_y, maximum_y)
+  # and the graph is then saved
+  if (currentminute % 3) == 0 or nu:
+    update_hour_graph(minimum_y, maximum_y)
+    plt.savefig('/tmp/lnxdiagd/site/img/day21.png', format='png')
 
-  plt.savefig('/tmp/lnxdiagd/site/img/day21.png', format='png')
   syslog_trace("* Unlock", False, DEBUG)
   unlock(flock)
   syslog_trace("* Main Loop end", False, DEBUG)
