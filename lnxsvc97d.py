@@ -22,7 +22,8 @@ NODE        = os.uname()[1]
 
 class MyDaemon(Daemon):
   """Definition of daemon."""
-  def run(self):
+  @staticmethod
+  def run():
     try:                 # Initialise MySQLdb
       consql    = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
       if consql.open:    # dB initialised succesfully -> get a cursor on the dB.

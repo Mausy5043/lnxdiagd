@@ -40,7 +40,8 @@ if (NODE == "boson"):
 
 class MyDaemon(Daemon):
   """Definition of daemon."""
-  def run(self):
+  @staticmethod
+  def run():
     iniconf         = configparser.ConfigParser()
     inisection      = MYID
     home            = os.path.expanduser('~')
@@ -284,6 +285,7 @@ def syslog_trace(trace, logerr, out2console):
       syslog.syslog(logerr, line)
     if line and out2console:
       print(line)
+
 
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + MYAPP + '/' + MYID + '.pid')
