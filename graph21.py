@@ -81,25 +81,25 @@ class MyDaemon(Daemon):
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
-    reportTime      = iniconf.getint(inisection, "reporttime")
-    samplesperCycle = iniconf.getint(inisection, "samplespercycle")
+    reporttime      = iniconf.getint(inisection, "reporttime")
+    samplespercycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
-    sampleTime      = reportTime/samplesperCycle        # time [s] between samples
+    sampletime      = reporttime/samplespercycle        # time [s] between samples
 
     init_axes()
     do_main(flock, True, consql)  # get all data and graphs on start-up
 
     while True:
       try:
-        startTime   = time.time()
+        starttime   = time.time()
 
         do_main(flock, False, consql)
 
-        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
-        if (waitTime > 0):
-          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
+        waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
+        if (waittime > 0):
+          syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
-          time.sleep(waitTime)
+          time.sleep(waittime)
       except Exception:  # Gotta catch em all
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)

@@ -34,25 +34,25 @@ class MyDaemon(Daemon):
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     syslog_trace("getsqlday.sh  runs every 30 minutes starting at minute {0}".format(SQLMNT), syslog.LOG_DEBUG, DEBUG)
     syslog_trace("getsqlweek.sh runs every 4th hour  starting  at hour   {0}:{1}".format(SQLHR, SQLHRM), syslog.LOG_DEBUG, DEBUG)
-    reportTime      = iniconf.getint(inisection, "reporttime")
-    samplesperCycle = iniconf.getint(inisection, "samplespercycle")
+    reporttime      = iniconf.getint(inisection, "reporttime")
+    samplespercycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
 
     scriptname      = iniconf.get(inisection, "lftpscript")
 
-    sampleTime      = reportTime/samplesperCycle         # time [s] between samples
+    sampletime      = reporttime/samplespercycle         # time [s] between samples
     getsqldata(home, True)
     while True:
       try:
-        startTime   = time.time()
+        starttime   = time.time()
 
         do_mv_data(flock, home, scriptname)
 
-        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
-        if (waitTime > 0):
-          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
+        waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
+        if (waittime > 0):
+          syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
-          time.sleep(waitTime)
+          time.sleep(waittime)
       except Exception:
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
