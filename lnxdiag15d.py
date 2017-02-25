@@ -23,7 +23,8 @@ NODE        = os.uname()[1]
 os.nice(5)
 
 class MyDaemon(Daemon):
-  def run(self):
+  @staticmethod
+  def run():
     iniconf         = configparser.ConfigParser()
     inisection      = MYID
     home            = os.path.expanduser('~')
