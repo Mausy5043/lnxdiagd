@@ -111,7 +111,7 @@ def update_hour_query(consql, xdata, ydata, queryminutes):
   divider = 60
   sqlcmd = ("SELECT MIN(sample_time), AVG(temperature) "
             "FROM systemp "
-            "WHERE (sample_time >= NOW() - INTERVAL %s MINUTE) AND (host = '%s') "
+            "WHERE (sample_time >= NOW() - INTERVAL %s MINUTE) AND (host = %s) "
             "GROUP BY (sample_epoch DIV %s);")
   sqldata = (queryminutes, NODE, divider)
   try:
@@ -152,7 +152,7 @@ def update_day_query(consql, xdata, ydata, queryhours):
   divider = 1800
   sqlcmd = ("SELECT MIN(sample_time), MIN(temperature), AVG(temperature), MAX(temperature) "
             "FROM systemp "
-            "WHERE (sample_time >= NOW() - INTERVAL %s HOUR) AND (host = '%s') "
+            "WHERE (sample_time >= NOW() - INTERVAL %s HOUR) AND (host = %s) "
             "GROUP BY (sample_epoch DIV %s);")
   sqldata = (queryhours, NODE, divider)
   try:
@@ -193,7 +193,7 @@ def update_week_query(consql, xdata, ydata, querydays):
   divider = 14400
   sqlcmd = ("SELECT MIN(sample_time), MIN(temperature), AVG(temperature), MAX(temperature) "
             "FROM systemp "
-            "WHERE (sample_time >= NOW() - INTERVAL %s DAY) AND (host = '%s') "
+            "WHERE (sample_time >= NOW() - INTERVAL %s DAY) AND (host = %s) "
             "GROUP BY (sample_epoch DIV %s);")
   sqldata = (querydays, NODE, divider)
   try:
@@ -233,7 +233,7 @@ def update_year_query(consql, xdata, ydata):
   syslog_trace("* Get update for past year", False, DEBUG)
   sqlcmd = ("SELECT MIN(sample_time), MIN(temperature), AVG(temperature), MAX(temperature) "
             "FROM systemp "
-            "WHERE (sample_time >= NOW() - INTERVAL %sDAY) AND (host = '%s') "
+            "WHERE (sample_time >= NOW() - INTERVAL %s DAY) AND (host = %s) "
             "GROUP BY YEAR(sample_time), MONTH(sample_time), DAY(sample_time);")
   sqldata = (370, NODE)
   try:
