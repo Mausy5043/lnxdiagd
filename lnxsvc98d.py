@@ -22,6 +22,11 @@ NODE        = os.uname()[1]
 SQLMNT      = rnd(0, 59)
 SQLHR       = rnd(0, 23)
 SQLHRM      = rnd(0, 59)
+SQL_UPDATE_HOUR   = 6   # in minutes
+SQL_UPDATE_DAY    = 12  # in minutes
+SQL_UPDATE_WEEK   = 4   # in hours
+SQL_UPDATE_YEAR   = 8   # in hours
+GRAPH_UPDATE      = 6   # in minutes
 
 class MyDaemon(Daemon):
   def run(self):
@@ -40,7 +45,7 @@ class MyDaemon(Daemon):
     scriptname      = iniconf.get(inisection, "lftpscript")
 
     sampleTime      = reportTime/samplesperCycle         # time [s] between samples
-    getsqldata(home, True)
+    getsqldata(home, 0, 0, True)
     while True:
       try:
         startTime   = time.time()
@@ -62,12 +67,13 @@ def do_mv_data(flock, homedir, script):
   # unlock(flock)  # remove stale lock
   time.sleep(4)
   minit = int(time.strftime('%M'))
+  nowur = int(time.strftime('%H'))
 
   # Retrieve data from MySQL database
-  getsqldata(homedir, False)
+  getsqldata(homedir, minit, nowur, False)
 
   # Create the graphs based on the MySQL data every 3rd minute
-  if ((minit % 3) == 0):
+  if ((minit % GRAPH_UPDATE) == 0):
     cmnd = homedir + '/' + MYAPP + '/graphs.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
@@ -90,23 +96,23 @@ def do_mv_data(flock, homedir, script):
 
   return
 
-def getsqldata(homedir, nu):
-  minit = int(time.strftime('%M'))
-  nowur = int(time.strftime('%H'))
+def getsqldata(homedir, minit, nowur, nu):
+  # minit = int(time.strftime('%M'))
+  # nowur = int(time.strftime('%H'))
   # data of last hour is updated every 3 minutes
-  if ((minit % 3) == 0):
+  if ((minit % SQL_UPDATE_HOUR) == 0):
     cmnd = homedir + '/' + MYAPP + '/getsqlhour.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last day is updated every 30 minutes
-  if nu or ((minit % 30) == (SQLMNT % 30)):
+  if nu or ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)):
     cmnd = homedir + '/' + MYAPP + '/getsqlday.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # dat of the last week is updated every 4 hours
-  if nu or ((nowur % 4) == (SQLHR % 4) and (minit == SQLHRM)):
+  if nu or ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)):
     cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
@@ -144,6 +150,7 @@ def syslog_trace(trace, logerr, out2console):
       syslog.syslog(logerr, line)
     if line and out2console:
       print(line)
+
 
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + MYAPP + '/' + MYID + '.pid')
