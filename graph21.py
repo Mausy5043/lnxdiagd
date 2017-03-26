@@ -401,7 +401,7 @@ def do_main(flock, nu, consql):
     if nu:
       daily_data_x = np.array([])
       daily_data_y = np.array([[0, 0, 0]])  # initialise array with dummy data
-      daily_data_x, daily_data_y = update_day_query(consql, daily_data_x, daily_data_y, 25)
+      daily_data_x, daily_data_y = update_day_query(consql, daily_data_x, daily_data_y, 30)
     else:
       daily_data_x, daily_data_y = update_day_query(consql, daily_data_x, daily_data_y, 2)
     # print(daily_data_x)
