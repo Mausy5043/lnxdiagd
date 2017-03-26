@@ -5,7 +5,7 @@
 # * It checks the state of and (re-)starts daemons if they are not (yet) running.
 
 HOSTNAME=$(cat /etc/hostname)
-BRANCH=$(cat "$HOME/.lnxdiagd.BRANCH")
+BRANCH=$(cat "$HOME/.lnxdiagd.branch")
 
 # Wait for the daemons to finish their job. Prevents stale locks when restarting.
 echo "Waiting 30s..."
