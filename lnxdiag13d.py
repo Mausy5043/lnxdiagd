@@ -20,33 +20,35 @@ MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
 
 class MyDaemon(Daemon):
-  def run(self):
+  """Definition of daemon."""
+  @staticmethod
+  def run():
     iniconf         = configparser.ConfigParser()
     inisection      = MYID
     home            = os.path.expanduser('~')
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
-    reportTime      = iniconf.getint(inisection, "reporttime")
+    reporttime      = iniconf.getint(inisection, "reporttime")
     # cycles          = iniconf.getint(inisection, "cycles")
-    samplesperCycle = iniconf.getint(inisection, "samplespercycle")
+    samplespercycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
     fdata           = iniconf.get(inisection, "resultfile")
     try:
       netdevice     = iniconf.get(inisection, NODE+".net")
-    except configparser.NoOptionError as e:  # no netdevice
+    except configparser.NoOptionError:  # no netdevice
       netdevice     = "eth0"
     syslog_trace("Monitoring device: {0}".format(netdevice), syslog.LOG_DEBUG, DEBUG)
 
-    # samples         = samplesperCycle * cycles          # total number of samples averaged
-    sampleTime      = reportTime/samplesperCycle        # time [s] between samples
-    # cycleTime       = samples * sampleTime              # time [s] per cycle
+    # samples         = samplespercycle * cycles          # total number of samples averaged
+    sampletime      = reporttime/samplespercycle        # time [s] between samples
+    # cycleTime       = samples * sampletime              # time [s] per cycle
 
     data            = []                                # array for holding sampledata
 
     while True:
       try:
-        startTime   = time.time()
+        starttime   = time.time()
 
         result      = do_work(netdevice).split(',')
 
@@ -54,18 +56,18 @@ class MyDaemon(Daemon):
         syslog_trace("Data     : {0}".format(data), False, DEBUG)
 
         # report sample average
-        if (startTime % reportTime < sampleTime):
+        if (starttime % reporttime < sampletime):
           averages  = data
           # averages = sum(data[:]) / len(data)
           # if DEBUG: print averages
           syslog_trace("Averages : {0}".format(averages), False, DEBUG)
           do_report(averages, flock, fdata)
 
-        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
-        if (waitTime > 0):
-          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
+        waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
+        if (waittime > 0):
+          syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
-          time.sleep(waitTime)
+          time.sleep(waittime)
       except Exception:
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
@@ -136,6 +138,7 @@ def syslog_trace(trace, logerr, out2console):
       syslog.syslog(logerr, line)
     if line and out2console:
       print(line)
+
 
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + MYAPP + '/' + MYID + '.pid')

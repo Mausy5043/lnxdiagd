@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # update.sh is run periodically by a cronjob.
-# * It synchronises the local copy of LNXDIAGD with the current github branch
+# * It synchronises the local copy of LNXDIAGD with the current github BRANCH
 # * It checks the state of and (re-)starts daemons if they are not (yet) running.
 
 HOSTNAME=$(cat /etc/hostname)
-branch=$(cat "$HOME/.lnxdiagd.branch")
+BRANCH=$(cat "$HOME/.lnxdiagd.branch")
 
 # Wait for the daemons to finish their job. Prevents stale locks when restarting.
 echo "Waiting 30s..."
@@ -26,11 +26,11 @@ pushd "$HOME/lnxdiagd"
   source ./includes
   git fetch origin
   # Check which files have changed
-  DIFFLIST=$(git --no-pager diff --name-only "$branch..origin/$branch")
+  DIFFLIST=$(git --no-pager diff --name-only "$BRANCH..origin/$BRANCH")
   git pull
   git fetch origin
-  git checkout "$branch"
-  git reset --hard "origin/$branch" && git clean -f -d
+  git checkout "$BRANCH"
+  git reset --hard "origin/$BRANCH" && git clean -f -d
   # Set permissions
   chmod -R 744 ./*
 
@@ -38,6 +38,7 @@ pushd "$HOME/lnxdiagd"
     echo ">   $fname was updated from GIT"
     f7l4="${fname:0:7}${fname:${#fname}-4}"
     f6l4="${fname:0:6}${fname:${#fname}-4}"
+    f5l3="${fname:0:6}${fname:${#fname}-4}"
 
     # Detect DIAG changes
     if [[ "$f7l4" == "lnxdiagd.py" ]]; then
@@ -51,10 +52,16 @@ pushd "$HOME/lnxdiagd"
       eval "./$fname stop"
     fi
 
+    # Detect GRAPH changes
+    if [[ "$f5l3" == "graph.py" ]]; then
+      echo "  ! Graphing daemon changed"
+      eval "./$fname stop"
+    fi
+
     # LIBDAEMON.PY changed
     if [[ "$fname" == "libdaemon.py" ]]; then
       echo "  ! Diagnostic library changed"
-      echo "  o Restarting all diagnostic daemons"
+      echo "  o Restarting all daemons"
       for daemon in $diaglist; do
         echo "  +- Restart DIAG $daemon"
         eval "./lnxdiag$daemon"d.py restart
@@ -63,13 +70,17 @@ pushd "$HOME/lnxdiagd"
       for daemon in $srvclist; do
         echo "  +- Restart SVC $daemon"
         eval "./lnxsvc$daemon"d.py restart
+      done
+      for daemon in $grphlist; do
+        echo "  +- Restart GRAPH $daemon"
+        eval "./graph$daemon".py restart &
       done
     fi
 
     #CONFIG.INI changed
     if [[ "$fname" == "config.ini" ]]; then
       echo "  ! Configuration file changed"
-      echo "  o Restarting all diagnostic daemons"
+      echo "  o Restarting all daemons"
       for daemon in $diaglist; do
         echo "  +- Restart DIAG $daemon"
         eval "./lnxdiag$daemon"d.py restart
@@ -78,6 +89,10 @@ pushd "$HOME/lnxdiagd"
       for daemon in $srvclist; do
         echo "  +- Restart SVC $daemon"
         eval "./lnxsvc$daemon"d.py restart
+      done
+      for daemon in $grphlist; do
+        echo "  +- Restart GRAPH $daemon"
+        eval "./graph$daemon".py restart &
       done
     fi
   done
@@ -114,6 +129,22 @@ pushd "$HOME/lnxdiagd"
     fi
   done
 
+  # Check if GRAPH daemons are running
+  for daemon in $grphlist; do
+    if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
+      if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
+        logger -p user.err -t lnxdiagd "  * Stale daemon $daemon pid-file found."
+        rm "/tmp/lnxdiagd/$daemon.pid"
+          echo "  * Start GRAPH $daemon"
+        eval "./graph$daemon".py start" &
+      fi
+    else
+      logger -p user.notice -t lnxdiagd "Found daemon $daemon not running."
+        echo "  * Start GRAPH $daemon"
+      eval "./graph$(daemon).py start" &
+    fi
+  done
+
   # Do some host specific stuff
   case "$HOSTNAME" in
     rbagain ) echo "Weather Monitor"
@@ -121,6 +152,10 @@ pushd "$HOME/lnxdiagd"
     bbone )   echo "BeagleBone Black"
               ;;
     rbups )   echo "UPS monitor"
+              ;;
+    rbux  )   echo "Testbench"
+              ;;
+    rbux3 )   echo "Testbench RPi3"
               ;;
     rbelec )  echo "Electricity monitor"
               ;;
@@ -139,7 +174,6 @@ pushd "$HOME/lnxdiagd"
               else
                 logger -p user.notice -t lnxdiagd "Found daemon 19 not running."
                 echo "  * Start DIAG 19"
-                # sudo ./lnxsmartinfo19.sh |logger -p info -t lnxsmartinfo19
                 eval ./lnxdiag19d.py start
               fi
               ;;

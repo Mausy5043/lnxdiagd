@@ -37,6 +37,8 @@ install_package "python3"
 install_package "build-essential"
 install_package "python3-dev"
 install_package "python3-pip"
+install_package "python3-numpy"
+install_package "python3-matplotlib"
 
 # gnuPlot packages
 #install_package "python-numpy"
