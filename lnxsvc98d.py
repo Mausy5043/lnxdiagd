@@ -47,7 +47,7 @@ class MyDaemon(Daemon):
     scriptname      = iniconf.get(inisection, "lftpscript")
 
     sampletime      = reporttime/samplespercycle         # time [s] between samples
-    getsqldata(home, True)
+    getsqldata(home, 0, 0, True)
     while True:
       try:
         starttime   = time.time()
@@ -69,9 +69,10 @@ def do_mv_data(flock, homedir, script):
   # unlock(flock)  # remove stale lock
   time.sleep(4)
   minit = int(time.strftime('%M'))
+  nowur = int(time.strftime('%H'))
 
   # Retrieve data from MySQL database
-  getsqldata(homedir, False)
+  getsqldata(homedir, minit, nowur, False)
 
   # Create the graphs based on the MySQL data every 3rd minute
   if ((minit % GRAPH_UPDATE) == 0):
@@ -97,23 +98,23 @@ def do_mv_data(flock, homedir, script):
 
   return
 
-def getsqldata(homedir, nu):
-  minit = int(time.strftime('%M'))
-  nowur = int(time.strftime('%H'))
+def getsqldata(homedir, minit, nowur, nu):
+  # minit = int(time.strftime('%M'))
+  # nowur = int(time.strftime('%H'))
   # data of last hour is updated every 3 minutes
-  if ((minit % 3) == 0):
+  if ((minit % SQL_UPDATE_HOUR) == 0):
     cmnd = homedir + '/' + MYAPP + '/getsqlhour.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last day is updated every 30 minutes
-  if nu or ((minit % 30) == (SQLMNT % 30)):
+  if nu or ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)):
     cmnd = homedir + '/' + MYAPP + '/getsqlday.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # dat of the last week is updated every 4 hours
-  if nu or ((nowur % 4) == (SQLHR % 4) and (minit == SQLHRM)):
+  if nu or ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)):
     cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
