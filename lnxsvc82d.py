@@ -145,7 +145,6 @@ def do_markdown(flock, fdata, hwdevice):
     f.write('### Server Graphs:  \n')
     if (hwdevice != "nohwdevice"):
       f.write('![A GNUplot image should be here: day11.png](img/day11.png)\n')
-      f.write('![A GNUplot image should be here: day21.png](img/day21.png)\n')
     f.write('![A GNUplot image should be here: day12.png](img/day12.png)\n')
     f.write('![A GNUplot image should be here: day14.png](img/day14.png)\n')
     f.write('![A GNUplot image should be here: day13.png](img/day13.png)\n')
