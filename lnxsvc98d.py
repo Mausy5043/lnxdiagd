@@ -22,6 +22,11 @@ NODE        = os.uname()[1]
 SQLMNT      = rnd(0, 59)
 SQLHR       = rnd(0, 23)
 SQLHRM      = rnd(0, 59)
+SQL_UPDATE_HOUR   = 6   # in minutes
+SQL_UPDATE_DAY    = 12  # in minutes
+SQL_UPDATE_WEEK   = 4   # in hours
+SQL_UPDATE_YEAR   = 8   # in hours
+GRAPH_UPDATE      = 6   # in minutes
 
 class MyDaemon(Daemon):
   """Definition of daemon."""
@@ -69,7 +74,7 @@ def do_mv_data(flock, homedir, script):
   getsqldata(homedir, False)
 
   # Create the graphs based on the MySQL data every 3rd minute
-  if ((minit % 3) == 0):
+  if ((minit % GRAPH_UPDATE) == 0):
     cmnd = homedir + '/' + MYAPP + '/graphs.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
