@@ -36,7 +36,7 @@ class MyDaemon(Daemon):
     fdata           = iniconf.get(inisection, "resultfile")
     try:
       netdevice     = iniconf.get(inisection, NODE+".net")
-    except configparser.NoOptionError as e:  # no netdevice
+    except configparser.NoOptionError:  # no netdevice
       netdevice     = "eth0"
     syslog_trace("Monitoring device: {0}".format(netdevice), syslog.LOG_DEBUG, DEBUG)
 
@@ -138,6 +138,7 @@ def syslog_trace(trace, logerr, out2console):
       syslog.syslog(logerr, line)
     if line and out2console:
       print(line)
+
 
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + MYAPP + '/' + MYID + '.pid')
