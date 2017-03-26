@@ -464,7 +464,7 @@ def init_axes():
   plt.figure(0)
   FIG = plt.gcf()
   DPI = FIG.get_dpi()
-  FIG.set_size_inches(1280.0/float(DPI), 640.0/float(DPI))
+  FIG.set_size_inches(1024.0/float(DPI), 512.0/float(DPI))
 
   # configure the figure
   plt.subplots_adjust(left=LMARG, bottom=None, right=RMARG, top=None,  wspace=0.01, hspace=None)
