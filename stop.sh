@@ -21,7 +21,7 @@ pushd "$HOME/lnxdiagd"
   done
 
   # Check if GRAPH daemons are running
-  for daemon in $graphlist; do
+  for daemon in $grphlist; do
     # command the daemon to stop regardless if it is running or not.
     eval "./graph$daemon".py stop
     # kill off any rogue daemons by the same name (it happens sometimes)
