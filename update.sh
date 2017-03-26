@@ -54,19 +54,19 @@ pushd "$HOME/lnxdiagd"
 
     # Detect GRAPH changes
     if [[ "$f5l3" == "graph.py" ]]; then
-      echo "  ! Diagnostic daemon changed"
+      echo "  ! Graphing daemon changed"
       eval "./$fname stop"
     fi
 
     # LIBDAEMON.PY changed
     if [[ "$fname" == "libdaemon.py" ]]; then
       echo "  ! Diagnostic library changed"
-      echo "  o Restarting all diagnostic daemons"
+      echo "  o Restarting all daemons"
       for daemon in $diaglist; do
         echo "  +- Restart DIAG $daemon"
         eval "./lnxdiag$daemon"d.py restart
       done
-      for daemon in $graphlist; do
+      for daemon in $grphlist; do
         echo "  +- Restart GRAPH $daemon"
         eval "./graph$daemon".py restart
       done
@@ -80,12 +80,12 @@ pushd "$HOME/lnxdiagd"
     #CONFIG.INI changed
     if [[ "$fname" == "config.ini" ]]; then
       echo "  ! Configuration file changed"
-      echo "  o Restarting all diagnostic daemons"
+      echo "  o Restarting all daemons"
       for daemon in $diaglist; do
         echo "  +- Restart DIAG $daemon"
         eval "./lnxdiag$daemon"d.py restart
       done
-      for daemon in $graphlist; do
+      for daemon in $grphlist; do
         echo "  +- Restart GRAPH $daemon"
         eval "./graph$daemon".py restart
       done
@@ -114,7 +114,7 @@ pushd "$HOME/lnxdiagd"
   done
 
   # Check if GRAPH daemons are running
-  for daemon in $graphlist; do
+  for daemon in $grphlist; do
     if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
       if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
         logger -p user.err -t lnxdiagd "  * Stale daemon $daemon pid-file found."
