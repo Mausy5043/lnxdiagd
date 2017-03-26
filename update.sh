@@ -119,12 +119,12 @@ pushd "$HOME/lnxdiagd"
       if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
         logger -p user.err -t lnxdiagd "  * Stale daemon $daemon pid-file found."
         rm "/tmp/lnxdiagd/$daemon.pid"
-          echo "  * Start DIAG $daemon"
+          echo "  * Start GRAPH $daemon"
         eval "./graph$daemon".py start
       fi
     else
       logger -p user.notice -t lnxdiagd "Found daemon $daemon not running."
-        echo "  * Start DIAG $daemon"
+        echo "  * Start GRAPH $daemon"
       eval "./graph$daemon".py start
     fi
   done
