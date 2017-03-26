@@ -37,6 +37,9 @@ LOCATEDDAYS     = mpl.dates.DayLocator()                          # find all day
 LOCATEDHOURS    = mpl.dates.HourLocator()                         # find all hours
 LOCATEDMINUTES  = mpl.dates.MinuteLocator()                       # find all minutes
 
+UPDATE_HOUR     = 3   # minutes
+UPDATE_DAY      = 30  # minutes
+UPDATE_WEEK     = 4   # hours
 
 def timeme(method):
   """
@@ -380,7 +383,7 @@ def do_main(flock, nu, consql):
 
   # WEEK data
   # data of the last week is updated every 4 hours
-  if (currenthour % 4) == 0 and (currentminute == 1) or nu:
+  if (currenthour % UPDATE_WEEK) == 0 and (currentminute == 1) or nu:
     syslog_trace("* Get new data for week", False, DEBUG)
     syslog_trace("* hour:  {0}".format(currenthour), False, DEBUG)
     if nu:
@@ -395,7 +398,7 @@ def do_main(flock, nu, consql):
 
   # DAY data
   # data of the last day is updated every 30 minutes
-  if (currentminute % 30) == 0 or nu:
+  if (currentminute % UPDATE_DAY) == 0 or nu:
     syslog_trace("* Get new data for day", False, DEBUG)
     syslog_trace("* min :  {0}".format(currentminute), False, DEBUG)
     if nu:
@@ -423,24 +426,24 @@ def do_main(flock, nu, consql):
   maximum_y = max(np.nanmax(weekly_data_y[:, 2], 0), np.nanmax(daily_data_y[:, 2], 0), np.nanmax(hourly_data_y, 0)) + 1
 
   # YEAR graph
-  # graph of the last year is updated at 01:11
-  if (currenthour == 1) and (currentminute == 12) or nu:
+  # graph of the last year is updated at 01:23
+  if (currenthour == 1) and (currentminute == 23) or nu:
     update_year_graph(minimum_y, maximum_y)
 
   # WEEK data
   # graph of the last week is updated every 4 hours
-  if (currenthour % 4) == 0 and (currentminute == 2) or nu:
+  if (currenthour % UPDATE_WEEK) == 0 and (currentminute == 2) or nu:
     update_week_graph(minimum_y, maximum_y)
 
   # DAY data
   # graph of the last day is updated every 30 minutes
-  if (currentminute % 30) == 0 or nu:
+  if (currentminute % UPDATE_DAY) == 0 or nu:
     update_day_graph(minimum_y, maximum_y)
 
   # HOUR graph
   # graph of last hour is updated every minute
   # and the graph is then saved
-  if (currentminute % 3) == 0 or nu:
+  if (currentminute % UPDATE_HOUR) == 0 or nu:
     update_hour_graph(minimum_y, maximum_y)
     plt.savefig('/tmp/lnxdiagd/site/img/day21.png', format='png')
 
