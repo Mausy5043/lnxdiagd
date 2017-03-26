@@ -66,14 +66,14 @@ pushd "$HOME/lnxdiagd"
         echo "  +- Restart DIAG $daemon"
         eval "./lnxdiag$daemon"d.py restart
       done
-      for daemon in $grphlist; do
-        echo "  +- Restart GRAPH $daemon"
-        eval "./graph$daemon".py restart
-      done
       echo "  o Restarting all service daemons"
       for daemon in $srvclist; do
         echo "  +- Restart SVC $daemon"
         eval "./lnxsvc$daemon"d.py restart
+      done
+      for daemon in $grphlist; do
+        echo "  +- Restart GRAPH $daemon"
+        eval "./graph$daemon".py restart &
       done
     fi
 
@@ -85,14 +85,14 @@ pushd "$HOME/lnxdiagd"
         echo "  +- Restart DIAG $daemon"
         eval "./lnxdiag$daemon"d.py restart
       done
-      for daemon in $grphlist; do
-        echo "  +- Restart GRAPH $daemon"
-        eval "./graph$daemon".py restart
-      done
       echo "  o Restarting all service daemons"
       for daemon in $srvclist; do
         echo "  +- Restart SVC $daemon"
         eval "./lnxsvc$daemon"d.py restart
+      done
+      for daemon in $grphlist; do
+        echo "  +- Restart GRAPH $daemon"
+        eval "./graph$daemon".py restart &
       done
     fi
   done
@@ -113,22 +113,6 @@ pushd "$HOME/lnxdiagd"
     fi
   done
 
-  # Check if GRAPH daemons are running
-  for daemon in $grphlist; do
-    if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
-      if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
-        logger -p user.err -t lnxdiagd "  * Stale daemon $daemon pid-file found."
-        rm "/tmp/lnxdiagd/$daemon.pid"
-          echo "  * Start GRAPH $daemon"
-        eval "./graph$daemon".py start
-      fi
-    else
-      logger -p user.notice -t lnxdiagd "Found daemon $daemon not running."
-        echo "  * Start GRAPH $daemon"
-      eval "./graph$daemon".py start
-    fi
-  done
-
   # Check if SVC daemons are running
   for daemon in $srvclist; do
     if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
@@ -142,6 +126,22 @@ pushd "$HOME/lnxdiagd"
       logger -p user.notice -t lnxdiagd "Found daemon $daemon not running."
         echo "  * Start SVC $daemon"
       eval "./lnxsvc$daemon"d.py start
+    fi
+  done
+
+  # Check if GRAPH daemons are running
+  for daemon in $grphlist; do
+    if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
+      if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
+        logger -p user.err -t lnxdiagd "  * Stale daemon $daemon pid-file found."
+        rm "/tmp/lnxdiagd/$daemon.pid"
+          echo "  * Start GRAPH $daemon"
+        eval "./graph$daemon".py start" &
+      fi
+    else
+      logger -p user.notice -t lnxdiagd "Found daemon $daemon not running."
+        echo "  * Start GRAPH $daemon"
+      eval "./graph$(daemon).py start" &
     fi
   done
 
@@ -174,7 +174,6 @@ pushd "$HOME/lnxdiagd"
               else
                 logger -p user.notice -t lnxdiagd "Found daemon 19 not running."
                 echo "  * Start DIAG 19"
-                # sudo ./lnxsmartinfo19.sh |logger -p info -t lnxsmartinfo19
                 eval ./lnxdiag19d.py start
               fi
               ;;
