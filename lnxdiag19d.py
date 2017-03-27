@@ -35,29 +35,27 @@ DEBUG = False
 leaf = os.path.realpath(__file__).split('/')[-2]
 
 class MyDaemon(Daemon):
-  """Definition of daemon."""
-  @staticmethod
-  def run():
+  def run(self):
     iniconf         = configparser.ConfigParser()
     inisection      = MYID
     home            = os.path.expanduser('~')
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
-    reporttime      = iniconf.getint(inisection, "reporttime")
+    reportTime      = iniconf.getint(inisection, "reporttime")
     cycles          = iniconf.getint(inisection, "cycles")
-    samplespercycle = iniconf.getint(inisection, "samplespercycle")
+    samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
     fdata           = iniconf.get(inisection, "resultfile")
 
-    samples         = samplespercycle * cycles      # total number of samples averaged
-    sampletime      = reporttime/samplespercycle    # time [s] between samples
+    samples         = samplesperCycle * cycles      # total number of samples averaged
+    sampleTime      = reportTime/samplesperCycle    # time [s] between samples
 
     data            = []                            # array for holding sampledata
 
     while True:
       try:
-        starttime = time.time()
+        startTime = time.time()
 
         result        = do_work()
         result        = result.split(',')
@@ -69,7 +67,7 @@ class MyDaemon(Daemon):
         syslog_trace("Data     : {0}".format(data),   False, DEBUG)
 
         # report sample average
-        if (starttime % reporttime < sampletime):
+        if (startTime % reportTime < sampleTime):
           somma       = list(map(sum, list(zip(*data))))
           # not all entries should be float
           # 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
@@ -78,11 +76,11 @@ class MyDaemon(Daemon):
           syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
           do_report(averages, flock, fdata)
 
-        waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
-        if (waittime > 0):
-          syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
+        if (waitTime > 0):
+          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
-          time.sleep(waittime)
+          time.sleep(waitTime)
       except ValueError:
         syslog_trace("Waiting for S.M.A.R.T. data..", syslog.LOG_DEBUG, DEBUG)
         time.sleep(60)

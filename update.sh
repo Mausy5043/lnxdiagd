@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # update.sh is run periodically by a cronjob.
-# * It synchronises the local copy of LNXDIAGD with the current github BRANCH
+# * It synchronises the local copy of LNXDIAGD with the current github branch
 # * It checks the state of and (re-)starts daemons if they are not (yet) running.
 
 HOSTNAME=$(cat /etc/hostname)
-BRANCH=$(cat "$HOME/.lnxdiagd.branch")
+branch=$(cat "$HOME/.lnxdiagd.branch")
 
 # Wait for the daemons to finish their job. Prevents stale locks when restarting.
 #echo "Waiting 30s..."
@@ -26,11 +26,11 @@ pushd "$HOME/lnxdiagd"
   source ./includes
   git fetch origin
   # Check which files have changed
-  DIFFLIST=$(git --no-pager diff --name-only "$BRANCH..origin/$BRANCH")
+  DIFFLIST=$(git --no-pager diff --name-only "$branch..origin/$branch")
   git pull
   git fetch origin
-  git checkout "$BRANCH"
-  git reset --hard "origin/$BRANCH" && git clean -f -d
+  git checkout "$branch"
+  git reset --hard "origin/$branch" && git clean -f -d
   # Set permissions
   chmod -R 744 ./*
 
@@ -38,7 +38,6 @@ pushd "$HOME/lnxdiagd"
     echo ">   $fname was updated from GIT"
     f7l4="${fname:0:7}${fname:${#fname}-4}"
     f6l4="${fname:0:6}${fname:${#fname}-4}"
-    f5l3="${fname:0:6}${fname:${#fname}-4}"
 
     # Detect DIAG changes
     if [[ "$f7l4" == "lnxdiagd.py" ]]; then
@@ -55,7 +54,7 @@ pushd "$HOME/lnxdiagd"
     # LIBDAEMON.PY changed
     if [[ "$fname" == "libdaemon.py" ]]; then
       echo "  ! Diagnostic library changed"
-      echo "  o Restarting all daemons"
+      echo "  o Restarting all diagnostic daemons"
       for daemon in $diaglist; do
         echo "  +- Restart DIAG $daemon"
         eval "./lnxdiag$daemon"d.py restart
@@ -70,7 +69,7 @@ pushd "$HOME/lnxdiagd"
     #CONFIG.INI changed
     if [[ "$fname" == "config.ini" ]]; then
       echo "  ! Configuration file changed"
-      echo "  o Restarting all daemons"
+      echo "  o Restarting all diagnostic daemons"
       for daemon in $diaglist; do
         echo "  +- Restart DIAG $daemon"
         eval "./lnxdiag$daemon"d.py restart
@@ -123,10 +122,6 @@ pushd "$HOME/lnxdiagd"
               ;;
     rbups )   echo "UPS monitor"
               ;;
-    rbux  )   echo "Testbench"
-              ;;
-    rbux3 )   echo "Testbench RPi3"
-              ;;
     rbelec )  echo "Electricity monitor"
               ;;
     rbian )   echo "Raspberry testbench"
@@ -144,6 +139,7 @@ pushd "$HOME/lnxdiagd"
               else
                 logger -p user.notice -t lnxdiagd "Found daemon 19 not running."
                 echo "  * Start DIAG 19"
+                # sudo ./lnxsmartinfo19.sh |logger -p info -t lnxsmartinfo19
                 eval ./lnxdiag19d.py start
               fi
               ;;
