@@ -39,24 +39,22 @@ if (NODE == "boson"):
   # sdg =
 
 class MyDaemon(Daemon):
-  """Definition of daemon."""
-  @staticmethod
-  def run():
+  def run(self):
     iniconf         = configparser.ConfigParser()
     inisection      = MYID
     home            = os.path.expanduser('~')
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
-    reporttime      = iniconf.getint(inisection, "reporttime")
+    reportTime      = iniconf.getint(inisection, "reporttime")
     # cycles          = iniconf.getint(inisection, "cycles")
-    samplespercycle = iniconf.getint(inisection, "samplespercycle")
+    samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
     fdata           = iniconf.get(inisection, "markdown")
 
-    # samples         = samplespercycle * cycles          # total number of samples averaged
-    sampletime      = reporttime/samplespercycle        # time [s] between samples
-    # cycleTime       = samples * sampletime              # time [s] per cycle
+    # samples         = samplesperCycle * cycles          # total number of samples averaged
+    sampleTime      = reportTime/samplesperCycle        # time [s] between samples
+    # cycleTime       = samples * sampleTime              # time [s] per cycle
 
     try:
       hwdevice      = iniconf.get("11", NODE + ".hwdevice")
@@ -66,15 +64,15 @@ class MyDaemon(Daemon):
 
     while True:
       try:
-        starttime   = time.time()
+        startTime   = time.time()
 
         do_markdown(flock, fdata, hwdevice)
 
-        waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
-        if (waittime > 0):
-          syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
+        if (waitTime > 0):
+          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
-          time.sleep(waittime)
+          time.sleep(waitTime)
       except Exception:
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)

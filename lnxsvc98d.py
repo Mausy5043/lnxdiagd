@@ -25,16 +25,9 @@ NODE        = os.uname()[1]
 SQLMNT      = rnd(0, 59)
 SQLHR       = rnd(0, 23)
 SQLHRM      = rnd(0, 59)
-SQL_UPDATE_HOUR   = 6   # in minutes
-SQL_UPDATE_DAY    = 12  # in minutes
-SQL_UPDATE_WEEK   = 4   # in hours
-SQL_UPDATE_YEAR   = 8   # in hours
-GRAPH_UPDATE      = 6   # in minutes
 
 class MyDaemon(Daemon):
-  """Definition of daemon."""
-  @staticmethod
-  def run():
+  def run(self):
     iniconf         = configparser.ConfigParser()
     inisection      = MYID
     home            = os.path.expanduser('~')
@@ -43,26 +36,25 @@ class MyDaemon(Daemon):
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     syslog_trace("getsqlday.sh  runs every 30 minutes starting at minute {0}".format(SQLMNT), syslog.LOG_DEBUG, DEBUG)
     syslog_trace("getsqlweek.sh runs every 4th hour  starting  at hour   {0}:{1}".format(SQLHR, SQLHRM), syslog.LOG_DEBUG, DEBUG)
-    reporttime      = iniconf.getint(inisection, "reporttime")
-    samplespercycle = iniconf.getint(inisection, "samplespercycle")
+    reportTime      = iniconf.getint(inisection, "reporttime")
+    samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
 
     scriptname      = iniconf.get(inisection, "lftpscript")
-    
-    sampletime      = reporttime/samplespercycle         # time [s] between samples
 
-    getsqldata(home, 0, 0, True)
+    sampleTime      = reportTime/samplesperCycle         # time [s] between samples
+    getsqldata(home, True)
     while True:
       try:
-        starttime   = time.time()
+        startTime   = time.time()
 
         do_mv_data(flock, home, scriptname)
 
-        waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
-        if (waittime > 0):
-          syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
+        if (waitTime > 0):
+          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
-          time.sleep(waittime)
+          time.sleep(waitTime)
       except Exception:
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
@@ -73,13 +65,12 @@ def do_mv_data(flock, homedir, script):
   # unlock(flock)  # remove stale lock
   time.sleep(4)
   minit = int(time.strftime('%M'))
-  nowur = int(time.strftime('%H'))
 
   # Retrieve data from MySQL database
-  getsqldata(homedir, minit, nowur, False)
+  getsqldata(homedir, False)
 
   # Create the graphs based on the MySQL data every 3rd minute
-  if ((minit % GRAPH_UPDATE) == 0):
+  if ((minit % 3) == 0):
     cmnd = homedir + '/' + MYAPP + '/mkgraphs.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
@@ -102,17 +93,17 @@ def do_mv_data(flock, homedir, script):
 
   return
 
-def getsqldata(homedir, minit, nowur, nu):
-  # minit = int(time.strftime('%M'))
-  # nowur = int(time.strftime('%H'))
+def getsqldata(homedir, nu):
+  minit = int(time.strftime('%M'))
+  nowur = int(time.strftime('%H'))
   # data of last hour is updated every 3 minutes
-  if ((minit % SQL_UPDATE_HOUR) == 0):
+  if ((minit % 3) == 0):
     cmnd = homedir + '/' + MYAPP + '/getsqlhour.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last day is updated every 30 minutes
-  if nu or ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)):
+  if nu or ((minit % 30) == (SQLMNT % 30)):
     cmnd = homedir + '/' + MYAPP + '/getsqlday.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
@@ -124,7 +115,7 @@ def getsqldata(homedir, minit, nowur, nu):
       cmnd = subprocess.call(cmnd)
       syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last week is updated every 4 hours
-  if nu or ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)):
+  if nu or ((nowur % 4) == (SQLHR % 4) and (minit == SQLHRM)):
     cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)

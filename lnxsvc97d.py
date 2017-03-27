@@ -21,9 +21,7 @@ MYAPP       = os.path.realpath(__file__).split('/')[-2]
 NODE        = os.uname()[1]
 
 class MyDaemon(Daemon):
-  """Definition of daemon."""
-  @staticmethod
-  def run():
+  def run(self):
     try:                 # Initialise MySQLdb
       consql    = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
       if consql.open:    # dB initialised succesfully -> get a cursor on the dB.
@@ -47,26 +45,26 @@ class MyDaemon(Daemon):
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
     syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
-    reporttime      = iniconf.getint(inisection, "reporttime")
+    reportTime      = iniconf.getint(inisection, "reporttime")
     # cycles          = iniconf.getint(inisection, "cycles")
-    samplespercycle = iniconf.getint(inisection, "samplespercycle")
+    samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
 
-    # samples         = samplespercycle * cycles              # total number of samples averaged
-    sampletime      = reporttime/samplespercycle         # time [s] between samples
-    # cycleTime       = samples * sampletime                # time [s] per cycle
+    # samples         = samplesperCycle * cycles              # total number of samples averaged
+    sampleTime      = reportTime/samplesperCycle         # time [s] between samples
+    # cycleTime       = samples * sampleTime                # time [s] per cycle
 
     while True:
       try:
-        starttime   = time.time()
+        startTime   = time.time()
 
         do_sql_data(flock, iniconf, consql)
 
-        waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
-        if (waittime > 0):
-          syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
+        waitTime    = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
+        if (waitTime > 0):
+          syslog_trace("Waiting  : {0}s".format(waitTime), False, DEBUG)
           syslog_trace("................................", False, DEBUG)
-          time.sleep(waittime)
+          time.sleep(waitTime)
       except Exception:
         syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
         syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
