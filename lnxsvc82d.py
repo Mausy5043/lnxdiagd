@@ -145,12 +145,18 @@ def do_markdown(flock, fdata, hwdevice):
     f.write('### Server Graphs:  \n')
     if (hwdevice != "nohwdevice"):
       f.write('![A GNUplot image should be here: day11.png](img/day11.png)\n')
+      # f.write('![A GNUplot image should be here: day11.png](img/day11.old.png)\n')
     f.write('![A GNUplot image should be here: day12.png](img/day12.png)\n')
+    f.write('![A GNUplot image should be here: day12.png](img/day12.old.png)\n')
     f.write('![A GNUplot image should be here: day14.png](img/day14.png)\n')
+    f.write('![A GNUplot image should be here: day14.png](img/day14.old.png)\n')
     f.write('![A GNUplot image should be here: day13.png](img/day13.png)\n')
+    f.write('![A GNUplot image should be here: day13.png](img/day13.old.png)\n')
     f.write('![A GNUplot image should be here: day15.png](img/day15.png)\n')
+    f.write('![A GNUplot image should be here: day15.png](img/day15.old.png)\n')
     if (NODE == "boson"):
       f.write('![A GNUplot image should be here: day19.png](img/day19.png)\n')
+      f.write('![A GNUplot image should be here: day19.png](img/day19.old.png)\n')
 
     # Disk usage
     f.write('## Disk Usage\n')
