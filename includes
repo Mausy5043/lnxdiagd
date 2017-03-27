@@ -2,5 +2,3 @@ diaglist="11 12 13 14 15"
 
 # order is important <98> before <97>
 srvclist="98 82 97"
-
-grphlist="21"

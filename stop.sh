@@ -20,20 +20,6 @@ pushd "$HOME/lnxdiagd"
     rm -f "/tmp/lnxdiagd/$daemon.pid"
   done
 
-  # Check if GRAPH daemons are running
-  for daemon in $grphlist; do
-    # command the daemon to stop regardless if it is running or not.
-    eval "./graph$daemon".py stop
-    # kill off any rogue daemons by the same name (it happens sometimes)
-    if [   $(pgrep -f "graph$daemon".py | wc -l) -ne 0 ]; then
-      kill $(pgrep -f  "graph$daemon".py)
-    fi
-    # log the activity
-    logger -p user.err -t lnxdiagd "  * Daemon $daemon Stopped."
-    # force rm the .pid file
-    rm -f "/tmp/lnxdiagd/$daemon.pid"
-  done
-
   # Check if SVC daemons are running
   for daemon in $srvclist; do
     # command the daemon to stop regardless if it is running or not.
