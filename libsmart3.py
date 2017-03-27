@@ -80,7 +80,6 @@ class SmartDisk():
   def getinfo(self):
     return self.identity
 
-  @staticmethod
   def cat(self, filename):
     ret = ""
     if os.path.isfile(filename):
