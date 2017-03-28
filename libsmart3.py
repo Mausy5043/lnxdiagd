@@ -22,7 +22,7 @@ class SmartDisk():
     self.vars     = "-"
     self.health   = "-"
     self.selftest = "-"
-    self.identity = self.cat(self.diskid + "-i.dat").splitlines()
+    self.identity = cat(self.diskid + "-i.dat").splitlines()
     retm = retd = rets = ""
     for line in self.identity:
       if DEBUG:
@@ -38,10 +38,10 @@ class SmartDisk():
     self.identity = retm + " || " + retd + " (" + rets + ")"
 
   def smart(self):
-    self.vars     = self.cat(self.diskid + "-A.dat").splitlines()
-    self.health   = self.cat(self.diskid + "-H.dat")
-    self.selftest = self.cat(self.diskid + "-l.dat")
-    self.identity = self.cat(self.diskid + "-i.dat").splitlines()
+    self.vars     = cat(self.diskid + "-A.dat").splitlines()
+    self.health   = cat(self.diskid + "-H.dat")
+    self.selftest = cat(self.diskid + "-l.dat")
+    self.identity = cat(self.diskid + "-i.dat").splitlines()
     retm = retd = rets = ""
     for line in self.identity:
       if DEBUG:
@@ -80,12 +80,13 @@ class SmartDisk():
   def getinfo(self):
     return self.identity
 
-  def cat(self, filename):
-    ret = ""
-    if os.path.isfile(filename):
-      with open(filename, 'r') as f:
-        ret = f.read().strip('\n')
-    return ret
+def cat(self, filename):
+  ret = ""
+  if os.path.isfile(filename):
+    with open(filename, 'r') as f:
+      ret = f.read().strip('\n')
+  return ret
+
 
 
 if __name__ == '__main__':
