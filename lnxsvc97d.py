@@ -150,10 +150,10 @@ def do_sql_data(flock, inicnfg, cnsql):
       syslog_trace("*2* {0}".format(sys.exc_info()[1]), False, DEBUG)
 
     try:
-      if not errsql:                     # SQL-job was successful or non-existing
-        if os.path.isfile(ifile):        # IF resultfile exists
-          syslog_trace("Deleting {0}".format(ifile), False, DEBUG)
-          os.remove(ifile)
+      if os.path.isfile(ifile) and not errsql:
+        # IF resultfile exists AND SQL-job was successful or non-existing
+        syslog_trace("Deleting {0}".format(ifile), False, DEBUG)
+        os.remove(ifile)
     except configparser.NoOptionError:  # no ofile
       syslog_trace("*3* {0}".format(sys.exc_info()[1]), False, DEBUG)
 

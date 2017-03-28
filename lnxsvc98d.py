@@ -50,7 +50,7 @@ class MyDaemon(Daemon):
     scriptname      = iniconf.get(inisection, "lftpscript")
     
     sampletime      = reporttime/samplespercycle         # time [s] between samples
-
+    
     getsqldata(home, 0, 0, True)
     while True:
       try:
