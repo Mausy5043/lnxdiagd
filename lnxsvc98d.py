@@ -45,7 +45,7 @@ class MyDaemon(Daemon):
     flock           = iniconf.get(inisection, "lockfile")
 
     scriptname      = iniconf.get(inisection, "lftpscript")
-    
+
     sampletime      = reporttime/samplespercycle         # time [s] between samples
 
     getsqldata(home, 0, 0, True)
@@ -77,7 +77,7 @@ def do_mv_data(flock, homedir, script):
 
   # Create the graphs based on the MySQL data every 3rd minute
   if ((minit % GRAPH_UPDATE) == 0):
-    cmnd = homedir + '/' + MYAPP + '/graphs.sh'
+    cmnd = homedir + '/' + MYAPP + '/mkgraphs.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
