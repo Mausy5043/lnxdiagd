@@ -87,6 +87,7 @@ class SmartDisk():
         ret = f.read().strip('\n')
     return ret
 
+
 if __name__ == '__main__':
 
   DEBUG = True
