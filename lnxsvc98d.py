@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 # daemon98.py file post-processor.
+# - graphs
+# - MySQL queries
+# - upload
 
 import configparser
 import os
@@ -114,7 +117,13 @@ def getsqldata(homedir, minit, nowur, nu):
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-  # dat of the last week is updated every 4 hours
+    # data of the last year is updated at 01:xx
+    if (nowur == 1) or nu:
+      cmnd = homedir + '/' + MYAPP + '/getsqlyear.sh'
+      syslog_trace("...:  {0}".format(cmnd), True, DEBUG)  # temporary logging
+      cmnd = subprocess.call(cmnd)
+      syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # data of the last week is updated every 4 hours
   if nu or ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)):
     cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
