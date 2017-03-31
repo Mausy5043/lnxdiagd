@@ -1,0 +1,12 @@
+engines:
+  duplication:
+    enabled: true
+    exclude_fingerprints:
+    - 3abb87ac6c3f0a769b8d164bcb57fd79.
+    checks:
+      Similar code:
+        enabled: false
+  radon: 
+    enabled: true
+    config: 
+      threshold: "C"
