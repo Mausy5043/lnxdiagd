@@ -34,6 +34,9 @@ sde = SmartDisk("wwn-0x50014ee60507b79c")  # WD-WMC4N0E24DVU
 DEBUG = False
 leaf = os.path.realpath(__file__).split('/')[-2]
 
+# initialise logging
+syslog.openlog(ident=MYAPP, facility=syslog.LOG_LOCAL0)
+
 class MyDaemon(Daemon):
   """Definition of daemon."""
   @staticmethod

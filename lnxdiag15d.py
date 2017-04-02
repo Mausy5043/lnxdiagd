@@ -22,6 +22,9 @@ NODE        = os.uname()[1]
 
 os.nice(5)
 
+# initialise logging
+syslog.openlog(ident=MYAPP, facility=syslog.LOG_LOCAL0)
+
 class MyDaemon(Daemon):
   """Definition of daemon."""
   @staticmethod

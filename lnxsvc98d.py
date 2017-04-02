@@ -31,6 +31,9 @@ SQL_UPDATE_WEEK   = 4   # in hours
 SQL_UPDATE_YEAR   = 8   # in hours
 GRAPH_UPDATE      = 6   # in minutes
 
+# initialise logging
+syslog.openlog(ident=MYAPP, facility=syslog.LOG_LOCAL0)
+
 class MyDaemon(Daemon):
   """Definition of daemon."""
   @staticmethod
