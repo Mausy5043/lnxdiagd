@@ -13,7 +13,7 @@ import syslog
 import time
 import traceback
 
-from libdaemon import Daemon
+from mausy5043libs.libdaemon3 import Daemon
 from random import randrange as rnd
 
 # constants
@@ -51,9 +51,9 @@ class MyDaemon(Daemon):
     flock           = iniconf.get(inisection, "lockfile")
 
     scriptname      = iniconf.get(inisection, "lftpscript")
-    
+
     sampletime      = reporttime/samplespercycle         # time [s] between samples
-    
+
     getsqldata(home, 0, 0, True)
     while True:
       try:

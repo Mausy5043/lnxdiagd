@@ -9,8 +9,8 @@ import syslog
 import time
 import traceback
 
-from libdaemon import Daemon
-from libsmart3 import SmartDisk
+from mausy5043libs.libdaemon3 import Daemon
+from mausy5043libs.libsmart3 import SmartDisk
 
 # constants
 DEBUG       = False

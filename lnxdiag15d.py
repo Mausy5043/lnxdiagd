@@ -11,7 +11,7 @@ import time
 import traceback
 import subprocess
 
-from libdaemon import Daemon
+from mausy5043libs.libdaemon3 import Daemon
 
 # constants
 DEBUG       = False
