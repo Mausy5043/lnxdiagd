@@ -55,6 +55,15 @@ sudo pip3 install mysqlclient
 minit=$(echo $RANDOM/555 |bc)
 echo "MINIT = $minit"
 
+echo "Install common python functions..."
+pushd /tmp
+  git clone https://github.com/Mausy5043/mausy5043-common-python.git
+  # set permissions
+  chmod -R 0755 /tmp/mausy5043-common-python
+  pushd /tmp/mausy5043-common-python
+    sudo ./setup.py install
+  popd
+popd
 
 pushd "$HOME/lnxdiagd"
   # To suppress git detecting changes by chmod:
