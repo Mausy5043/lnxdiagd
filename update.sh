@@ -32,7 +32,7 @@ pushd "$HOME/lnxdiagd"
   git checkout "$BRANCH"
   git reset --hard "origin/$BRANCH" && git clean -f -d
   # Set permissions
-  chmod -R 744 ./*
+  # chmod -R 744 ./*
 
   for fname in $DIFFLIST; do
     echo ">   $fname was updated from GIT"
