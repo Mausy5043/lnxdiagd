@@ -24,15 +24,15 @@ pushd "$HOME/lnxdiagd"
   for daemon in $diaglist; do
     if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
       if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
-        logger -p user.err -t lnxdiagd "  * Stale daemon $daemon pid-file found."
+        logger -p user.err -t lnxdiagd-restarter "  * Stale daemon $daemon pid-file found."
         rm "/tmp/lnxdiagd/$daemon.pid"
           echo "  * Start DIAG $daemon"
-        eval "./lnxdiag$daemon"d.py start
+        eval "./lnxdiag$daemon"d.py restart
       fi
     else
-      logger -p user.notice -t lnxdiagd "Found daemon $daemon not running."
+      logger -p user.notice -t lnxdiagd-restarter "Found daemon $daemon not running."
         echo "  * Start DIAG $daemon"
-      eval "./lnxdiag$daemon"d.py start
+      eval "./lnxdiag$daemon"d.py restart
     fi
   done
 
@@ -40,15 +40,15 @@ pushd "$HOME/lnxdiagd"
   for daemon in $srvclist; do
     if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
       if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
-        logger -p user.err -t lnxdiagd "* Stale daemon $daemon pid-file found."
+        logger -p user.err -t lnxdiagd-restarter "* Stale daemon $daemon pid-file found."
         rm "/tmp/lnxdiagd/$daemon.pid"
           echo "  * Start SVC $daemon"
-        eval "./lnxsvc$daemon"d.py start
+        eval "./lnxsvc$daemon"d.py restart
       fi
     else
-      logger -p user.notice -t lnxdiagd "Found daemon $daemon not running."
+      logger -p user.notice -t lnxdiagd-restarter "Found daemon $daemon not running."
         echo "  * Start SVC $daemon"
-      eval "./lnxsvc$daemon"d.py start
+      eval "./lnxsvc$daemon"d.py restart
     fi
   done
 
@@ -73,15 +73,15 @@ pushd "$HOME/lnxdiagd"
     boson )   echo "BOSON"
               if [ -e /tmp/lnxdiagd/19.pid ]; then
                 if ! kill -0 $(cat /tmp/lnxdiagd/19.pid)  > /dev/null 2>&1; then
-                  logger -p user.err -t lnxdiagd "* Stale daemon 19 pid-file found."
+                  logger -p user.err -t lnxdiagd-restarter "* Stale daemon 19 pid-file found."
                   rm /tmp/lnxdiagd/19.pid
                   echo "  * Start DIAG 19"
                   eval ./lnxdiag19d.py restart
                 fi
               else
-                logger -p user.notice -t lnxdiagd "Found daemon 19 not running."
+                logger -p user.notice -t lnxdiagd-restarter "Found daemon 19 not running."
                 echo "  * Start DIAG 19"
-                eval ./lnxdiag19d.py start
+                eval ./lnxdiag19d.py restart
               fi
               ;;
     neutron ) echo "NEUTRON"
