@@ -4,7 +4,7 @@
 # * It synchronises the local copy of LNXDIAGD with the current github BRANCH
 # * It checks the state of and (re-)starts daemons if they are not (yet) running.
 
-HOSTNAME=$(cat /etc/hostname)
+HOSTNAME=$(hostname)
 BRANCH=$(cat "$HOME/.lnxdiagd.branch")
 
 # Wait for the daemons to finish their job. Prevents stale locks when restarting.
