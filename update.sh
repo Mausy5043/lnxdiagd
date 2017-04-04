@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# update.sh is run periodically by a cronjob.
+# update.sh is run manually
 # * It synchronises the local copy of LNXDIAGD with the current github BRANCH
 # * It checks the state of and (re-)starts daemons if they are not (yet) running.
 
