@@ -97,7 +97,7 @@ def do_mv_data(flock, homedir, script):
     syslog_trace("***TIMEOUT***:  {0}".format(cmnd), syslog.LOG_ERR, DEBUG)
     pass
   except subprocess.CalledProcessError:
-    syslog_trace("***ERROR***:  {0}".format(cmnd), syslog.LOG_CRIT, DEBUG)
+    syslog_trace("***ERROR***:  {0}".format(cmnd), syslog.LOG_ERR, DEBUG)
     pass
 
   return
