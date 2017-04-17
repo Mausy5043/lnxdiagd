@@ -98,6 +98,7 @@ def do_mv_data(flock, homedir, script):
     pass
   except subprocess.CalledProcessError:
     syslog_trace("***ERROR***:  {0}".format(cmnd), syslog.LOG_ERR, DEBUG)
+    time.sleep(16*60)             # wait 16 minutes for the router to restart.
     pass
 
   return
