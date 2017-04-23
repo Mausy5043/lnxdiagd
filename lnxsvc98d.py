@@ -116,14 +116,14 @@ def getsqldata(homedir, minit, nowur, nu):
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-  # data of the last day is updated every 30 minutes
+  # data of the last day is updated every <SQL_UPDATE_DAY> minutes
   if nu or ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)):
     cmnd = homedir + '/' + MYAPP + '/getsqlday.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     # data of the last year is updated at 01:xx
-    if (nowur == 1) or nu:
+    if (nowur == 1 and minit == SQL_UPDATE_DAY) or nu:
       cmnd = homedir + '/' + MYAPP + '/getsqlyear.sh'
       syslog_trace("...:  {0}".format(cmnd), True, DEBUG)  # temporary logging
       cmnd = subprocess.call(cmnd)
