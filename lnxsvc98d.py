@@ -28,7 +28,7 @@ SQLHRM      = rnd(0, 59)
 SQL_UPDATE_HOUR   = 6   # in minutes
 SQL_UPDATE_DAY    = 12  # in minutes
 SQL_UPDATE_WEEK   = 4   # in hours
-SQL_UPDATE_YEAR   = 8   # in hours
+SQL_UPDATE_YEAR   = 1   # in hours
 GRAPH_UPDATE      = 6   # in minutes
 
 # initialise logging
@@ -123,13 +123,13 @@ def getsqldata(homedir, minit, nowur, nu):
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last week is updated every <SQL_UPDATE_WEEK> hours
-  if nu or ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)):
+  if ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)) or nu:
     cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last year is updated at 01:xx
-  if (nowur == 1 and minit == SQL_UPDATE_DAY) or nu:
+  if (nowur == SQL_UPDATE_YEAR and minit == SQL_UPDATE_DAY) or nu:
     cmnd = homedir + '/' + MYAPP + '/getsqlyear.sh'
     syslog_trace("...:  {0}".format(cmnd), True, DEBUG)  # temporary logging
     cmnd = subprocess.call(cmnd)
