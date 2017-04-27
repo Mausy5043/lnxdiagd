@@ -64,6 +64,7 @@ if [ $commonlibversion != $required_commonlibversion ]; then
     # set permissions
     chmod -R 0755 /tmp/mausy5043-common-python
     pushd /tmp/mausy5043-common-python
+      git pull
       sudo ./setup.py install
     popd
   popd
