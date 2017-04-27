@@ -110,7 +110,7 @@ def do_mv_data(flock, homedir, script):
 def getsqldata(homedir, minit, nowur, nu):
   # minit = int(time.strftime('%M'))
   # nowur = int(time.strftime('%H'))
-  # data of last hour is updated every 3 minutes
+  # data of last hour is updated every <SQL_UPDATE_HOUR> minutes
   if ((minit % SQL_UPDATE_HOUR) == 0):
     cmnd = homedir + '/' + MYAPP + '/getsqlhour.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
@@ -122,13 +122,13 @@ def getsqldata(homedir, minit, nowur, nu):
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    # data of the last year is updated at 01:xx
-    if (nowur == 1 and minit == SQL_UPDATE_DAY) or nu:
-      cmnd = homedir + '/' + MYAPP + '/getsqlyear.sh'
-      syslog_trace("...:  {0}".format(cmnd), True, DEBUG)  # temporary logging
-      cmnd = subprocess.call(cmnd)
-      syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-  # data of the last week is updated every 4 hours
+  # data of the last year is updated at 01:xx
+  if (nowur == 9 and minit == SQL_UPDATE_DAY) or nu:
+    cmnd = homedir + '/' + MYAPP + '/getsqlyear.sh'
+    syslog_trace("...:  {0}".format(cmnd), True, DEBUG)  # temporary logging
+    cmnd = subprocess.call(cmnd)
+    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # data of the last week is updated every <SQL_UPDATE_WEEK> hours
   if nu or ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)):
     cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
     syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
