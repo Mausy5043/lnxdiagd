@@ -14,6 +14,7 @@ import time
 import traceback
 
 from mausy5043libs.libdaemon3 import Daemon
+import mausy5043funcs.fileops3 as mf
 from random import randrange as rnd
 
 # constants
@@ -149,15 +150,6 @@ def write_lftp(script):
     f.write('cd _' + NODE + ' ;\n')
     f.write('mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;\n')
     f.write('\n')
-
-def lock(fname):
-  open(fname, 'a').close()
-  syslog_trace("!..LOCK", False, DEBUG)
-
-def unlock(fname):
-  if os.path.isfile(fname):
-    os.remove(fname)
-    syslog_trace("!..UNLOCK", False, DEBUG)
 
 def syslog_trace(trace, logerr, out2console):
   # Log a python stack trace to syslog

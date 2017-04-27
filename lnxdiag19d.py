@@ -11,6 +11,7 @@ import traceback
 
 from mausy5043libs.libdaemon3 import Daemon
 from mausy5043libs.libsmart3 import SmartDisk
+import mausy5043funcs.fileops3 as mf
 
 # constants
 DEBUG       = False
@@ -126,21 +127,14 @@ def do_report(result, flock, fdata):
   # round to current minute to ease database JOINs
   outEpoch      = outEpoch - (outEpoch % 60)
   # ident            = NODE + '@' + str(outEpoch)
-  lock(flock)
+  mf.lock(flock)
   with open(fdata, 'a') as f:
     f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sda.id, result[0], sda.id + '@' + str(outEpoch)))
     f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sdb.id, result[1], sdb.id + '@' + str(outEpoch)))
     f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sdc.id, result[2], sdc.id + '@' + str(outEpoch)))
     f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sdd.id, result[3], sdd.id + '@' + str(outEpoch)))
     f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sde.id, result[4], sde.id + '@' + str(outEpoch)))
-  unlock(flock)
-
-def lock(fname):
-  open(fname, 'a').close()
-
-def unlock(fname):
-  if os.path.isfile(fname):
-    os.remove(fname)
+  mf.unlock(flock)
 
 def syslog_trace(trace, logerr, out2console):
   # Log a python stack trace to syslog

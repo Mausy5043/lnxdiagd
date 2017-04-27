@@ -12,6 +12,7 @@ import time
 import traceback
 
 from mausy5043libs.libdaemon3 import Daemon
+import mausy5043funcs.fileops3 as mf
 
 # constants
 DEBUG       = False
@@ -116,7 +117,7 @@ def do_markdown(flock, fdata, hwdevice):
   p5                = subprocess.Popen(["head", "-10"],         stdin=p4.stdout,  stdout=subprocess.PIPE)
   psout             = str(p5.stdout.read(), 'utf-8')
 
-  lock(flock)
+  mf.lock(flock)
 
   with open(fdata, 'w') as f:
     syslog_trace("writing {0}".format(fdata), False, DEBUG)
@@ -276,14 +277,7 @@ def do_markdown(flock, fdata, hwdevice):
     f.write(psout)    # psout comes with its own built-in '/n'
     f.write('```\n\n')
 
-  unlock(flock)
-
-def lock(fname):
-  open(fname, 'a').close()
-
-def unlock(fname):
-  if os.path.isfile(fname):
-    os.remove(fname)
+  mf.unlock(flock)
 
 def syslog_trace(trace, logerr, out2console):
   # Log a python stack trace to syslog
