@@ -69,7 +69,7 @@ if [ $commonlibversion != $required_commonlibversion ]; then
       git checkout $commonlibbranch
       sudo ./setup.py install
     popd
-    rm -rf mausy5043-common-python/
+    sudo rm -rf mausy5043-common-python/
   popd
   echo
   echo -n "Installed: "
