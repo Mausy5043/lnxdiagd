@@ -89,7 +89,6 @@ def cat(filename):
 def do_writesample(cnsql, cmd, sample):
   fail2write  = False
   dat         = (sample.split(', '))
-  uhoh = sys.exc_info()[1]
   try:
     cursql    = cnsql.cursor()
     syslog_trace("   Data: {0}".format(dat), False, DEBUG)
@@ -97,6 +96,7 @@ def do_writesample(cnsql, cmd, sample):
     cnsql.commit()
     cursql.close()
   except mdb.IntegrityError:
+    uhoh = sys.exc_info()[1]
     syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
     syslog_trace(" *** DB error : {0}".format(uhoh), syslog.LOG_ERR,  DEBUG)
     if cursql:
@@ -107,6 +107,7 @@ def do_writesample(cnsql, cmd, sample):
       syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
     pass
   except mdb.OperationalError:
+    uhoh = sys.exc_info()[1]
     syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
     syslog_trace(" *** DB error : {0}".format(uhoh), syslog.LOG_ERR,  DEBUG)
     fail2write = True
