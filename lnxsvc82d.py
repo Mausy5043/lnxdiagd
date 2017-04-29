@@ -50,8 +50,8 @@ class MyDaemon(Daemon):
     inisection      = MYID
     home            = os.path.expanduser('~')
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
-    syslog_trace("Config file   : {0}".format(s), False, DEBUG)
-    syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
+    mf.syslog_trace("Config file   : {0}".format(s), False, DEBUG)
+    mf.syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reporttime      = iniconf.getint(inisection, "reporttime")
     # cycles          = iniconf.getint(inisection, "cycles")
     samplespercycle = iniconf.getint(inisection, "samplespercycle")
@@ -76,12 +76,12 @@ class MyDaemon(Daemon):
 
         waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
         if (waittime > 0):
-          syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
-          syslog_trace("................................", False, DEBUG)
+          mf.syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
+          mf.syslog_trace("................................", False, DEBUG)
           time.sleep(waittime)
       except Exception:
-        syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
-        syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
+        mf.syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
+        mf.syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
 
 def do_markdown(flock, fdata, hwdevice):
@@ -120,7 +120,7 @@ def do_markdown(flock, fdata, hwdevice):
   mf.lock(flock)
 
   with open(fdata, 'w') as f:
-    syslog_trace("writing {0}".format(fdata), False, DEBUG)
+    mf.syslog_trace("writing {0}".format(fdata), False, DEBUG)
     # YAML header
     f.write('---\n')
     f.write('title: ' + NODE + '\n')
@@ -279,15 +279,6 @@ def do_markdown(flock, fdata, hwdevice):
 
   mf.unlock(flock)
 
-def syslog_trace(trace, logerr, out2console):
-  # Log a python stack trace to syslog
-  log_lines = trace.split('\n')
-  for line in log_lines:
-    if line and logerr:
-      syslog.syslog(logerr, line)
-    if line and out2console:
-      print(line)
-
 
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + MYAPP + '/' + MYID + '.pid')
@@ -302,7 +293,7 @@ if __name__ == "__main__":
       # assist with debugging.
       print("Debug-mode started. Use <Ctrl>+C to stop.")
       DEBUG = True
-      syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
+      mf.syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
       daemon.run()
     else:
       print("Unknown command")

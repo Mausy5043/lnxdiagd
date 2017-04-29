@@ -38,19 +38,19 @@ class MyDaemon(Daemon):
         logtext = "{0} : {1}".format("Attached to MySQL server", versql)
         syslog.syslog(syslog.LOG_INFO, logtext)
     except mdb.Error:
-      syslog_trace("Unexpected MySQL error in run(init)", syslog.LOG_CRIT, DEBUG)
-      syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
+      mf.syslog_trace("Unexpected MySQL error in run(init)", syslog.LOG_CRIT, DEBUG)
+      mf.syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
       if consql.open:    # attempt to close connection to MySQLdb
         consql.close()
-        syslog_trace(" ** Closed MySQL connection in run() **", syslog.LOG_CRIT, DEBUG)
+        mf.syslog_trace(" ** Closed MySQL connection in run() **", syslog.LOG_CRIT, DEBUG)
       raise
 
     iniconf         = configparser.ConfigParser()
     inisection      = MYID
     home            = os.path.expanduser('~')
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
-    syslog_trace("Config file   : {0}".format(s), False, DEBUG)
-    syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
+    mf.syslog_trace("Config file   : {0}".format(s), False, DEBUG)
+    mf.syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reporttime      = iniconf.getint(inisection, "reporttime")
     # cycles          = iniconf.getint(inisection, "cycles")
     samplespercycle = iniconf.getint(inisection, "samplespercycle")
@@ -68,16 +68,16 @@ class MyDaemon(Daemon):
 
         waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
         if (waittime > 0):
-          syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
-          syslog_trace("................................", False, DEBUG)
+          mf.syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
+          mf.syslog_trace("................................", False, DEBUG)
           time.sleep(waittime)
       except Exception:
-        syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
-        syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
+        mf.syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
+        mf.syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         # attempt to close connection to MySQLdb
         if consql.open:
           consql.close()
-          syslog_trace(" *** Closed MySQL connection in run() ***", syslog.LOG_CRIT, DEBUG)
+          mf.syslog_trace(" *** Closed MySQL connection in run() ***", syslog.LOG_CRIT, DEBUG)
         raise
 
 def cat(filename):
@@ -92,38 +92,38 @@ def do_writesample(cnsql, cmd, sample):
   dat         = (sample.split(', '))
   try:
     cursql    = cnsql.cursor()
-    syslog_trace("   Data: {0}".format(dat), False, DEBUG)
+    mf.syslog_trace("   Data: {0}".format(dat), False, DEBUG)
     cursql.execute(cmd, dat)
     cnsql.commit()
     cursql.close()
   except mdb.IntegrityError:
-    syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
-    syslog_trace(" *** DB error : {0}".format(sys.exc_info()[1]), syslog.LOG_ERR,  DEBUG)
+    mf.syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
+    mf.syslog_trace(" *** DB error : {0}".format(sys.exc_info()[1]), syslog.LOG_ERR,  DEBUG)
     if cursql:
       cursql.close()
-      syslog_trace(" *I* Closed MySQL connection in do_writesample()", syslog.LOG_ERR, DEBUG)
-      syslog_trace(" *** Execution of MySQL command {0} FAILED!".format(cmd), syslog.LOG_ERR, DEBUG)
-      syslog_trace(" *** Not added to MySQLdb: {0}".format(dat), syslog.LOG_ERR, DEBUG)
-      syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
+      mf.syslog_trace(" *I* Closed MySQL connection in do_writesample()", syslog.LOG_ERR, DEBUG)
+      mf.syslog_trace(" *** Execution of MySQL command {0} FAILED!".format(cmd), syslog.LOG_ERR, DEBUG)
+      mf.syslog_trace(" *** Not added to MySQLdb: {0}".format(dat), syslog.LOG_ERR, DEBUG)
+      mf.syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
     pass
   except mdb.OperationalError:
-    syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
-    syslog_trace(" *** DB error : {0}".format(sys.exc_info()[1]), syslog.LOG_ERR,  DEBUG)
+    mf.syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
+    mf.syslog_trace(" *** DB error : {0}".format(sys.exc_info()[1]), syslog.LOG_ERR,  DEBUG)
     fail2write = True
     if cursql:
       cursql.close()
-      syslog_trace(" *O* Closed MySQL connection in do_writesample()", syslog.LOG_ERR, DEBUG)
-      syslog_trace(" *** Execution of MySQL command {0} FAILED!".format(cmd), syslog.LOG_ERR, DEBUG)
-      syslog_trace(" *** Not added to MySQLdb: {0}".format(dat), syslog.LOG_ERR, DEBUG)
-      syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
+      mf.syslog_trace(" *O* Closed MySQL connection in do_writesample()", syslog.LOG_ERR, DEBUG)
+      mf.syslog_trace(" *** Execution of MySQL command {0} FAILED!".format(cmd), syslog.LOG_ERR, DEBUG)
+      mf.syslog_trace(" *** Not added to MySQLdb: {0}".format(dat), syslog.LOG_ERR, DEBUG)
+      mf.syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
     pass
 
   return fail2write
 
 def do_sql_data(flock, inicnfg, cnsql):
-  syslog_trace("============================", False, DEBUG)
-  syslog_trace("Pushing data to MySQL-server", False, DEBUG)
-  syslog_trace("============================", False, DEBUG)
+  mf.syslog_trace("============================", False, DEBUG)
+  mf.syslog_trace("Pushing data to MySQL-server", False, DEBUG)
+  mf.syslog_trace("============================", False, DEBUG)
   mf.unlock(flock)  # remove stale lock
   time.sleep(2)
   mf.lock(flock)
@@ -134,19 +134,19 @@ def do_sql_data(flock, inicnfg, cnsql):
     count_internal_locks = 0
     for fname in glob.glob(r'/tmp/' + MYAPP + '/*.lock'):
       count_internal_locks += 1
-    syslog_trace("{0} internal locks exist".format(count_internal_locks), False, DEBUG)
+    mf.syslog_trace("{0} internal locks exist".format(count_internal_locks), False, DEBUG)
   # endwhile
 
   for inisect in inicnfg.sections():  # Check each section of the config.ini file
     errsql = False
     try:
       ifile = inicnfg.get(inisect, "resultfile")
-      syslog_trace(" < {0}".format(ifile), False, DEBUG)
+      mf.syslog_trace(" < {0}".format(ifile), False, DEBUG)
 
       try:
         sqlcmd = []
         sqlcmd = inicnfg.get(inisect, "sqlcmd")
-        syslog_trace("   CMD : {0}".format(sqlcmd), False, DEBUG)
+        mf.syslog_trace("   CMD : {0}".format(sqlcmd), False, DEBUG)
 
         data = cat(ifile).splitlines()
         if data:
@@ -155,29 +155,20 @@ def do_sql_data(flock, inicnfg, cnsql):
           # endfor
         # endif
       except configparser.NoOptionError:  # no sqlcmd
-        syslog_trace("*1* {0}".format(sys.exc_info()[1]), False, DEBUG)
+        mf.syslog_trace("*1* {0}".format(sys.exc_info()[1]), False, DEBUG)
     except configparser.NoOptionError:  # no ifile
-      syslog_trace("*2* {0}".format(sys.exc_info()[1]), False, DEBUG)
+      mf.syslog_trace("*2* {0}".format(sys.exc_info()[1]), False, DEBUG)
 
     try:
       if os.path.isfile(ifile) and not errsql:
         # IF resultfile exists AND SQL-job was successful or non-existing
-        syslog_trace("Deleting {0}".format(ifile), False, DEBUG)
+        mf.syslog_trace("Deleting {0}".format(ifile), False, DEBUG)
         os.remove(ifile)
     except configparser.NoOptionError:  # no ofile
-      syslog_trace("*3* {0}".format(sys.exc_info()[1]), False, DEBUG)
+      mf.syslog_trace("*3* {0}".format(sys.exc_info()[1]), False, DEBUG)
 
   # endfor
   mf.unlock(flock)
-
-def syslog_trace(trace, logerr, out2console):
-  # Log a python stack trace to syslog
-  log_lines = trace.split('\n')
-  for line in log_lines:
-    if line and logerr:
-      syslog.syslog(logerr, line)
-    if line and out2console:
-      print(line)
 
 
 if __name__ == "__main__":
@@ -193,7 +184,7 @@ if __name__ == "__main__":
       # assist with debugging.
       print("Debug-mode started. Use <Ctrl>+C to stop.")
       DEBUG = True
-      syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
+      mf.syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
       daemon.run()
     else:
       print("Unknown command")
