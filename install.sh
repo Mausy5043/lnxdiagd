@@ -5,7 +5,7 @@
 
 ME=$(whoami)
 required_commonlibversion="0.4.1"
-comonlibbranch="v0_4"
+commonlibbranch="v0_4"
 
 echo -n "Started installing LNXDIAGD on "; date
 
@@ -58,15 +58,12 @@ minit=$(echo $RANDOM/555 |bc)
 echo "MINIT = $minit"
 
 commonlibversion=$(pip3 freeze |grep mausy5043 |cut -c 26-)
-if [ $commonlibversion != $required_commonlibversion ]; then
+if [ "$commonlibversion" != "$required_commonlibversion" ]; then
   echo "Install common python functions..."
   sudo pip3 uninstall -y mausy5043-common-python
   pushd /tmp
-    git clone https://github.com/Mausy5043/mausy5043-common-python.git
-    # set permissions
-    chmod -R 0755 /tmp/mausy5043-common-python
+    git clone -b $commonlibbranch https://github.com/Mausy5043/mausy5043-common-python.git
     pushd /tmp/mausy5043-common-python
-      git checkout $commonlibbranch
       sudo ./setup.py install
     popd
     sudo rm -rf mausy5043-common-python/
