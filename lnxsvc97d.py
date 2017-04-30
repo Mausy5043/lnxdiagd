@@ -118,7 +118,7 @@ def do_writesample(cnsql, cmd, sample):
       syslog_trace(" *** Execution of MySQL command {0} FAILED!".format(cmd), syslog.LOG_ERR, DEBUG)
       syslog_trace(" *** Not added to MySQLdb: {0}".format(dat), syslog.LOG_ERR, DEBUG)
       syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
-    if e.args[0] in (mdbcr.SERVER_GONE_ERROR, mdbcr.CR.SERVER_LOST):
+    if e.args[0] in (mdbcr.SERVER_GONE_ERROR, mdbcr.SERVER_LOST):
       time.sleep(17*60)             # wait 17 minutes for the server to return.
       raise
     else:
