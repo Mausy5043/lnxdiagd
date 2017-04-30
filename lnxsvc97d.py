@@ -106,8 +106,7 @@ def do_writesample(cnsql, cmd, sample):
       syslog_trace(" *** Not added to MySQLdb: {0}".format(dat), syslog.LOG_ERR, DEBUG)
       syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
     pass
-  except mdb.OperationalError:
-    uhoh = sys.exc_info()[1]
+  except mdb.OperationalError, e:
     syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
     syslog_trace(" *** DB error : {0}".format(uhoh), syslog.LOG_ERR,  DEBUG)
     fail2write = True
@@ -117,8 +116,9 @@ def do_writesample(cnsql, cmd, sample):
       syslog_trace(" *** Execution of MySQL command {0} FAILED!".format(cmd), syslog.LOG_ERR, DEBUG)
       syslog_trace(" *** Not added to MySQLdb: {0}".format(dat), syslog.LOG_ERR, DEBUG)
       syslog_trace(" ***** MySQL ERROR *****", syslog.LOG_ERR, DEBUG)
-    if (int(uhoh[0]) == 2006):
-      time.sleep(17*60)             # wait 17 minutes for the router to restart.
+      syslog_trace(" e: {0}".format(e), syslog.LOG_ERR, DEBUG)
+    if e.args[0] in (mdb.constants.CR.SERVER_GONE_ERROR, mdb.constants.CR.SERVER_LOST):
+      time.sleep(17*60)             # wait 17 minutes for the server to reappear.
       raise
     else:
       pass
