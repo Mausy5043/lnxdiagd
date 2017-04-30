@@ -77,13 +77,6 @@ class MyDaemon(Daemon):
         mf.syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
 
-def cat(filename):
-  ret = ""
-  if os.path.isfile(filename):
-    with open(filename, 'r') as f:
-      ret = f.read().strip('\n')
-  return ret
-
 def do_work(nwdev):
   # 6 #datapoints gathered here
   # Network traffic
@@ -94,7 +87,7 @@ def do_work(nwdev):
   loIn  = 0
   loOut = 0
 
-  list  = cat("/proc/net/dev").replace(":", " ").splitlines()
+  list  = mf.cat("/proc/net/dev").replace(":", " ").splitlines()
   for line in range(2, len(list)):
     device = list[line].split()[0]
     if device == "lo":

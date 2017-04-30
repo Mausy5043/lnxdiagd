@@ -71,13 +71,6 @@ class MyDaemon(Daemon):
         mf.syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
 
-def cat(filename):
-  ret = ""
-  if os.path.isfile(filename):
-    with open(filename, 'r') as f:
-      ret = f.read().strip('\n')
-  return ret
-
 def do_work():
   # 8 #datapoints gathered here
   # memory /proc/meminfo
@@ -89,7 +82,7 @@ def do_work():
   # ref: http://thoughtsbyclayg.blogspot.nl/2008/09/display-free-memory-on-linux-ubuntu.html
   # ref: http://serverfault.com/questions/85470/meaning-of-the-buffers-cache-line-in-the-output-of-free
 
-  out = cat("/proc/meminfo").splitlines()
+  out = mf.cat("/proc/meminfo").splitlines()
   for line in range(0, len(out)-1):
     mem = out[line].split()
     if mem[0] == 'MemFree:':
