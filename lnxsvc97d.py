@@ -120,7 +120,7 @@ def do_writesample(cnsql, cmd, sample):
       syslog_trace(" e[0]: {0}".format(e[0]), syslog.LOG_ERR, DEBUG)
       syslog_trace(" e[1]: {0}".format(e[1]), syslog.LOG_ERR, DEBUG)
     if e.args[0] in (mdb.constants.CR.SERVER_GONE_ERROR, mdb.constants.CR.SERVER_LOST):
-      time.sleep(17*60)             # wait 17 minutes for the router to restart.
+      time.sleep(17*60)             # wait 17 minutes for the server to return.
       raise
     else:
       pass
