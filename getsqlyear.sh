@@ -19,7 +19,7 @@ pushd "$HOME/lnxdiagd" >/dev/null
    SELECT MIN(sample_time), MIN(temperature), AVG(temperature), MAX(temperature) \
    FROM systemp \
    WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
-   GROUP BY YEAR(sample_time), MONTH(sample_time), DAY(sample_time);" \
+   GROUP BY YEAR(sample_time), MONTH(sample_time), WEEK(sample_time);" \
   | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11y.csv"
 
   # Get year data for system load (sysload; graph12)
@@ -29,6 +29,6 @@ pushd "$HOME/lnxdiagd" >/dev/null
           AVG(user),  AVG(system),  AVG(waiting) \
    FROM sysload \
    WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
-   GROUP BY YEAR(sample_time), MONTH(sample_time), DAY(sample_time);" \
+   GROUP BY YEAR(sample_time), MONTH(sample_time), WEEK(sample_time);" \
   | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql12y.csv"
 popd >/dev/null
