@@ -33,7 +33,7 @@ pushd "$HOME/lnxdiagd" >/dev/null
 
   # Get day data for system temperature (systemp; graph11)
   divider=1800
-  mysql -h sql.lan --skip-column-names -e \
+  mysql -h sql --skip-column-names -e \
   "USE domotica; \
    SELECT MIN(sample_time), MIN(temperature), AVG(temperature), MAX(temperature) \
    FROM systemp \
@@ -42,7 +42,7 @@ pushd "$HOME/lnxdiagd" >/dev/null
   | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11d.csv"
 
   # Get day data for system load (sysload; graph12)
-  mysql -h sql.lan --skip-column-names -e \
+  mysql -h sql --skip-column-names -e \
   "USE domotica; \
    SELECT MIN(sample_time), AVG(load5min), \
           AVG(user),  AVG(system),  AVG(waiting) \
