@@ -28,7 +28,7 @@ sdb = SmartDisk("wwn-0x50014ee261020fce")  # WD-WCC4N5PF96KD
 sdc = SmartDisk("wwn-0x50014ee605a043e2")  # WD-WMC4N0K01249
 sdd = SmartDisk("wwn-0x50014ee6055a237b")  # WD-WMC4N0J6Y6LW
 sde = SmartDisk("wwn-0x50014ee60507b79c")  # WD-WMC4N0E24DVU
-# sdf =
+# sdf = wwn-0x50014ee262ed6df5
 # sdg =
 
 DEBUG = False
