@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 # daemon98.py file post-processor.
+# - graphs
+# - MySQL queries
+# - upload
 
 import configparser
 import os
@@ -10,7 +13,8 @@ import syslog
 import time
 import traceback
 
-from libdaemon import Daemon
+from mausy5043libs.libdaemon3 import Daemon
+import mausy5043funcs.fileops3 as mf
 from random import randrange as rnd
 
 # constants
@@ -25,7 +29,7 @@ SQLHRM      = rnd(0, 59)
 SQL_UPDATE_HOUR   = 6   # in minutes
 SQL_UPDATE_DAY    = 12  # in minutes
 SQL_UPDATE_WEEK   = 4   # in hours
-SQL_UPDATE_YEAR   = 8   # in hours
+SQL_UPDATE_YEAR   = 1   # in hours
 GRAPH_UPDATE      = 6   # in minutes
 
 # initialise logging
@@ -39,10 +43,10 @@ class MyDaemon(Daemon):
     inisection      = MYID
     home            = os.path.expanduser('~')
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
-    syslog_trace("Config file   : {0}".format(s), False, DEBUG)
-    syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
-    syslog_trace("getsqlday.sh  runs every 30 minutes starting at minute {0}".format(SQLMNT), syslog.LOG_DEBUG, DEBUG)
-    syslog_trace("getsqlweek.sh runs every 4th hour  starting  at hour   {0}:{1}".format(SQLHR, SQLHRM), syslog.LOG_DEBUG, DEBUG)
+    mf.syslog_trace("Config file   : {0}".format(s), False, DEBUG)
+    mf.syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
+    mf.syslog_trace("getsqlday.sh  runs every 30 minutes starting at minute {0}".format(SQLMNT), syslog.LOG_DEBUG, DEBUG)
+    mf.syslog_trace("getsqlweek.sh runs every 4th hour  starting  at hour   {0}:{1}".format(SQLHR, SQLHRM), syslog.LOG_DEBUG, DEBUG)
     reporttime      = iniconf.getint(inisection, "reporttime")
     samplespercycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
@@ -60,12 +64,12 @@ class MyDaemon(Daemon):
 
         waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
         if (waittime > 0):
-          syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
-          syslog_trace("................................", False, DEBUG)
+          mf.syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
+          mf.syslog_trace("................................", False, DEBUG)
           time.sleep(waittime)
       except Exception:
-        syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
-        syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
+        mf.syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
+        mf.syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
 
 def do_mv_data(flock, homedir, script):
@@ -81,24 +85,24 @@ def do_mv_data(flock, homedir, script):
   # Create the graphs based on the MySQL data every 3rd minute
   if ((minit % GRAPH_UPDATE) == 0):
     cmnd = homedir + '/' + MYAPP + '/mkgraphs.sh'
-    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
-    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
 
   try:
     # Upload the webpage and graphs
     if os.path.isfile('/tmp/' + MYAPP + '/site/text.md'):
       write_lftp(script)
       cmnd = ['lftp', '-f', script]
-      syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+      mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
       cmnd = subprocess.check_output(cmnd, timeout=20)
-      syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+      mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   except subprocess.TimeoutExpired:
-    syslog_trace("***TIMEOUT***:  {0}".format(cmnd), syslog.LOG_ERR, DEBUG)
+    mf.syslog_trace("***TIMEOUT***:  {0}".format(cmnd), syslog.LOG_ERR, DEBUG)
     time.sleep(17*60)             # wait 17 minutes for the router to restart.
     pass
   except subprocess.CalledProcessError:
-    syslog_trace("***ERROR***:    {0}".format(cmnd), syslog.LOG_ERR, DEBUG)
+    mf.syslog_trace("***ERROR***:    {0}".format(cmnd), syslog.LOG_ERR, DEBUG)
     time.sleep(17*60)             # wait 17 minutes for the router to restart.
     pass
 
@@ -107,24 +111,30 @@ def do_mv_data(flock, homedir, script):
 def getsqldata(homedir, minit, nowur, nu):
   # minit = int(time.strftime('%M'))
   # nowur = int(time.strftime('%H'))
-  # data of last hour is updated every 3 minutes
-  if ((minit % SQL_UPDATE_HOUR) == 0):
+  # data of last hour is updated every <SQL_UPDATE_HOUR> minutes
+  if ((minit % SQL_UPDATE_HOUR) == 0) or nu:
     cmnd = homedir + '/' + MYAPP + '/getsqlhour.sh'
-    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
-    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-  # data of the last day is updated every 30 minutes
-  if nu or ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)):
+    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # data of the last day is updated every <SQL_UPDATE_DAY> minutes
+  if ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)) or nu:
     cmnd = homedir + '/' + MYAPP + '/getsqlday.sh'
-    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
-    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-  # dat of the last week is updated every 4 hours
-  if nu or ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)):
+    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # data of the last week is updated every <SQL_UPDATE_WEEK> hours
+  if ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)) or nu:
     cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
-    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
-    syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # data of the last year is updated at 01:xx
+  if (nowur == SQL_UPDATE_YEAR and minit == SQL_UPDATE_DAY) or nu:
+    cmnd = homedir + '/' + MYAPP + '/getsqlyear.sh'
+    mf.syslog_trace("...:  {0}".format(cmnd), True, DEBUG)  # temporary logging
+    cmnd = subprocess.call(cmnd)
+    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
 
 def write_lftp(script):
   with open(script, 'w') as f:
@@ -141,24 +151,6 @@ def write_lftp(script):
     f.write('mirror --reverse --delete --verbose=3 -c /tmp/' + MYAPP + '/site/ . ;\n')
     f.write('\n')
 
-def lock(fname):
-  open(fname, 'a').close()
-  syslog_trace("!..LOCK", False, DEBUG)
-
-def unlock(fname):
-  if os.path.isfile(fname):
-    os.remove(fname)
-    syslog_trace("!..UNLOCK", False, DEBUG)
-
-def syslog_trace(trace, logerr, out2console):
-  # Log a python stack trace to syslog
-  log_lines = trace.split('\n')
-  for line in log_lines:
-    if line and logerr:
-      syslog.syslog(logerr, line)
-    if line and out2console:
-      print(line)
-
 
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + MYAPP + '/' + MYID + '.pid')
@@ -173,7 +165,7 @@ if __name__ == "__main__":
       # assist with debugging.
       print("Debug-mode started. Use <Ctrl>+C to stop.")
       DEBUG = True
-      syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
+      mf.syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
       daemon.run()
     else:
       print("Unknown command")

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# update.sh is run periodically by a cronjob.
+# update.sh is run manually
 # * It synchronises the local copy of LNXDIAGD with the current github BRANCH
 # * It checks the state of and (re-)starts daemons if they are not (yet) running.
 
@@ -8,8 +8,8 @@ HOSTNAME=$(hostname)
 BRANCH=$(cat "$HOME/.lnxdiagd.branch")
 
 # Wait for the daemons to finish their job. Prevents stale locks when restarting.
-echo "Waiting 30s..."
-sleep 30
+#echo "Waiting 30s..."
+#sleep 30
 
 # make sure working tree exists
 if [ ! -d /tmp/lnxdiagd/site/img ]; then
@@ -32,7 +32,7 @@ pushd "$HOME/lnxdiagd"
   git checkout "$BRANCH"
   git reset --hard "origin/$BRANCH" && git clean -f -d
   # Set permissions
-  chmod -R 744 ./*
+  # chmod -R 744 ./*
 
   for fname in $DIFFLIST; do
     echo ">   $fname was updated from GIT"

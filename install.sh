@@ -4,6 +4,8 @@
 # a `*boot` repo.
 
 ME=$(whoami)
+required_commonlibversion="0.4.2"
+commonlibbranch="v0_4"
 
 echo -n "Started installing LNXDIAGD on "; date
 
@@ -37,6 +39,8 @@ install_package "python3"
 install_package "build-essential"
 install_package "python3-dev"
 install_package "python3-pip"
+install_package "python3-numpy"
+install_package "python3-matplotlib"
 
 # gnuPlot packages
 #install_package "python-numpy"
@@ -53,13 +57,29 @@ sudo pip3 install mysqlclient
 minit=$(echo $RANDOM/555 |bc)
 echo "MINIT = $minit"
 
+commonlibversion=$(pip3 freeze |grep mausy5043 |cut -c 26-)
+if [ "$commonlibversion" != "$required_commonlibversion" ]; then
+  echo "Install common python functions..."
+  sudo pip3 uninstall -y mausy5043-common-python
+  pushd /tmp
+    git clone -b $commonlibbranch https://github.com/Mausy5043/mausy5043-common-python.git
+    pushd /tmp/mausy5043-common-python
+      sudo ./setup.py install
+    popd
+    sudo rm -rf mausy5043-common-python/
+  popd
+  echo
+  echo -n "Installed: "
+  pip3 freeze | grep mausy5043
+  echo
+fi
 
 pushd "$HOME/lnxdiagd"
   # To suppress git detecting changes by chmod:
   git config core.fileMode false
   # set the branch
   if [ ! -e "$HOME/.lnxdiagd.branch" ]; then
-    echo "v3_1" > "$HOME/.lnxdiagd.branch"
+    echo "v4_x" > "$HOME/.lnxdiagd.branch"
   fi
 
   # Create the /etc/cron.d directory if it doesn't exist
@@ -67,7 +87,7 @@ pushd "$HOME/lnxdiagd"
 
   # Set up some cronjobs
   echo "# m h dom mon dow user  command" | sudo tee /etc/cron.d/lnxdiagd
-  echo "$minit  * *   *   *   $ME    $HOME/lnxdiagd/restart.sh 2>&1 | logger -p info -t lnxdiagd" | sudo tee --append /etc/cron.d/lnxdiagd
+  echo "$minit  * *   *   *   $ME    $HOME/lnxdiagd/start.sh 2>&1 | logger -p info -t lnxdiagd" | sudo tee --append /etc/cron.d/lnxdiagd
   # @reboot we allow for 120s for the WiFi to come up:
   echo "@reboot               $ME    sleep 120; $HOME/lnxdiagd/update.sh 2>&1 | logger -p info -t lnxdiagd" | sudo tee --append /etc/cron.d/lnxdiagd
 

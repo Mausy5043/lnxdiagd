@@ -10,7 +10,8 @@ import syslog
 import time
 import traceback
 
-from libdaemon import Daemon
+from mausy5043libs.libdaemon3 import Daemon
+import mausy5043funcs.fileops3 as mf
 
 # constants
 DEBUG       = False
@@ -30,8 +31,8 @@ class MyDaemon(Daemon):
     inisection      = MYID
     home            = os.path.expanduser('~')
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
-    syslog_trace("Config file   : {0}".format(s), False, DEBUG)
-    syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
+    mf.syslog_trace("Config file   : {0}".format(s), False, DEBUG)
+    mf.syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reporttime      = iniconf.getint(inisection, "reporttime")
     # cycles          = iniconf.getint(inisection, "cycles")
     samplespercycle = iniconf.getint(inisection, "samplespercycle")
@@ -41,7 +42,7 @@ class MyDaemon(Daemon):
       netdevice     = iniconf.get(inisection, NODE+".net")
     except configparser.NoOptionError:  # no netdevice
       netdevice     = "eth0"
-    syslog_trace("Monitoring device: {0}".format(netdevice), syslog.LOG_DEBUG, DEBUG)
+    mf.syslog_trace("Monitoring device: {0}".format(netdevice), syslog.LOG_DEBUG, DEBUG)
 
     # samples         = samplespercycle * cycles          # total number of samples averaged
     sampletime      = reporttime/samplespercycle        # time [s] between samples
@@ -56,32 +57,25 @@ class MyDaemon(Daemon):
         result      = do_work(netdevice).split(',')
 
         data        = list(map(int, result))
-        syslog_trace("Data     : {0}".format(data), False, DEBUG)
+        mf.syslog_trace("Data     : {0}".format(data), False, DEBUG)
 
         # report sample average
         if (starttime % reporttime < sampletime):
           averages  = data
           # averages = sum(data[:]) / len(data)
           # if DEBUG: print averages
-          syslog_trace("Averages : {0}".format(averages), False, DEBUG)
+          mf.syslog_trace("Averages : {0}".format(averages), False, DEBUG)
           do_report(averages, flock, fdata)
 
         waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
         if (waittime > 0):
-          syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
-          syslog_trace("................................", False, DEBUG)
+          mf.syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
+          mf.syslog_trace("................................", False, DEBUG)
           time.sleep(waittime)
       except Exception:
-        syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
-        syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
+        mf.syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
+        mf.syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
-
-def cat(filename):
-  ret = ""
-  if os.path.isfile(filename):
-    with open(filename, 'r') as f:
-      ret = f.read().strip('\n')
-  return ret
 
 def do_work(nwdev):
   # 6 #datapoints gathered here
@@ -93,7 +87,7 @@ def do_work(nwdev):
   loIn  = 0
   loOut = 0
 
-  list  = cat("/proc/net/dev").replace(":", " ").splitlines()
+  list  = mf.cat("/proc/net/dev").replace(":", " ").splitlines()
   for line in range(2, len(list)):
     device = list[line].split()[0]
     if device == "lo":
@@ -120,27 +114,11 @@ def do_report(result, flock, fdata):
   outEpoch  = outEpoch - (outEpoch % 60)
   result    = ', '.join(map(str, result))
   ident            = NODE + '@' + str(outEpoch)
-  syslog_trace(">>> ID : {0}  -  {1}".format(ident, outDate), False, DEBUG)
-  lock(flock)
+  mf.syslog_trace(">>> ID : {0}  -  {1}".format(ident, outDate), False, DEBUG)
+  mf.lock(flock)
   with open(fdata, 'a') as f:
     f.write('{0}, {1}, {2}, {3}, {4}\n'.format(outDate, outEpoch, NODE, result, ident))
-  unlock(flock)
-
-def lock(fname):
-  open(fname, 'a').close()
-
-def unlock(fname):
-  if os.path.isfile(fname):
-    os.remove(fname)
-
-def syslog_trace(trace, logerr, out2console):
-  # Log a python stack trace to syslog
-  log_lines = trace.split('\n')
-  for line in log_lines:
-    if line and logerr:
-      syslog.syslog(logerr, line)
-    if line and out2console:
-      print(line)
+  mf.unlock(flock)
 
 
 if __name__ == "__main__":
@@ -156,7 +134,7 @@ if __name__ == "__main__":
       # assist with debugging.
       print("Debug-mode started. Use <Ctrl>+C to stop.")
       DEBUG = True
-      syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
+      mf.syslog_trace("Daemon logging is ON", syslog.LOG_DEBUG, DEBUG)
       daemon.run()
     else:
       print("Unknown command")
