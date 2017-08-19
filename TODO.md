@@ -28,3 +28,4 @@ As a result of the chosen resolution, the queries can be timed appropriately:
   
 Also, all queries need to be performed at start-up. And it may be considered to have the daemons add the new data to the local store, thus reducing/eliminating the need for queries. That would also mean the need to construct a local data store.
 This could be achieved using `rrdtool` (which would add an addtional option for graphing) or a local database (SQL) or a local flat-textfile (CSV)
+The use of `rrdtool` on Raspberry Pi is less appropriate as it may reduce the SD-card's lifetime. However, if the RRD database is stored on `tmpfs`s this should not be an issue. 
