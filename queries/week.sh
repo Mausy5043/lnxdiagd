@@ -2,12 +2,13 @@
 
 # Pull WEEKLY data from MySQL server and graph them.
 
-# shellcheck disable=SC1091
-source ./sql-includes
-
-#sleep $(echo $RANDOM/555 |bc)
-
 pushd "$HOME/lnxdiagd" >/dev/null || exit 1
+
+  # shellcheck disable=SC1091
+  source ./sql-includes || exit
+
+  #sleep $(echo $RANDOM/555 |bc)
+
   mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM systemp where (sample_time >=NOW() - ${W_INTERVAL}) AND (host = '${HOST}');" | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql11w.csv"
   mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM sysload where (sample_time >=NOW() - ${W_INTERVAL}) AND (host = '${HOST}');" | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql12w.csv"
   mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM sysnet  where (sample_time >=NOW() - ${W_INTERVAL}) AND (host = '${HOST}');" | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13w.csv"

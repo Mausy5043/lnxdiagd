@@ -2,12 +2,13 @@
 
 # Pull YEARLY data from MySQL server.
 
-# shellcheck disable=SC1091
-source ./sql-includes
-
-#sleep $(echo $RANDOM/555 |bc)
-
 pushd "$HOME/lnxdiagd" >/dev/null  || exit 1
+
+  # shellcheck disable=SC1091
+  source ./sql-includes || exit
+
+  #sleep $(echo $RANDOM/555 |bc)
+
   # Get year data for system temperature (systemp; graph11)
   mysql -h sql --skip-column-names -e             \
   "USE domotica;                                  \
