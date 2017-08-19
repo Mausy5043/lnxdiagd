@@ -17,7 +17,7 @@ if [ ! -d /tmp/lnxdiagd/mysql ]; then
   chmod -R 755 /tmp/lnxdiagd
 fi
 
-pushd "$HOME/lnxdiagd"
+pushd "$HOME/lnxdiagd" || exit 1
   source ./includes
 
   # Check if DIAG daemons are running
