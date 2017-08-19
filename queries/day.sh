@@ -31,7 +31,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
           MAX(temperature)                        \
     FROM systemp                                  \
     WHERE (sample_time >= NOW() - ${D_INTERVAL})  \
-      AND (sample_time <= NOW() - ${H_INTERVAL})  \
+      AND (sample_time <= NOW() - ${DH_INTERVAL}) \
       AND (host = '${HOST}')                      \
     GROUP BY (sample_epoch DIV ${D_DIVIDER});"    \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE4}/sql11d.csv"
@@ -46,7 +46,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
           AVG(waiting)                            \
     FROM sysload                                  \
     WHERE (sample_time >= NOW() - ${D_INTERVAL})  \
-      AND (sample_time <= NOW() - ${H_INTERVAL})  \
+      AND (sample_time <= NOW() - ${DH_INTERVAL}) \
       AND (host = '${HOST}')                      \
     GROUP BY (sample_epoch DIV ${D_DIVIDER});"    \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE4}/sql12d.csv"
