@@ -9,7 +9,7 @@ UTCSECONDS=$(date -d "$UTC" +%s)
 UTCOFFSET=$((LOCALSECONDS - UTCSECONDS))
 host=$(hostname)
 
-pushd "$HOME/lnxdiagd" >/dev/null
+pushd "$HOME/lnxdiagd" >/dev/null  || exit 1
   if [ $(wc -l < /tmp/lnxdiagd/mysql/sql11d.csv) -gt 5 ]; then
     time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graphs/graph11.gp
   fi
