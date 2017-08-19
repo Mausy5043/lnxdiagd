@@ -2,7 +2,7 @@
 
 # Pull YEARLY data from MySQL server.
 
-pushd "$HOME/lnxdiagd" >/dev/null  || exit 1
+pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
 
   # shellcheck disable=SC1091
   source ./sql-includes || exit
