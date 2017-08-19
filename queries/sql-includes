@@ -1,0 +1,23 @@
+
+HOST=$(hostname)
+
+H_DIVIDER=60
+H_INTERVAL="INTERVAL 70 MINUTE "
+
+D_DIVIDER=1800
+D_INTERVAL="D_INTERVAL 30 HOUR "
+
+W_DIVIDER=14400
+W_INTERVAL="INTERVAL 8 DAY "
+
+Y_INTERVAL="Y_INTERVAL 370 DAY "
+
+DATASTORE="/tmp/lnxdiagd/mysql"
+if [ ! -d "${DATASTORE}" ]; then
+  mkdir -p "${DATASTORE}"
+fi
+
+DATASTORE4="/tmp/lnxdiagd/mysql4python"
+if [ ! -d "${DATASTORE4}" ]; then
+  mkdir -p "${DATASTORE4}"
+fi
