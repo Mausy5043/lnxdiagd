@@ -35,9 +35,10 @@ pushd "$HOME/lnxdiagd" >/dev/null || exit 1
   # Get hour data for system temperature (systemp; graph11)
   divider=60
   mysql -h sql --skip-column-names -e \
-  "USE domotica; \
-   SELECT MIN(sample_time), AVG(temperature) \
-   FROM systemp \
+  "USE domotica;           \
+   SELECT MIN(sample_time), \
+          AVG(temperature)   \
+   FROM systemp               \
    WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
    GROUP BY (sample_epoch DIV ${divider});" \
   | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11h.csv"
@@ -45,8 +46,11 @@ pushd "$HOME/lnxdiagd" >/dev/null || exit 1
   # Get hour data for system load (sysload; graph12)
   mysql -h sql --skip-column-names -e \
   "USE domotica; \
-   SELECT MIN(sample_time), AVG(load5min), \
-          AVG(user),  AVG(system),  AVG(waiting) \
+   SELECT MIN(sample_time), \
+          AVG(load5min), \
+          AVG(user),  \
+          AVG(system), \
+          AVG(waiting)  \
    FROM sysload \
    WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
    GROUP BY (sample_epoch DIV ${divider});" \

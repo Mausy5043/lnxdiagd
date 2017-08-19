@@ -15,9 +15,12 @@ fi
 pushd "$HOME/lnxdiagd" >/dev/null  || exit 1
   # Get year data for system temperature (systemp; graph11)
   mysql -h sql --skip-column-names -e \
-  "USE domotica; \
-   SELECT MIN(sample_time), MIN(temperature), AVG(temperature), MAX(temperature) \
-   FROM systemp \
+  "USE domotica;            \
+   SELECT MIN(sample_time), \
+          MIN(temperature), \
+          AVG(temperature), \
+          MAX(temperature)  \
+   FROM systemp             \
    WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
    GROUP BY YEAR(sample_time), MONTH(sample_time), WEEK(sample_time);" \
   | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11y.csv"
@@ -25,8 +28,11 @@ pushd "$HOME/lnxdiagd" >/dev/null  || exit 1
   # Get year data for system load (sysload; graph12)
   mysql -h sql --skip-column-names -e \
   "USE domotica; \
-   SELECT MIN(sample_time), AVG(load5min), \
-          AVG(user),  AVG(system),  AVG(waiting) \
+   SELECT MIN(sample_time), \
+          AVG(load5min), \
+          AVG(user), \
+          AVG(system),  \
+          AVG(waiting) \
    FROM sysload \
    WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
    GROUP BY YEAR(sample_time), MONTH(sample_time), WEEK(sample_time);" \
