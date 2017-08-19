@@ -14,12 +14,12 @@ install_package()
   # See if packages are installed and install them.
   package=$1
   echo "*********************************************************"
-  echo "* Requesting $package"
-  status=$(dpkg-query -W -f='${Status} ${Version}\n' $package 2>/dev/null | wc -l)
-  if [ "$status" -eq 0 ]; then
-    echo "* Installing $package"
+  echo "* Requesting ${package}"
+  status=$(dpkg-query -W -f='${Status} ${Version}\n' "${package}" 2>/dev/null | wc -l)
+  if [ "${status}" -eq 0 ]; then
+    echo "* Installing ${package}"
     echo "*********************************************************"
-    sudo apt-get -yuV install $package
+    sudo apt-get -yuV install "${package}"
   else
     echo "* Already installed !!!"
     echo "*********************************************************"
@@ -55,15 +55,15 @@ sudo pip3 install mysqlclient
 
 
 minit=$(echo $RANDOM/555 |bc)
-echo "MINIT = $minit"
+echo "MINIT = ${minit}"
 
 commonlibversion=$(pip3 freeze |grep mausy5043 |cut -c 26-)
-if [ "$commonlibversion" != "$required_commonlibversion" ]; then
+if [ "${commonlibversion}" != "${required_commonlibversion}" ]; then
   echo "Install common python functions..."
   sudo pip3 uninstall -y mausy5043-common-python
-  pushd /tmp
-    git clone -b $commonlibbranch https://github.com/Mausy5043/mausy5043-common-python.git
-    pushd /tmp/mausy5043-common-python
+  pushd /tmp || exit 1
+    git clone -b "${commonlibbranch}" https://github.com/Mausy5043/mausy5043-common-python.git
+    pushd /tmp/mausy5043-common-python || exit 1
       sudo ./setup.py install
     popd
     sudo rm -rf mausy5043-common-python/
@@ -74,7 +74,7 @@ if [ "$commonlibversion" != "$required_commonlibversion" ]; then
   echo
 fi
 
-pushd "$HOME/lnxdiagd"
+pushd "$HOME/lnxdiagd" || exit 1
   # To suppress git detecting changes by chmod:
   git config core.fileMode false
   # set the branch
@@ -91,7 +91,6 @@ pushd "$HOME/lnxdiagd"
   # @reboot we allow for 120s for the WiFi to come up:
   echo "@reboot               $ME    sleep 120; $HOME/lnxdiagd/update.sh 2>&1 | logger -p info -t lnxdiagd" | sudo tee --append /etc/cron.d/lnxdiagd
 
-  #./update.sh
 popd
 
 echo -n "Finished installation of LNXDIAGD on "; date
