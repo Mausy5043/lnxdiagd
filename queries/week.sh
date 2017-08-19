@@ -11,7 +11,7 @@ fi
 interval="INTERVAL 8 DAY "
 host=$(hostname)
 
-pushd "$HOME/lnxdiagd" >/dev/null
+pushd "$HOME/lnxdiagd" >/dev/null || exit 1
   # mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM systemp where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11w.csv"
   # mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM sysload where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql12w.csv"
   mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM sysnet  where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql13w.csv"

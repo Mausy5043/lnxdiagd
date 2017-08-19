@@ -12,7 +12,7 @@ if [ ! -d "${datastore}" ]; then
   mkdir -p "${datastore}"
 fi
 
-pushd "$HOME/lnxdiagd" >/dev/null
+pushd "$HOME/lnxdiagd" >/dev/null  || exit 1
   # Get year data for system temperature (systemp; graph11)
   mysql -h sql --skip-column-names -e \
   "USE domotica; \

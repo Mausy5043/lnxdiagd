@@ -13,7 +13,7 @@ host=$(hostname)
 
 #sleep $(echo $RANDOM/555 |bc)
 
-pushd "$HOME/lnxdiagd" >/dev/null
+pushd "$HOME/lnxdiagd" >/dev/null || exit 1
   # mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM systemp where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11h.csv"
   # mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM sysload where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql12h.csv"
   mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM sysnet  where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql13h.csv"
