@@ -3,7 +3,7 @@
 # Use stop.sh to stop all daemons in one go
 # You can use update.sh to get everything started again.
 
-pushd "$HOME/lnxdiagd"
+pushd "$HOME/lnxdiagd" || exit 1
   source ./includes
 
   # Check if DIAG daemons are running
