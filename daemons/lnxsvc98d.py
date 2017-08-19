@@ -132,7 +132,7 @@ def getsqldata(homedir, minit, nowur, nu):
   # data of the last year is updated at 01:xx
   if (nowur == SQL_UPDATE_YEAR and minit == SQL_UPDATE_DAY) or nu:
     cmnd = homedir + '/' + MYAPP + '/queries/year.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), True, DEBUG)  # temporary logging
+    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
 
