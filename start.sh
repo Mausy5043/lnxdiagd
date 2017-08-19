@@ -23,33 +23,33 @@ pushd "$HOME/lnxdiagd" || exit 1
 
   # Check if DIAG daemons are running
   for daemon in $diaglist; do
-    if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
-      if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
-        logger -p user.err -t lnxdiagd-restarter "  * Stale daemon $daemon pid-file found."
-        rm "/tmp/lnxdiagd/$daemon.pid"
-          echo "  * Start DIAG $daemon"
-        eval "./daemons/lnxdiag$daemon"d.py restart
+    if [ -e "/tmp/lnxdiagd/${daemon}.pid" ]; then
+      if ! kill -0 $(cat "/tmp/lnxdiagd/${daemon}.pid")  > /dev/null 2>&1; then
+        logger -p user.err -t lnxdiagd-restarter "  * Stale daemon ${daemon} pid-file found."
+        rm "/tmp/lnxdiagd/${daemon}.pid"
+          echo "  * Start DIAG ${daemon}"
+        eval "./daemons/lnxdiag${daemon}d.py restart"
       fi
     else
-      logger -p user.notice -t lnxdiagd-restarter "Found daemon $daemon not running."
-        echo "  * Start DIAG $daemon"
-      eval "./daemons/lnxdiag$daemon"d.py restart
+      logger -p user.notice -t lnxdiagd-restarter "Found daemon ${daemon} not running."
+        echo "  * Start DIAG ${daemon}"
+      eval "./daemons/lnxdiag${daemon}d.py restart"
     fi
   done
 
   # Check if SVC daemons are running
   for daemon in $srvclist; do
-    if [ -e "/tmp/lnxdiagd/$daemon.pid" ]; then
-      if ! kill -0 $(cat "/tmp/lnxdiagd/$daemon.pid")  > /dev/null 2>&1; then
-        logger -p user.err -t lnxdiagd-restarter "* Stale daemon $daemon pid-file found."
-        rm "/tmp/lnxdiagd/$daemon.pid"
-          echo "  * Start SVC $daemon"
-        eval "./daemons/lnxsvc$daemon"d.py restart
+    if [ -e "/tmp/lnxdiagd/${daemon}.pid" ]; then
+      if ! kill -0 $(cat "/tmp/lnxdiagd/${daemon}.pid")  > /dev/null 2>&1; then
+        logger -p user.err -t lnxdiagd-restarter "* Stale daemon ${daemon} pid-file found."
+        rm "/tmp/lnxdiagd/${daemon}.pid"
+          echo "  * Start SVC ${daemon}"
+        eval "./daemons/lnxsvc${daemon}d.py restart"
       fi
     else
-      logger -p user.notice -t lnxdiagd-restarter "Found daemon $daemon not running."
-        echo "  * Start SVC $daemon"
-      eval "./daemons/lnxsvc$daemon"d.py restart
+      logger -p user.notice -t lnxdiagd-restarter "Found daemon ${daemon} not running."
+        echo "  * Start SVC ${daemon}"
+      eval "./daemons/lnxsvc${daemon}d.py restart"
     fi
   done
 
