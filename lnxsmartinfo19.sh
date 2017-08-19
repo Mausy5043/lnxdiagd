@@ -2,8 +2,8 @@
 
 # This script is executed periodically by a cronjob.
 # It prevents the use of repeated `sudo smartctl...` commands
-# The resulting data is stored in `/tmp/lnxdiagd/*.dat` files and subsequently
-# read by the daemons 19 using `libsmart3.py`.
+# The resulting data is stored in `/tmp/lnxdiagd/*.dat` files that are
+# subsequently read by `daemons/lnxdiag19d.py`.
 
 rf="/tmp/lnxdiagd/smartinfo"
 
