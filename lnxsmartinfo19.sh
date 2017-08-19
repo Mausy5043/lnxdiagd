@@ -19,15 +19,15 @@ sdf="wwn-0x50014ee262ed6df5"  # WD-WCC4J0JPYS0D
 # sdgl=""
 
 function smart1999 {
-  if [[ -e "/dev/disk/by-id/$1"]]; then
-    if [[ ! -e $rf"-"$1"-i.dat" ]]; then
+  if [[ -e "/dev/disk/by-id/${1}" ]]; then
+    if [[ ! -e "${rf}-${1}-i.dat" ]]; then
       # this is static info, therefore only get it if it's not there.
-      smartctl -i "/dev/disk/by-id/"$1 |awk 'NR>4' >$rf"-"$1"-i.dat"
+      smartctl -i "/dev/disk/by-id/${1}" |awk 'NR>4' > "${rf}-${1}-i.dat"
     fi
-    smartctl -A "/dev/disk/by-id/"$1 |awk 'NR>7' >$rf"-"$1"-A.dat"
-    smartctl -H "/dev/disk/by-id/"$1 |grep 'test result' >$rf"-"$1"-H.dat"
-    smartctl -l selftest "/dev/disk/by-id/"$1 |grep '\# 1' >$rf"-"$1"-l.dat"
-    chmod 744 $rf-*
+    smartctl -A "/dev/disk/by-id/${1}" |awk 'NR>7' > "${rf}-${1}-A.dat"
+    smartctl -H "/dev/disk/by-id/${1}" |grep 'test result' > "${rf}-${1}-H.dat"
+    smartctl -l selftest "/dev/disk/by-id/${1}" |grep '\# 1' > "${rf}-${1}-l.dat"
+    chmod 744 "${rf}-*"
   fi
 }
 
@@ -35,11 +35,11 @@ if [[ ! -d /tmp/lnxdiagd ]]; then
   mkdir -m 777 /tmp/lnxdiagd
 fi
 
-touch $rf".lock"
+touch "${rf}.lock"
 smart1999 $sda
 smart1999 $sdb
 smart1999 $sdc
 smart1999 $sdd
 smart1999 $sde
 smart1999 $sdf
-rm $rf".lock"
+rm "${rf}.lock"
