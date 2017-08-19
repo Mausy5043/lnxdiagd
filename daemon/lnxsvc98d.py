@@ -45,8 +45,8 @@ class MyDaemon(Daemon):
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
     mf.syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     mf.syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
-    mf.syslog_trace("getsqlday.sh  runs every 30 minutes starting at minute {0}".format(SQLMNT), syslog.LOG_DEBUG, DEBUG)
-    mf.syslog_trace("getsqlweek.sh runs every 4th hour  starting  at hour   {0}:{1}".format(SQLHR, SQLHRM), syslog.LOG_DEBUG, DEBUG)
+    mf.syslog_trace("queries/day.sh  runs every 30 minutes starting at minute {0}".format(SQLMNT), syslog.LOG_DEBUG, DEBUG)
+    mf.syslog_trace("queries/week.sh runs every 4th hour  starting  at hour   {0}:{1}".format(SQLHR, SQLHRM), syslog.LOG_DEBUG, DEBUG)
     reporttime      = iniconf.getint(inisection, "reporttime")
     samplespercycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
@@ -113,25 +113,25 @@ def getsqldata(homedir, minit, nowur, nu):
   # nowur = int(time.strftime('%H'))
   # data of last hour is updated every <SQL_UPDATE_HOUR> minutes
   if ((minit % SQL_UPDATE_HOUR) == 0) or nu:
-    cmnd = homedir + '/' + MYAPP + '/getsqlhour.sh'
+    cmnd = homedir + '/' + MYAPP + '/queries/hour.sh'
     mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last day is updated every <SQL_UPDATE_DAY> minutes
   if ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)) or nu:
-    cmnd = homedir + '/' + MYAPP + '/getsqlday.sh'
+    cmnd = homedir + '/' + MYAPP + '/queries/day.sh'
     mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last week is updated every <SQL_UPDATE_WEEK> hours
   if ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)) or nu:
-    cmnd = homedir + '/' + MYAPP + '/getsqlweek.sh'
+    cmnd = homedir + '/' + MYAPP + '/queries/week.sh'
     mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
     cmnd = subprocess.call(cmnd)
     mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last year is updated at 01:xx
   if (nowur == SQL_UPDATE_YEAR and minit == SQL_UPDATE_DAY) or nu:
-    cmnd = homedir + '/' + MYAPP + '/getsqlyear.sh'
+    cmnd = homedir + '/' + MYAPP + '/queries/year.sh'
     mf.syslog_trace("...:  {0}".format(cmnd), True, DEBUG)  # temporary logging
     cmnd = subprocess.call(cmnd)
     mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
