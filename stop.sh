@@ -9,7 +9,7 @@ pushd "$HOME/lnxdiagd"
   # Check if DIAG daemons are running
   for daemon in $diaglist; do
     # command the daemon to stop regardless if it is running or not.
-    eval "./lnxdiag$daemon"d.py stop
+    eval "./daemon/lnxdiag$daemon"d.py stop
     # kill off any rogue daemons by the same name (it happens sometimes)
     if [   $(pgrep -f "lnxdiag$daemon"d.py | wc -l) -ne 0 ]; then
       kill $(pgrep -f  "lnxdiag$daemon"d.py)

@@ -17,7 +17,7 @@ pushd "$HOME/lnxdiagd"
   echo "  Stopping all diagnostic daemons"
   for daemon in $diaglist; do
     echo "Stopping "$daemon
-    eval "./lnxdiag"$daemon"d.py stop"
+    eval "./daemon/lnxdiag"$daemon"d.py stop"
   done
   echo "  Stopping all service daemons"
   for daemon in $srvclist; do

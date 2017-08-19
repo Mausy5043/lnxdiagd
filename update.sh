@@ -58,7 +58,7 @@ pushd "$HOME/lnxdiagd"
       echo "  o Restarting all daemons"
       for daemon in $diaglist; do
         echo "  +- Restart DIAG $daemon"
-        eval "./lnxdiag$daemon"d.py restart
+        eval "./daemon/lnxdiag$daemon"d.py restart
       done
       echo "  o Restarting all service daemons"
       for daemon in $srvclist; do
@@ -73,7 +73,7 @@ pushd "$HOME/lnxdiagd"
       echo "  o Restarting all daemons"
       for daemon in $diaglist; do
         echo "  +- Restart DIAG $daemon"
-        eval "./lnxdiag$daemon"d.py restart
+        eval "./daemon/lnxdiag$daemon"d.py restart
       done
       echo "  o Restarting all service daemons"
       for daemon in $srvclist; do
@@ -90,12 +90,12 @@ pushd "$HOME/lnxdiagd"
         logger -p user.err -t lnxdiagd "  * Stale daemon $daemon pid-file found."
         rm "/tmp/lnxdiagd/$daemon.pid"
           echo "  * Start DIAG $daemon"
-        eval "./lnxdiag$daemon"d.py start
+        eval "./daemon/lnxdiag$daemon"d.py start
       fi
     else
       logger -p user.notice -t lnxdiagd "Found daemon $daemon not running."
         echo "  * Start DIAG $daemon"
-      eval "./lnxdiag$daemon"d.py start
+      eval "./daemon/lnxdiag$daemon"d.py start
     fi
   done
 
@@ -139,12 +139,12 @@ pushd "$HOME/lnxdiagd"
                   logger -p user.err -t lnxdiagd "* Stale daemon 19 pid-file found."
                   rm /tmp/lnxdiagd/19.pid
                   echo "  * Start DIAG 19"
-                  eval ./lnxdiag19d.py restart
+                  eval ./daemon/lnxdiag19d.py restart
                 fi
               else
                 logger -p user.notice -t lnxdiagd "Found daemon 19 not running."
                 echo "  * Start DIAG 19"
-                eval ./lnxdiag19d.py start
+                eval ./daemon/lnxdiag19d.py start
               fi
               ;;
     neutron ) echo "NEUTRON"
