@@ -18,6 +18,7 @@ if [ ! -d /tmp/lnxdiagd/mysql ]; then
 fi
 
 pushd "$HOME/lnxdiagd" || exit 1
+  # shellcheck disable=SC1091
   source ./includes
 
   # Check if DIAG daemons are running

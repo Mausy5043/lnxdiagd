@@ -23,6 +23,7 @@ if [ ! -d /tmp/lnxdiagd/mysql ]; then
 fi
 
 pushd "$HOME/lnxdiagd"
+  # shellcheck disable=SC1091
   source ./includes
   git fetch origin
   # Check which files have changed

@@ -9,6 +9,7 @@ HOSTNAME=$(cat /etc/hostname)
 echo -n "Started UNinstalling LNXDIAGD on "; date
 
 pushd "$HOME/lnxdiagd"
+ # shellcheck disable=SC1091
  source ./includes
 
 

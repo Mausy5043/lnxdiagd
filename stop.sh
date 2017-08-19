@@ -4,6 +4,7 @@
 # You can use update.sh to get everything started again.
 
 pushd "$HOME/lnxdiagd" || exit 1
+  # shellcheck disable=SC1091
   source ./includes
 
   # Check if DIAG daemons are running
