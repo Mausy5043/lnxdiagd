@@ -22,7 +22,7 @@ pushd "$HOME/lnxdiagd"
   echo "  Stopping all service daemons"
   for daemon in $srvclist; do
     echo "Stopping "$daemon
-    eval "./lnxsvc"$daemon"d.py stop"
+    eval "./daemon/lnxsvc"$daemon"d.py stop"
   done
 popd
 

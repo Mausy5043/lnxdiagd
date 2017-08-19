@@ -43,12 +43,12 @@ pushd "$HOME/lnxdiagd"
         logger -p user.err -t lnxdiagd-restarter "* Stale daemon $daemon pid-file found."
         rm "/tmp/lnxdiagd/$daemon.pid"
           echo "  * Start SVC $daemon"
-        eval "./lnxsvc$daemon"d.py restart
+        eval "./daemon/lnxsvc$daemon"d.py restart
       fi
     else
       logger -p user.notice -t lnxdiagd-restarter "Found daemon $daemon not running."
         echo "  * Start SVC $daemon"
-      eval "./lnxsvc$daemon"d.py restart
+      eval "./daemon/lnxsvc$daemon"d.py restart
     fi
   done
 
