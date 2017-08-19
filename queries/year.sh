@@ -17,6 +17,7 @@ pushd "$HOME/lnxdiagd" >/dev/null  || exit 1
           MAX(temperature)                        \
     FROM systemp                                  \
     WHERE (sample_time >= NOW() - ${Y_INTERVAL})  \
+      AND (sample_time <= NOW() - ${W_INTERVAL})  \
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
              MONTH(sample_time),                  \
@@ -33,6 +34,7 @@ pushd "$HOME/lnxdiagd" >/dev/null  || exit 1
           AVG(waiting)                            \
     FROM sysload                                  \
     WHERE (sample_time >= NOW() - ${Y_INTERVAL})  \
+      AND (sample_time <= NOW() - ${W_INTERVAL})  \
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
              MONTH(sample_time),                  \

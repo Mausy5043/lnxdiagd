@@ -27,9 +27,9 @@ SQLMNT      = rnd(0, 59)
 SQLHR       = rnd(0, 23)
 SQLHRM      = rnd(0, 59)
 SQL_UPDATE_HOUR   = 6   # in minutes
-SQL_UPDATE_DAY    = 12  # in minutes
+SQL_UPDATE_DAY    = 20  # in minutes
 SQL_UPDATE_WEEK   = 4   # in hours
-SQL_UPDATE_YEAR   = 1   # in hours
+SQL_UPDATE_YEAR   = 8   # in hours
 GRAPH_UPDATE      = 6   # in minutes
 
 # initialise logging
