@@ -2,14 +2,14 @@
 
 # Pull data from MySQL server and graph them.
 
-datastore="/tmp/lnxdiagd/mysql"
+divider=1800
+interval="INTERVAL 30 HOUR "
+host=$(hostname)
 
+datastore="/tmp/lnxdiagd/mysql"
 if [ ! -d "${datastore}" ]; then
   mkdir -p "${datastore}"
 fi
-
-interval="INTERVAL 30 HOUR "
-host=$(hostname)
 
 pushd "$HOME/lnxdiagd" >/dev/null || exit 1
   # mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM systemp where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11d.csv"
@@ -26,13 +26,11 @@ pushd "$HOME/lnxdiagd" >/dev/null || exit 1
   fi
 
   datastore="/tmp/lnxdiagd/mysql4python"
-
   if [ ! -d "${datastore}" ]; then
     mkdir -p "${datastore}"
   fi
 
   # Get day data for system temperature (systemp; graph11)
-  divider=1800
   mysql -h sql --skip-column-names -e \
   "USE domotica;           \
    SELECT MIN(sample_time), \

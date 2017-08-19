@@ -3,11 +3,11 @@
 # Pull YEARLY data from MySQL server.
 
 ######
-datastore="/tmp/lnxdiagd/mysql4python"
 
 interval="INTERVAL 370 DAY "
 host=$(hostname)
 
+datastore="/tmp/lnxdiagd/mysql4python"
 if [ ! -d "${datastore}" ]; then
   mkdir -p "${datastore}"
 fi

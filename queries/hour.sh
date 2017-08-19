@@ -2,14 +2,14 @@
 
 # Pull data from MySQL server and graph them.
 
-datastore="/tmp/lnxdiagd/mysql"
+divider=60
+interval="INTERVAL 70 MINUTE "
+host=$(hostname)
 
+datastore="/tmp/lnxdiagd/mysql"
 if [ ! -d "${datastore}" ]; then
   mkdir -p "${datastore}"
 fi
-
-interval="INTERVAL 70 MINUTE "
-host=$(hostname)
 
 #sleep $(echo $RANDOM/555 |bc)
 
@@ -27,13 +27,11 @@ pushd "$HOME/lnxdiagd" >/dev/null || exit 1
   fi
 
   datastore="/tmp/lnxdiagd/mysql4python"
-
   if [ ! -d "${datastore}" ]; then
     mkdir -p "${datastore}"
   fi
 
   # Get hour data for system temperature (systemp; graph11)
-  divider=60
   mysql -h sql --skip-column-names -e \
   "USE domotica;           \
    SELECT MIN(sample_time), \
