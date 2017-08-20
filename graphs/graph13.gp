@@ -67,7 +67,7 @@ Ymax = max(max(Yd_max, Yh_max), Yw_max) * BPS
 Ymin = 1024 * BPS
 Ystd = max(max(Yd_stddev, Yh_stddev), Yw_stddev)
 Ymean = max(max(Yd_mean, Yh_mean), Yw_mean)
-Ymax = (Ymean + Ystd) * 4 * BPS
+Ymax = (Ymean + Ystd) * 3 * BPS
 
 # ********************** Statistics for the bottom graphs **********************
 # ********************************************************* Statistics (R) *****
@@ -194,7 +194,7 @@ Ymax = max(max(Ybd_max, Ybh_max), Ybw_max) * BPS
 Ymin = 1024 * BPS
 Ystd = max(max(Ybd_stddev, Ybh_stddev), Ybw_stddev)
 Ymean = max(max(Ybd_mean, Ybh_mean), Ybw_mean)
-Ymax = (Ymean + Ystd) * 4 * BPS
+Ymax = (Ymean + Ystd) * 3 * BPS
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
