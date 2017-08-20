@@ -10,6 +10,7 @@ set output "/tmp/lnxdiagd/site/img/day11.png"
 
 # ******************************************************* General settings *****
 set terminal png enhanced font "Vera,9" size 1280,320
+set style fill solid 0.25 noborder
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
 set grid
@@ -96,7 +97,8 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($1+utc_offset):3 title " Temperature [degC]" with lines lw 0.1 fc rgb "#ccbb0000"
+      using ($1+utc_offset):2:4 notitle with filledcurves \
+  ,'' using ($1+utc_offset):3 title " Temperature [degC]" with lines lw 0.1 fc rgb "#ccbb0000"
 
 
 
@@ -127,7 +129,8 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($1+utc_offset):3 with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
+      using ($1+utc_offset):2:4 with filledcurves \
+  ,'' using ($1+utc_offset):3 with points pt 5 ps 0.2 fc rgb "#ccbb0000"
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
