@@ -2,6 +2,8 @@
 Platform independent system diagnostics gatherer
 [![Code Issues](https://www.quantifiedcode.com/api/v1/project/4da7514ffd1d49b8a90c52ab7fe92961/badge.svg)](https://www.quantifiedcode.com/app/project/4da7514ffd1d49b8a90c52ab7fe92961)
 
+This sub-branch (v4.**g**) is used to further develop the use of GNUplot for making the graphs.
+
 # Installing
 
 ```
