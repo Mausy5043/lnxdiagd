@@ -41,4 +41,19 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
              MONTH(sample_time),                  \
              WEEK(sample_time);"                  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql12y.csv"
+
+  # Get year data for system network load (sysnet; graph13)
+  mysql -h sql --skip-column-names -e             \
+  "USE domotica;                                  \
+   SELECT MIN(sample_time),                       \
+          AVG(etIn),                              \
+          AVG(etOut  )                            \
+    FROM sysnet                                   \
+    WHERE (sample_time >= NOW() - ${Y_INTERVAL})  \
+      AND (sample_time <= NOW() - ${W_INTERVAL})  \
+      AND (host = '${HOST}')                      \
+    GROUP BY YEAR(sample_time),                   \
+             MONTH(sample_time),                  \
+             WEEK(sample_time);"                  \
+  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13y.csv"
 popd >/dev/null
