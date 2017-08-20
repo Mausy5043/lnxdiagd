@@ -96,7 +96,7 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($1+utc_offset):3 title " Temperature [degC]" with points pt 5 ps 0.2 fc rgb "#ccbb0000" \
+      using ($1+utc_offset):3 title " Temperature [degC]" with lines lw 0.1 fc rgb "#ccbb0000"
 
 
 
