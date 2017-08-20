@@ -6,7 +6,7 @@
 ifnameh = "/tmp/lnxdiagd/mysql/sql19h.csv"
 ifnamed = "/tmp/lnxdiagd/mysql/sql19d.csv"
 ifnamew = "/tmp/lnxdiagd/mysql/sql19w.csv"
-set output "/tmp/lnxdiagd/site/img/day19.old.png"
+set output "/tmp/lnxdiagd/site/img/day19.png"
 
 # ******************************************************* General settings *****
 set terminal png enhanced font "Vera,9" size 1280,320
