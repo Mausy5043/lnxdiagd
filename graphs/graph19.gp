@@ -3,9 +3,9 @@
 # graph of HD temperatures
 
 # datafiles
-ifnameh = "/tmp/lnxdiagd/mysql/sql19h.csv"
-ifnamed = "/tmp/lnxdiagd/mysql/sql19d.csv"
-ifnamew = "/tmp/lnxdiagd/mysql/sql19w.csv"
+ifnameh = "/tmp/lnxdiagd/mysql4gnuplot/sql19h.csv"
+ifnamed = "/tmp/lnxdiagd/mysql4gnuplot/sql19d.csv"
+ifnamew = "/tmp/lnxdiagd/mysql4gnuplot/sql19w.csv"
 set output "/tmp/lnxdiagd/site/img/day19.png"
 
 # ******************************************************* General settings *****

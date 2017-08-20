@@ -3,9 +3,9 @@
 # graph of memory usage
 
 # datafiles
-ifnameh = "/tmp/lnxdiagd/mysql/sql14h.csv"
-ifnamed = "/tmp/lnxdiagd/mysql/sql14d.csv"
-ifnamew = "/tmp/lnxdiagd/mysql/sql14w.csv"
+ifnameh = "/tmp/lnxdiagd/mysql4gnuplot/sql14h.csv"
+ifnamed = "/tmp/lnxdiagd/mysql4gnuplot/sql14d.csv"
+ifnamew = "/tmp/lnxdiagd/mysql4gnuplot/sql14w.csv"
 set output  "/tmp/lnxdiagd/site/img/day14.png"
 
 

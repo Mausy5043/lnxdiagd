@@ -3,7 +3,7 @@
 # graph of count of loglines
 
 # datafile
-ifname = "/tmp/lnxdiagd/mysql/sql15w.csv"
+ifname = "/tmp/lnxdiagd/mysql4gnuplot/sql15w.csv"
 set output "/tmp/lnxdiagd/site/img/day15.png"
 
 # ******************************************************* General settings *****

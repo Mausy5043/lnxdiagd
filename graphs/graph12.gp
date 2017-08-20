@@ -3,9 +3,9 @@
 # graph of CPU load
 
 # datafiles
-ifnameh = "/tmp/lnxdiagd/mysql/sql12h.csv"
-ifnamed = "/tmp/lnxdiagd/mysql/sql12d.csv"
-ifnamew = "/tmp/lnxdiagd/mysql/sql12w.csv"
+ifnameh = "/tmp/lnxdiagd/mysql4gnuplot/sql12h.csv"
+ifnamed = "/tmp/lnxdiagd/mysql4gnuplot/sql12d.csv"
+ifnamew = "/tmp/lnxdiagd/mysql4gnuplot/sql12w.csv"
 set output "/tmp/lnxdiagd/site/img/day12.png"
 
 # ******************************************************* General settings *****

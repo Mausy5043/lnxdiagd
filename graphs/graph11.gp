@@ -3,9 +3,9 @@
 # graph of CPU temperature
 
 # datafiles
-ifnameh = "/tmp/lnxdiagd/mysql/sql11h.csv"
-ifnamed = "/tmp/lnxdiagd/mysql/sql11d.csv"
-ifnamew = "/tmp/lnxdiagd/mysql/sql11w.csv"
+ifnameh = "/tmp/lnxdiagd/mysql4gnuplot/sql11h.csv"
+ifnamed = "/tmp/lnxdiagd/mysql4gnuplot/sql11d.csv"
+ifnamew = "/tmp/lnxdiagd/mysql4gnuplot/sql11w.csv"
 set output "/tmp/lnxdiagd/site/img/day11.png"
 
 # ******************************************************* General settings *****

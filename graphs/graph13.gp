@@ -3,9 +3,9 @@
 # graph of network usage
 
 # datafiles
-ifnameh = "/tmp/lnxdiagd/mysql/sql13h.csv"
-ifnamed = "/tmp/lnxdiagd/mysql/sql13d.csv"
-ifnamew = "/tmp/lnxdiagd/mysql/sql13w.csv"
+ifnameh = "/tmp/lnxdiagd/mysql4gnuplot/sql13h.csv"
+ifnamed = "/tmp/lnxdiagd/mysql4gnuplot/sql13d.csv"
+ifnamew = "/tmp/lnxdiagd/mysql4gnuplot/sql13w.csv"
 set output "/tmp/lnxdiagd/site/img/day13.png"
 
 # ******************************************************* General settings *****
