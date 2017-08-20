@@ -28,7 +28,7 @@ RMARG = 0.94
 #delta(x) = ( xD = x - old_x, old_x = x, xD <= 0 ? 0.1 : xD)
 #old_x = NaN
 
-nonull(x) = (x <= 0 ? 0.1 : x)
+nonull(x) = (x <=0 ? 0.1 : x)
 min(x,y) = (x < y) ? x : y
 max(x,y) = (x > y) ? x : y
 
@@ -71,7 +71,7 @@ set xrange [ Xw_min : Xw_max ]
 set ylabel "Count [#]"
 set format y "%4.0s%c"
 set logscale y 10
-set yrange [ 0.5 : ]
+set yrange [ 0.5 : 1000 ]
 
 # ***************************************************************** Legend *****
 set key opaque box inside top left
@@ -120,7 +120,7 @@ set xrange [ Xd_min : Xd_max ]
 set ylabel " "
 set ytics format " "
 set logscale y 10
-set yrange [ 0.5 : ]
+set yrange [ 0.5 : 1000 ]
 
 # ***************************************************************** Legend *****
 unset key
@@ -156,7 +156,7 @@ set xtics textcolor rgb "red"
 set ylabel " "
 set ytics format " "
 set logscale y 10
-set yrange [ 0.5 : ]
+set yrange [ 0.5 : 1000 ]
 
 # ***************************************************************** Legend *****
 unset key
