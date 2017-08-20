@@ -39,8 +39,8 @@ install_package "python3"
 install_package "build-essential"
 install_package "python3-dev"
 install_package "python3-pip"
-install_package "python3-numpy"
-install_package "python3-matplotlib"
+# install_package "python3-numpy"
+# install_package "python3-matplotlib"
 
 # gnuPlot packages
 #install_package "python-numpy"
@@ -79,7 +79,7 @@ pushd "$HOME/lnxdiagd" || exit 1
   git config core.fileMode false
   # set the branch
   if [ ! -e "$HOME/.lnxdiagd.branch" ]; then
-    echo "v4_x" > "$HOME/.lnxdiagd.branch"
+    echo "v4.g" > "$HOME/.lnxdiagd.branch"
   fi
 
   # Create the /etc/cron.d directory if it doesn't exist
