@@ -27,7 +27,7 @@ max(x,y) = (x > y) ? x : y
 
 # ********************************************************* Statistics (R) *****
 # stats to be calculated here of column 2 (UX-epoch)
-stats ifnameh using 2 name "X" nooutput
+stats ifnameh using 1 name "X" nooutput
 
 Xh_min = X_min + utc_offset - epoch_compensate
 Xh_max = X_max + utc_offset - epoch_compensate
@@ -35,7 +35,7 @@ Xh_max = X_max + utc_offset - epoch_compensate
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 2 (UX-epoch)
-stats ifnamed using 2 name "X" nooutput
+stats ifnamed using 1 name "X" nooutput
 
 Xd_min = X_min + utc_offset - epoch_compensate
 Xd_max = X_max + utc_offset - epoch_compensate
@@ -43,7 +43,7 @@ Xd_max = X_max + utc_offset - epoch_compensate
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 2 (UX-epoch)
-stats ifnamew using 2 name "X" nooutput
+stats ifnamew using 1 name "X" nooutput
 Xw_min = X_min + utc_offset - epoch_compensate
 Xw_max = X_max + utc_offset - epoch_compensate
 
@@ -91,11 +91,11 @@ set style data boxes
 set style fill solid noborder
 
 plot ifnamew \
-      using ($2+utc_offset):($10+$11+$12+$13) title "idle"    fc rgb "#229922"    \
-  ,'' using ($2+utc_offset):($10+$11+$13)     title "waiting" fc "blue"           \
-  ,'' using ($2+utc_offset):($10+$11)         title "system"  fc "yellow"         \
-  ,'' using ($2+utc_offset):10                title "user"    fc rgb "#ccbb0000"  \
-  ,'' using ($2+utc_offset):5                 title "load 5min" with lines lw 0.1 fc "black" axes x1y2
+      using ($1+utc_offset):($3+$4+$5+$6)     title "idle"    fc rgb "#229922"    \
+  ,'' using ($1+utc_offset):($3+$4+$5)        title "waiting" fc "blue"           \
+  ,'' using ($1+utc_offset):($3+$4)           title "system"  fc "yellow"         \
+  ,'' using ($1+utc_offset):3                 title "user"    fc rgb "#ccbb0000"  \
+  ,'' using ($1+utc_offset):2                 title "load 5min" with lines lw 0.1 fc "black" axes x1y2
 
 
 
@@ -127,11 +127,11 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($2+utc_offset):($10+$11+$12+$13) fc rgb "#229922"    \
-  ,'' using ($2+utc_offset):($10+$11+$13)     fc "blue"           \
-  ,'' using ($2+utc_offset):($10+$11)         fc "yellow"         \
-  ,'' using ($2+utc_offset):10                fc rgb "#ccbb0000"  \
-  ,'' using ($2+utc_offset):5                 with lines lw 0.1 fc "black" axes x1y2
+      using ($1+utc_offset):($3+$4+$5+$6)     fc rgb "#229922"    \
+  ,'' using ($1+utc_offset):($3+$4+$5)        fc "blue"           \
+  ,'' using ($1+utc_offset):($3+$4)           fc "yellow"         \
+  ,'' using ($1+utc_offset):3                 fc rgb "#ccbb0000"  \
+  ,'' using ($1+utc_offset):2                 with lines lw 0.1 fc "black" axes x1y2
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -167,11 +167,11 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($2+utc_offset):($10+$11+$12+$13) fc rgb "#229922"    \
-  ,'' using ($2+utc_offset):($10+$11+$13)     fc "blue"           \
-  ,'' using ($2+utc_offset):($10+$11)         fc "yellow"         \
-  ,'' using ($2+utc_offset):10                fc rgb "#ccbb0000"  \
-  ,'' using ($2+utc_offset):5                 with lines lw 0.1 fc "black" axes x1y2
+      using ($1+utc_offset):($3+$4+$5+$6)     fc rgb "#229922"    \
+  ,'' using ($1+utc_offset):($3+$4+$5)        fc "blue"           \
+  ,'' using ($1+utc_offset):($3+$4)           fc "yellow"         \
+  ,'' using ($1+utc_offset):3                 fc rgb "#ccbb0000"  \
+  ,'' using ($1+utc_offset):2                 with lines lw 0.1 fc "black" axes x1y2
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
