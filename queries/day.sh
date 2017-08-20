@@ -12,7 +12,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   #time mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM systemp where (sample_time >=NOW() - ${D_INTERVAL}) AND (sample_time <= NOW() - ${DH_INTERVAL}) AND (host = '${HOST}');" | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql11d.csv"
   #time mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM sysload where (sample_time >=NOW() - ${D_INTERVAL}) AND (sample_time <= NOW() - ${DH_INTERVAL}) AND (host = '${HOST}');" | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql12d.csv"
   #time mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM sysnet  where (sample_time >=NOW() - ${D_INTERVAL}) AND (sample_time <= NOW() - ${DH_INTERVAL}) AND (host = '${HOST}');" | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13d.csv"
-  time mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM sysmem  where (sample_time >=NOW() - ${D_INTERVAL}) AND (sample_time <= NOW() - ${DH_INTERVAL}) AND (host = '${HOST}');" | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql14d.csv"
+  #time mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM sysmem  where (sample_time >=NOW() - ${D_INTERVAL}) AND (sample_time <= NOW() - ${DH_INTERVAL}) AND (host = '${HOST}');" | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql14d.csv"
   time mysql -h sql --skip-column-names -e "USE domotica; SELECT * FROM syslog  where (sample_time >=NOW() - ${D_INTERVAL}) AND (sample_time <= NOW() - ${DH_INTERVAL}) AND (host = '${HOST}');" | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql15d.csv"
 
   #http://www.sitepoint.com/understanding-sql-joins-mysql-database/
@@ -64,5 +64,21 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
       AND (host = '${HOST}')                      \
     GROUP BY (sample_epoch DIV ${D_DIVIDER});"    \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13d.csv"
+
+  # Get day data for system memory usage (sysmem; graph14)
+  time mysql -h sql --skip-column-names -e             \
+  "USE domotica;                                  \
+   SELECT MIN(sample_epoch),                      \
+          AVG(used),                              \
+          AVG(buffers),                           \
+          AVG(cached),                            \
+          AVG(free),                              \
+          AVG(swapused)                           \
+    FROM sysmem                                   \
+    WHERE (sample_time >= NOW() - ${D_INTERVAL})  \
+      AND (sample_time <= NOW() - ${DH_INTERVAL}) \
+      AND (host = '${HOST}')                      \
+    GROUP BY (sample_epoch DIV ${D_DIVIDER});"    \
+  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql14d.csv"
 
 popd >/dev/null
