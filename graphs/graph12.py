@@ -19,9 +19,11 @@ def bytespdate2num(fmt, encoding='utf-8'):
   return bytesconverter
 
 def timeaxis(arr):
-  n = mpl.dates.date2num(datetime.datetime.now())
+  # n = mpl.dates.date2num(datetime.datetime.now())
   t = np.array(arr)
-  w = np.ediff1d(np.append(t, n))
+  w = np.ediff1d(t)
+  # w = np.ediff1d(np.append(t, n)) # last label should not be `n` (now)
+  w = np.append(w, w[-1])           # and last interval should be similar to previous ones
   return t, w
 
 def makegraph12():
@@ -48,7 +50,8 @@ def makegraph12():
   Ymax = 100
 
   Y2min = 0
-  Y2max = max(np.nanmax(WK[:, 1], 0), np.nanmax(DY[:, 1], 0), np.nanmax(HR[:, 1], 0)) * 1.05
+  # Y2max = max(np.nanmax(WK[:, 1], 0), np.nanmax(DY[:, 1], 0), np.nanmax(HR[:, 1], 0)) * 1.05
+  Y2max = int(max(np.nanmax(WK[:, 1], 0), np.nanmax(DY[:, 1], 0), np.nanmax(HR[:, 1], 0))) + 1.0
 
   locatedmondays = mpl.dates.WeekdayLocator(mpl.dates.MONDAY)      # find all mondays
   locatedmonths  = mpl.dates.MonthLocator()                        # find all months

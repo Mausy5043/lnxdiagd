@@ -6,7 +6,7 @@ import matplotlib as mpl
 mpl.use("Agg")                              # activate Anti-Grain Geometry library
 
 import matplotlib.pyplot as plt             # noqa
-import numpy as np                         # noqa
+import numpy as np                          # noqa
 
 # following import is for debugging and profiling
 import datetime                             # noqa
