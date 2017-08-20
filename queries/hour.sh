@@ -74,7 +74,6 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
       AND (host = '${HOST}')                     \
     GROUP BY (sample_epoch DIV ${H_DIVIDER});"   \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql14h.csv"
-popd >/dev/null
 
 # Get hour data for system log (syslog; graph15)
 time mysql -h sql --skip-column-names -e            \
