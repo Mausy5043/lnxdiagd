@@ -31,8 +31,4 @@ pushd "$HOME/lnxdiagd" >/dev/null  || exit 1
       time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graphs/graph19.gp
 		fi
   fi
-
-  time ./graphs/graph11.py
-  time ./graphs/graph12.py
-
 popd >/dev/null
