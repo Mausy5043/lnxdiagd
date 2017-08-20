@@ -84,4 +84,23 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
     GROUP BY (sample_epoch DIV ${W_DIVIDER});"    \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql14w.csv"
 
+  # Get week data for system log (syslog; graph15)
+  time mysql -h sql --skip-column-names -e             \
+  "USE domotica;                                  \
+   SELECT MIN(sample_epoch),                      \
+          MAX(p0),                                \
+          MAX(p1),                                \
+          MAX(p2),                                \
+          MAX(p3),                                \
+          MAX(p4),                                \
+          MAX(p5),                                \
+          MAX(p6),                                \
+          MAX(p7)                                 \
+    FROM syslog                                   \
+    WHERE (sample_time >= NOW() - ${W_INTERVAL})  \
+      AND (sample_time <= NOW() - ${WD_INTERVAL}) \
+      AND (host = '${HOST}')                      \
+    GROUP BY (sample_epoch DIV ${W_DIVIDER});"    \
+  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql15w.csv"
+
 popd >/dev/null
