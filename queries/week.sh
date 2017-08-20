@@ -33,7 +33,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
       AND (sample_time <= NOW() - ${WD_INTERVAL}) \
       AND (host = '${HOST}')                      \
     GROUP BY (sample_epoch DIV ${W_DIVIDER});"    \
-  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE4}/sql11w.csv"
+  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql11w.csv"
 
   # Get week data for system load (sysload; graph12)
   mysql -h sql --skip-column-names -e             \
@@ -48,6 +48,6 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
       AND (sample_time <= NOW() - ${WD_INTERVAL}) \
       AND (host = '${HOST}')                      \
     GROUP BY (sample_epoch DIV ${W_DIVIDER});"    \
-  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE4}/sql12w.csv"
+  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql12w.csv"
 
 popd >/dev/null

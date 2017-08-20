@@ -23,7 +23,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
     GROUP BY YEAR(sample_time),                   \
              MONTH(sample_time),                  \
              WEEK(sample_time);"                  \
-  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE4}/sql11y.csv"
+  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql11y.csv"
 
   # Get year data for system load (sysload; graph12)
   mysql -h sql --skip-column-names -e             \
@@ -40,5 +40,5 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
     GROUP BY YEAR(sample_time),                   \
              MONTH(sample_time),                  \
              WEEK(sample_time);"                  \
-  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE4}/sql12y.csv"
+  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql12y.csv"
 popd >/dev/null

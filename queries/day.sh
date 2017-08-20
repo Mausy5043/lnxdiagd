@@ -34,7 +34,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
       AND (sample_time <= NOW() - ${DH_INTERVAL}) \
       AND (host = '${HOST}')                      \
     GROUP BY (sample_epoch DIV ${D_DIVIDER});"    \
-  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE4}/sql11d.csv"
+  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql11d.csv"
 
   # Get day data for system load (sysload; graph12)
   time mysql -h sql --skip-column-names -e             \
@@ -49,6 +49,6 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
       AND (sample_time <= NOW() - ${DH_INTERVAL}) \
       AND (host = '${HOST}')                      \
     GROUP BY (sample_epoch DIV ${D_DIVIDER});"    \
-  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE4}/sql12d.csv"
+  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql12d.csv"
 
 popd >/dev/null

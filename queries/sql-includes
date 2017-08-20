@@ -14,12 +14,7 @@ WD_INTERVAL="INTERVAL 26 HOUR "
 
 Y_INTERVAL="INTERVAL 370 DAY "
 
-DATASTORE="/tmp/lnxdiagd/mysql"
+DATASTORE="/tmp/lnxdiagd/mysql4gnuplot"
 if [ ! -d "${DATASTORE}" ]; then
   mkdir -p "${DATASTORE}"
-fi
-
-DATASTORE4="/tmp/lnxdiagd/mysql4python"
-if [ ! -d "${DATASTORE4}" ]; then
-  mkdir -p "${DATASTORE4}"
 fi
