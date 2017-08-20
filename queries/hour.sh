@@ -25,7 +25,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   # Get hour data for system temperature (systemp; graph11)
   time mysql -h sql --skip-column-names -e            \
   "USE domotica;                                 \
-   SELECT MIN(sample_time),                      \
+   SELECT MIN(sample_epoch),                      \
           AVG(temperature)                       \
     FROM systemp                                 \
     WHERE (sample_time >= NOW() - ${H_INTERVAL}) \
@@ -36,7 +36,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   # Get hour data for system load (sysload; graph12)
   time mysql -h sql --skip-column-names -e            \
   "USE domotica;                                 \
-   SELECT MIN(sample_time),                      \
+   SELECT MIN(sample_epoch),                      \
           AVG(load5min),                         \
           AVG(user),                             \
           AVG(system),                           \
@@ -50,7 +50,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   # Get hour data for system network load (sysnet; graph13)
   time mysql -h sql --skip-column-names -e            \
   "USE domotica;                                 \
-   SELECT MIN(sample_time),                      \
+   SELECT MIN(sample_epoch),                      \
           AVG(etIn),                             \
           AVG(etOut)                             \
     FROM sysnet                                  \
