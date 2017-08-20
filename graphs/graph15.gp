@@ -29,7 +29,7 @@ nonull(x) = (x <= 0 ? 0.1 : x)
 
 # ************************************************************* Statistics *****
 # stats to be calculated here of column 2 (UX-epoch)
-stats ifname using 2 name "X" nooutput
+stats ifname using 1 name "X" nooutput
 
 X_min = X_min + utc_offset - epoch_compensate
 X_max = X_max + utc_offset - epoch_compensate
@@ -66,9 +66,9 @@ set style data boxes
 set style fill solid noborder
 
 plot ifname \
-      using ($2+utc_offset):(nonull($4+$5+$6+$7+$8+$9)) title "p5" fc "green"  \
-  ,'' using ($2+utc_offset):(nonull($4+$5+$6+$7+$8))    title "p4" fc "cyan"   \
-  ,'' using ($2+utc_offset):(nonull($4+$5+$6+$7))       title "p3" fc "blue"   \
-  ,'' using ($2+utc_offset):(nonull($4+$5+$6))          title "p2" fc "orange" \
-  ,'' using ($2+utc_offset):(nonull($4+$5))             title "p1" fc "red"    \
-  ,'' using ($2+utc_offset):(nonull($4))                title "p0" fc "black"
+      using ($1+utc_offset):(nonull($2+$3+$4+$5+$6+$7)) title "p5" fc "green"  \
+  ,'' using ($1+utc_offset):(nonull($2+$3+$4+$5+$6))    title "p4" fc "cyan"   \
+  ,'' using ($1+utc_offset):(nonull($2+$3+$4+$5))       title "p3" fc "blue"   \
+  ,'' using ($1+utc_offset):(nonull($2+$3+$4))          title "p2" fc "orange" \
+  ,'' using ($1+utc_offset):(nonull($2+$3))             title "p1" fc "red"    \
+  ,'' using ($1+utc_offset):(nonull($2))                title "p0" fc "black"
