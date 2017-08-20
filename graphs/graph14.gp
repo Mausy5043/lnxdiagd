@@ -42,7 +42,7 @@ Xd_min = X_min + utc_offset - epoch_compensate
 Xd_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 11 (Swap memory used)
-stats ifnameh using 6 name "Yd" nooutput
+stats ifnamed using 6 name "Yd" nooutput
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 2 (UX-epoch)
@@ -51,7 +51,7 @@ Xw_min = X_min + utc_offset - epoch_compensate
 Xw_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 11 (Swap memory used)
-stats ifnameh using 6 name "Yw" nooutput
+stats ifnamew using 6 name "Yw" nooutput
 
 Ymax = max(max(Yd_max, Yh_max), Yw_max) * -1
 
