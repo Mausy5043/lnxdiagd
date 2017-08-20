@@ -35,32 +35,32 @@ max(x,y) = (x > y) ? x : y
 
 # ********************************************************* Statistics (R) *****
 # stats to be calculated here of column 2 (UX-epoch)
-stats ifnameh using 2 name "X" nooutput
+stats ifnameh using 1 name "X" nooutput
 Xh_min = X_min + utc_offset - epoch_compensate
 Xh_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
-stats ifnameh using (delta($7)) name "Yh" nooutput
+stats ifnameh using (delta($3)) name "Yh" nooutput
 old_x = NaN
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 2 (UX-epoch)
-stats ifnamed using 2 name "X" nooutput
+stats ifnamed using 1 name "X" nooutput
 Xd_min = X_min + utc_offset - epoch_compensate
 Xd_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
-stats ifnamed using (delta($7)) name "Yd" nooutput
+stats ifnamed using (delta($3)) name "Yd" nooutput
 old_x = NaN
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 2 (UX-epoch)
-stats ifnamew using 2 name "X" nooutput
+stats ifnamew using 1 name "X" nooutput
 Xw_min = X_min + utc_offset - epoch_compensate
 Xw_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
-stats ifnameh using (delta($7)) name "Yw" nooutput
+stats ifnameh using (delta($3)) name "Yw" nooutput
 old_x = NaN
 
 Ymax = max(max(Yd_max, Yh_max), Yw_max) * BPS
@@ -72,17 +72,17 @@ Ymax = (Ymean + Ystd) * 3 * BPS
 # ********************** Statistics for the bottom graphs **********************
 # ********************************************************* Statistics (R) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnameh using (delta($6)) name "Ybh" nooutput
+stats ifnameh using (delta($2)) name "Ybh" nooutput
 old_x = NaN
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnamed using (delta($6)) name "Ybd" nooutput
+stats ifnamed using (delta($2)) name "Ybd" nooutput
 old_x = NaN
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnameh using (delta($6)) name "Ybw" nooutput
+stats ifnameh using (delta($2)) name "Ybw" nooutput
 old_x = NaN
 
 
@@ -121,7 +121,7 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($2+utc_offset):(delta($7) * BPS) title "Upload (eth0)" with lines lc rgb "#cc0000bb" lw 1
+      using ($1+utc_offset):(delta($3) * BPS) title "Upload (eth0)" with lines lc rgb "#cc0000bb" lw 1
 old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -150,7 +150,7 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($2+utc_offset):(delta($7) * BPS) with lines lc rgb "#cc0000bb" lw 1
+      using ($1+utc_offset):(delta($3) * BPS) with lines lc rgb "#cc0000bb" lw 1
 old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -179,7 +179,7 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($2+utc_offset):(delta($7) * BPS) with lines lc rgb "#cc0000bb" lw 1
+      using ($1+utc_offset):(delta($3) * BPS) with lines lc rgb "#cc0000bb" lw 1
 old_x = NaN
 
 ################################################################################
@@ -230,7 +230,7 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($2+utc_offset):(delta($6) * BPS) title "Download (eth0)" with lines lc rgb "#ccbb0000" lw 1
+      using ($1+utc_offset):(delta($2) * BPS) title "Download (eth0)" with lines lc rgb "#ccbb0000" lw 1
 old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -260,7 +260,7 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($2+utc_offset):(delta($6) * BPS) with lines lc rgb "#ccbb0000" lw 1
+      using ($1+utc_offset):(delta($2) * BPS) with lines lc rgb "#ccbb0000" lw 1
 old_x = NaN
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -291,7 +291,7 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($2+utc_offset):(delta($6) * BPS) with lines lc rgb "#ccbb0000" lw 1
+      using ($1+utc_offset):(delta($2) * BPS) with lines lc rgb "#ccbb0000" lw 1
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
