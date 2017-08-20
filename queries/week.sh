@@ -55,8 +55,12 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   mysql -h sql --skip-column-names -e             \
   "USE domotica;                                  \
    SELECT MIN(sample_epoch),                      \
+          MIN(etIn),                              \
           AVG(etIn),                              \
-          AVG(etOut)                              \
+          MAX(etIn),                              \
+          MIN(etOut),                             \
+          AVG(etOut),                             \
+          MAX(etOut)                              \
     FROM sysnet                                   \
     WHERE (sample_time >= NOW() - ${W_INTERVAL})  \
       AND (sample_time <= NOW() - ${WD_INTERVAL}) \
