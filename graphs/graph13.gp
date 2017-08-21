@@ -199,9 +199,9 @@ plot ifnameh \
 ################################################################################
 
 
-Ymax = max(max(Ybd_max, Ybh_max), Ybw_max) * BPS
+Ymax = max(max(Ybd_max, Ybh_max), Ybw_max)
 #Ymin = min(min(Ybd_min, Ybh_min), Ybw_min) -1
-Ymin = 1024 * BPS
+Ymin = 1024
 Ystd = max(max(Ybd_stddev, Ybh_stddev), Ybw_stddev)
 Ymean = max(max(Ybd_mean, Ybh_mean), Ybw_mean)
 Ymax = (Ymean + Ystd) * 3
