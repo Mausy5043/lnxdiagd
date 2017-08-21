@@ -9,7 +9,6 @@ import sys
 import mausy5043funcs.fileops3 as mf
 
 def process_file(fname):
-  print(mf.cat(fname))
   src = mf.cat(fname).replace(";", " ").splitlines()
   newsrc = []
   # store first sample
