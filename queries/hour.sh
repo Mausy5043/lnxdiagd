@@ -17,6 +17,9 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   #http://www.sitepoint.com/understanding-sql-joins-mysql-database/
   #mysql -h sql --skip-column-names -e "USE domotica; SELECT ds18.sample_time, ds18.sample_epoch, ds18.temperature, wind.speed FROM ds18 INNER JOIN wind ON ds18.sample_epoch = wind.sample_epoch WHERE (ds18.sample_time) >=NOW() - INTERVAL 1 MINUTE;" | sed 's/\t/;/g;s/\n//g' > ${DATASTORE}/sql2c.csv
+  # if [ "${HOST}" == "boson" ]; then
+  #   time mysql -h sql --skip-column-names  < data19h.sql | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql19h.csv"
+  # fi
 
   # Get hour data for system temperature (systemp; graph11)
 	echo -n "11"
@@ -94,12 +97,44 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
           MAX(p6),                               \
           MAX(p7)                                \
     FROM syslog                                  \
-    WHERE (sample_time >= NOW() - (${H_INTERVAL}*10)) \
+    WHERE (sample_time >= NOW() - ${H_INTERVAL}) \
       AND (host = '${HOST}')                     \
-    GROUP BY (sample_epoch DIV ${H_DIVIDER});"   \
+    GROUP BY (sample_epoch DIV (${H_DIVIDER}*10));"   \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql15h.csv"
 
   if [ "${HOST}" == "boson" ]; then
-    time mysql -h sql --skip-column-names  < data19h.sql | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql19h.csv"
+    # Get hour data for HDD temperatures (disktemp; graph19)
+    # multiply H_DIVIDER by 5 because sampling takes place every 300s (5*60s)
+    echo -n "19"
+    time mysql -h sql --skip-column-names -e            \
+    "USE domotica;                                    \
+      SELECT                                          \
+        d1.sample_epoch,                              \
+        d1.diskt AS sdd,                              \
+        d2.diskt AS hda,                              \
+        d3.diskt AS hdb,                              \
+        d4.diskt AS hdc,                              \
+        d5.diskt AS hdd                               \
+      FROM                                            \
+        disktemp d1,                                  \
+        disktemp d2,                                  \
+        disktemp d3,                                  \
+        disktemp d4,                                  \
+        disktemp d5                                   \
+      WHERE                                           \
+        (d1.sample_time >= NOW() - ${H_INTERVAL})     \
+        AND (host = '${HOST}')                        \
+      	AND d1.sample_epoch = d2.sample_epoch         \
+      	AND d1.sample_epoch = d3.sample_epoch         \
+      	AND d1.sample_epoch = d4.sample_epoch         \
+      	AND d1.sample_epoch = d5.sample_epoch         \
+      	AND (d1.diskid LIKE '%d6dd5'                  \
+      		AND d2.diskid LIKE '%20fce'                 \
+      		AND d3.diskid LIKE '%043e2'                 \
+      		AND d4.diskid LIKE '%a237b'                 \
+      		AND d5.diskid LIKE '%7b79c'                 \
+      		)                                           \
+      GROUP BY (sample_epoch DIV (${H_DIVIDER}*5));"  \
+    | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql19h.csv"
   fi
 popd >/dev/null
