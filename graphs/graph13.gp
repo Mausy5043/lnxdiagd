@@ -22,14 +22,23 @@ LMPOS = 0.40
 MRPOS = 0.73
 RMARG = 0.94
 
-BPS = 8. / (60. * 3.)
+# network data is recorded in bytes per 1 minute
+# hourly data is queried in 1 minute intervals. So, data is bytes/minute
+# convert to bits per second:
+BPSh = 8. / (60.)
+# daily data is queried in 30 minute intervals (1800s). So, data is bytes/30'
+# convert to bits per second:
+BPSd = BPSh / 30.
+# weekly data is queried in 120 minute intervals (7200s). So, data is bytes/120'
+# convert to bits per second:
+BPSw = BPSh /120.
+
 
 # ************************************************************* Functions ******
-# determine delta data
-delta(x) = x
-# ( xD = x - old_x, old_x = x, xD <= 0 ? 0.1 : xD)
-# lg(x)    = ( xL = x, xL == NaN ? NaN : log(xL) )
-old_x = NaN
+# determine speed of data
+speedh(x) = x * BPSh
+speedd(x) = x * BPSd
+speedw(x) = x * BPSw
 
 min(x,y) = (x < y) ? x : y
 max(x,y) = (x > y) ? x : y
@@ -41,8 +50,8 @@ Xh_min = X_min + utc_offset - epoch_compensate
 Xh_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
-stats ifnameh using (delta($3)) name "Yh" nooutput
-old_x = NaN
+stats ifnameh using (speedh($3)) name "Yh" nooutput
+
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 2 (UX-epoch)
@@ -51,8 +60,8 @@ Xd_min = X_min + utc_offset - epoch_compensate
 Xd_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
-stats ifnamed using (delta($6)) name "Yd" nooutput
-old_x = NaN
+stats ifnamed using (speedd($6)) name "Yd" nooutput
+
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 2 (UX-epoch)
@@ -61,30 +70,30 @@ Xw_min = X_min + utc_offset - epoch_compensate
 Xw_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
-stats ifnamew using (delta($6)) name "Yw" nooutput
-old_x = NaN
+stats ifnamew using (speedw($6)) name "Yw" nooutput
 
-Ymax = max(max(Yd_max, Yh_max), Yw_max) * BPS
-Ymin = 1024 * BPS
+
+Ymax = max(max(Yd_max, Yh_max), Yw_max)
+Ymin = 1024
 Ystd = max(max(Yd_stddev, Yh_stddev), Yw_stddev)
 Ymean = max(max(Yd_mean, Yh_mean), Yw_mean)
-Ymax = (Ymean + Ystd) * 3 * BPS
+Ymax = (Ymean + Ystd) * 3
 
 # ********************** Statistics for the bottom graphs **********************
 # ********************************************************* Statistics (R) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnameh using (delta($2)) name "Ybh" nooutput
-old_x = NaN
+stats ifnameh using (speedh($2)) name "Ybh" nooutput
+
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnamed using (delta($3)) name "Ybd" nooutput
-old_x = NaN
+stats ifnamed using (speedd($3)) name "Ybd" nooutput
+
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnamew using (delta($3)) name "Ybw" nooutput
-old_x = NaN
+stats ifnamew using (speedw($3)) name "Ybw" nooutput
+
 
 
 set multiplot layout 2, 3 title "Network load ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
@@ -122,8 +131,8 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($1+utc_offset):(delta($6) * BPS) title "Upload (eth0)" with lines lc rgb "#cc0000bb" lw 1
-old_x = NaN
+      using ($1+utc_offset):(speedw($6)) title "Upload (eth0)" with lines lc rgb "#cc0000bb" lw 1
+
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -151,8 +160,8 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($1+utc_offset):(delta($6) * BPS) with lines lc rgb "#cc0000bb" lw 1
-old_x = NaN
+      using ($1+utc_offset):(speedd($6)) with lines lc rgb "#cc0000bb" lw 1
+
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -180,8 +189,8 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($1+utc_offset):(delta($3) * BPS) with lines lc rgb "#cc0000bb" lw 1
-old_x = NaN
+      using ($1+utc_offset):(speedh($3)) with lines lc rgb "#cc0000bb" lw 1
+
 
 ################################################################################
 ################################################################################
@@ -195,7 +204,7 @@ Ymax = max(max(Ybd_max, Ybh_max), Ybw_max) * BPS
 Ymin = 1024 * BPS
 Ystd = max(max(Ybd_stddev, Ybh_stddev), Ybw_stddev)
 Ymean = max(max(Ybd_mean, Ybh_mean), Ybw_mean)
-Ymax = (Ymean + Ystd) * 3 * BPS
+Ymax = (Ymean + Ystd) * 3
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -231,8 +240,8 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($1+utc_offset):(delta($3) * BPS) title "Download (eth0)" with lines lc rgb "#ccbb0000" lw 1
-old_x = NaN
+      using ($1+utc_offset):(speedw($3)) title "Download (eth0)" with lines lc rgb "#ccbb0000" lw 1
+
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -261,8 +270,8 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($1+utc_offset):(delta($3) * BPS) with lines lc rgb "#ccbb0000" lw 1
-old_x = NaN
+      using ($1+utc_offset):(speedd($3)) with lines lc rgb "#ccbb0000" lw 1
+
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -292,7 +301,7 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($1+utc_offset):(delta($2) * BPS) with lines lc rgb "#ccbb0000" lw 1
+      using ($1+utc_offset):(speedh($2)) with lines lc rgb "#ccbb0000" lw 1
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
