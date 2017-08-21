@@ -17,10 +17,6 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   #http://www.sitepoint.com/understanding-sql-joins-mysql-database/
   #mysql -h sql --skip-column-names -e "USE domotica; SELECT ds18.sample_time, ds18.sample_epoch, ds18.temperature, wind.speed FROM ds18 INNER JOIN wind ON ds18.sample_epoch = wind.sample_epoch WHERE (ds18.sample_time) >=NOW() - INTERVAL 1 MINUTE;" | sed 's/\t/;/g;s/\n//g' > ${DATASTORE}/sql2c.csv
-  if [ "${HOST}" == "boson" ]; then
-    time mysql -h sql --skip-column-names  < data19h.sql | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql19h.csv"
-  fi
-
 
   # Get hour data for system temperature (systemp; graph11)
 	echo -n "11"
@@ -102,4 +98,8 @@ time mysql -h sql --skip-column-names -e            \
     AND (host = '${HOST}')                     \
   GROUP BY (sample_epoch DIV ${H_DIVIDER});"   \
 | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql15h.csv"
+
+  if [ "${HOST}" == "boson" ]; then
+    time mysql -h sql --skip-column-names  < data19h.sql | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql19h.csv"
+  fi
 popd >/dev/null
