@@ -10,13 +10,13 @@ UTCOFFSET=$((LOCALSECONDS - UTCSECONDS))
 host=$(hostname)
 
 pushd "$HOME/lnxdiagd" >/dev/null
-  #if [ $(wc -l < /tmp/lnxdiagd/mysql/sql11d.csv) -gt 5 ]; then
-  #  gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph11.gp &
-  #fi
-  #if [ $(wc -l < /tmp/lnxdiagd/mysql/sql12d.csv) -gt 5 ]; then
-  #  time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph12.gp &
-  #fi
-  #wait
+  if [ $(wc -l < /tmp/lnxdiagd/mysql/sql11d.csv) -gt 5 ]; then
+    gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph11.gp &
+  fi
+  if [ $(wc -l < /tmp/lnxdiagd/mysql/sql12d.csv) -gt 5 ]; then
+    time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph12.gp &
+  fi
+  wait
   if [ $(wc -l < /tmp/lnxdiagd/mysql/sql13d.csv) -gt 5 ]; then
     time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph13.gp ;#&
   fi
@@ -35,7 +35,7 @@ pushd "$HOME/lnxdiagd" >/dev/null
   fi
   #wait
 
-  time ./graph11.py
-  time ./graph12.py
+  #time ./graph11.py
+  #time ./graph12.py
 
 popd >/dev/null

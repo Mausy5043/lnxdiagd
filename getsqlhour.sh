@@ -14,8 +14,8 @@ host=$(hostname)
 #sleep $(echo $RANDOM/555 |bc)
 
 pushd "$HOME/lnxdiagd" >/dev/null
-  # mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM systemp where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "$datastore/sql11h.csv"
-  # mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM sysload where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "$datastore/sql12h.csv"
+  mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM systemp where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "$datastore/sql11h.csv"
+  mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM sysload where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "$datastore/sql12h.csv"
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM sysnet  where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "$datastore/sql13h.csv"
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM sysmem  where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "$datastore/sql14h.csv"
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM syslog  where (sample_time >=NOW() - $interval) AND (host = '$host');" | sed 's/\t/;/g;s/\n//g' > "$datastore/sql15h.csv"
@@ -32,24 +32,24 @@ pushd "$HOME/lnxdiagd" >/dev/null
     mkdir -p "${datastore}"
   fi
 
-  # Get hour data for system temperature (systemp; graph11)
-  divider=60
-  mysql -h sql.lan --skip-column-names -e \
-  "USE domotica; \
-   SELECT MIN(sample_time), AVG(temperature) \
-   FROM systemp \
-   WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
-   GROUP BY (sample_epoch DIV ${divider});" \
-  | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11h.csv"
-
-  # Get hour data for system load (sysload; graph12)
-  mysql -h sql.lan --skip-column-names -e \
-  "USE domotica; \
-   SELECT MIN(sample_time), AVG(load5min), \
-          AVG(user),  AVG(system),  AVG(waiting) \
-   FROM sysload \
-   WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
-   GROUP BY (sample_epoch DIV ${divider});" \
-  | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql12h.csv"
+  # # Get hour data for system temperature (systemp; graph11)
+  # divider=60
+  # mysql -h sql.lan --skip-column-names -e \
+  # "USE domotica; \
+  #  SELECT MIN(sample_time), AVG(temperature) \
+  #  FROM systemp \
+  #  WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
+  #  GROUP BY (sample_epoch DIV ${divider});" \
+  # | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql11h.csv"
+  #
+  # # Get hour data for system load (sysload; graph12)
+  # mysql -h sql.lan --skip-column-names -e \
+  # "USE domotica; \
+  #  SELECT MIN(sample_time), AVG(load5min), \
+  #         AVG(user),  AVG(system),  AVG(waiting) \
+  #  FROM sysload \
+  #  WHERE (sample_time >= NOW() - ${interval}) AND (host = '${host}') \
+  #  GROUP BY (sample_epoch DIV ${divider});" \
+  # | sed 's/\t/;/g;s/\n//g' > "${datastore}/sql12h.csv"
 
 popd >/dev/null

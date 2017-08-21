@@ -207,7 +207,7 @@ def makegraph12():
     ar4.set_ylabel('Load')
     ar4.tick_params('y')
 
-    plt.savefig('/tmp/lnxdiagd/site/img/day12.png', format='png')
+    plt.savefig('/tmp/lnxdiagd/site/img/day12.new.png', format='png')
 
 
 if __name__ == "__main__":
