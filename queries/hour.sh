@@ -60,7 +60,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
     FROM sysnet                                  \
     WHERE (sample_time >= NOW() - ${H_INTERVAL}) \
       AND (host = '${HOST}')                     \
-    GROUP BY (sample_epoch DIV ${H_DIVIDER}*2);"   \
+    GROUP BY (sample_epoch DIV (${H_DIVIDER}*2));"   \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13h.csv"
 
   # Get hour data for system memory usage (sysmem; graph14)
