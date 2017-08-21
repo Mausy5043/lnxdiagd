@@ -23,7 +23,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   # Get week data for system temperature (systemp; graph11)
 	echo -n "11"
-  mysql -h sql --skip-column-names -e             \
+  time mysql -h sql --skip-column-names -e             \
   "USE domotica;                                  \
    SELECT MIN(sample_epoch),                      \
           MIN(temperature),                       \
@@ -38,7 +38,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   # Get week data for system load (sysload; graph12)
 	echo -n "12"
-  mysql -h sql --skip-column-names -e             \
+  time mysql -h sql --skip-column-names -e             \
   "USE domotica;                                  \
    SELECT MIN(sample_epoch),                      \
           AVG(load5min),                          \
@@ -55,7 +55,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   # Get week data for system network load (sysnet; graph13)
 	echo -n "13"
-  mysql -h sql --skip-column-names -e             \
+  time mysql -h sql --skip-column-names -e             \
   "USE domotica;                                  \
    SELECT MIN(sample_epoch),                      \
           MIN(etIn),                              \
@@ -73,7 +73,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   # Get week data for system memory usage (sysmem; graph14)
 	echo -n "14"
-  mysql -h sql --skip-column-names -e             \
+  time mysql -h sql --skip-column-names -e             \
   "USE domotica;                                  \
    SELECT MIN(sample_epoch),                      \
           AVG(used),                              \

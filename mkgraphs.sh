@@ -11,23 +11,29 @@ host=$(hostname)
 
 pushd "$HOME/lnxdiagd" >/dev/null  || exit 1
   if [ "$(wc -l < /tmp/lnxdiagd/mysql4gnuplot/sql11d.csv)" -gt 5 ]; then
+		echo -n "11"
     time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graphs/graph11.gp
   fi
   if [ "$(wc -l < /tmp/lnxdiagd/mysql4gnuplot/sql12d.csv)" -gt 5 ]; then
+		echo -n "12"
     time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graphs/graph12.gp
   fi
   if [ "$(wc -l < /tmp/lnxdiagd/mysql4gnuplot/sql13d.csv)" -gt 5 ]; then
+		echo -n "13"
     time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graphs/graph13.gp
   fi
   if [ "$(wc -l < /tmp/lnxdiagd/mysql4gnuplot/sql14d.csv)" -gt 5 ]; then
+		echo -n "14"
     time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graphs/graph14.gp
   fi
   if [ "$(wc -l < /tmp/lnxdiagd/mysql4gnuplot/sql15d.csv)" -gt 5 ]; then
+		echo -n "15"
     time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graphs/graph15.gp
   fi
 
   if [ "${host}" == "boson" ]; then
     if [ "$(wc -l < /tmp/lnxdiagd/mysql4gnuplot/sql19d.csv)" -gt 5 ]; then
+		  echo -n "19"
       time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graphs/graph19.gp
 		fi
   fi
