@@ -51,10 +51,8 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
   "USE domotica;                                  \
    SELECT MIN(sample_epoch),                      \
           MIN(etIn),                              \
-          MAX(etIn) - MIN(etIn),                  \
           MAX(etIn),                              \
           MIN(etOut),                             \
-          MAX(etOut) - MIN(etOut),                \
           MAX(etOut)                              \
     FROM sysnet                                   \
     WHERE (sample_time >= NOW() - ${Y_INTERVAL})  \
@@ -64,6 +62,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
              MONTH(sample_time),                  \
              WEEK(sample_time);"                  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13y.csv"
+  ./insertdiff.py "${DATASTORE}/sql13d.csv"
 
   # Get year data for system memory usage (sysmem; graph14)
 	echo -n "14"

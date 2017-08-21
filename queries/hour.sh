@@ -53,15 +53,18 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   # Get hour data for system network load (sysnet; graph13)
 	echo -n "13"
   time mysql -h sql --skip-column-names -e            \
-  "USE domotica;                                 \
-   SELECT MIN(sample_epoch),                     \
-          MAX(etIn) - MIN(etIn),                 \
-          MAX(etOut) - MIN(etOut)                \
-    FROM sysnet                                  \
-    WHERE (sample_time >= NOW() - ${H_INTERVAL}) \
-      AND (host = '${HOST}')                     \
-    GROUP BY (sample_epoch DIV (${H_DIVIDER}*2));"   \
+  "USE domotica;                                  \
+   SELECT MIN(sample_epoch),                      \
+          MIN(etIn),                              \
+          MAX(etIn),                              \
+          MIN(etOut),                             \
+          MAX(etOut)                              \
+    FROM sysnet                                   \
+    WHERE (sample_time >= NOW() - ${H_INTERVAL})  \
+      AND (host = '${HOST}')                      \
+    GROUP BY (sample_epoch DIV (${H_DIVIDER}));"  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13h.csv"
+  ./insertdiff.py "${DATASTORE}/sql13d.csv"
 
   # Get hour data for system memory usage (sysmem; graph14)
 	echo -n "14"

@@ -60,10 +60,8 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   "USE domotica;                                  \
    SELECT MIN(sample_epoch),                      \
           MIN(etIn),                              \
-          MAX(etIn) - MIN(etIn),                  \
           MAX(etIn),                              \
           MIN(etOut),                             \
-          MAX(etOut) - MIN(etOut),                \
           MAX(etOut)                              \
     FROM sysnet                                   \
     WHERE (sample_time >= NOW() - ${D_INTERVAL})  \
@@ -71,6 +69,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
       AND (host = '${HOST}')                      \
     GROUP BY (sample_epoch DIV ${D_DIVIDER});"    \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13d.csv"
+  ./insertdiff.py "${DATASTORE}/sql13d.csv"
 
   # Get day data for system memory usage (sysmem; graph14)
 	echo -n "14"
