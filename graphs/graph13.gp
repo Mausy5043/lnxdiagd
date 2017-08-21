@@ -25,13 +25,13 @@ RMARG = 0.94
 # network data is recorded in bytes per 1 minute
 # hourly data is queried in 1 minute intervals. So, data is bytes/minute
 # convert to bits per second:
-BPSh = 8. / (60.)
+BPSh = 8. / 60.
 # daily data is queried in 30 minute intervals (1800s). So, data is bytes/30'
 # convert to bits per second:
 BPSd = BPSh / 30.
 # weekly data is queried in 120 minute intervals (7200s). So, data is bytes/120'
 # convert to bits per second:
-BPSw = BPSh /120.
+BPSw = BPSh / 120.
 
 
 # ************************************************************* Functions ******

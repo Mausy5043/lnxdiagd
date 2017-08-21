@@ -55,12 +55,12 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   time mysql -h sql --skip-column-names -e            \
   "USE domotica;                                 \
    SELECT MIN(sample_epoch),                     \
-          MAX(etIn),                             \
-          MAX(etOut)                             \
+          MAX(etIn) - MIN(etIn),                 \
+          MAX(etOut) - MIN(etOut)                \
     FROM sysnet                                  \
     WHERE (sample_time >= NOW() - ${H_INTERVAL}) \
       AND (host = '${HOST}')                     \
-    GROUP BY (sample_epoch DIV ${H_DIVIDER});"   \
+    GROUP BY (sample_epoch DIV ${H_DIVIDER}*2);"   \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13h.csv"
 
   # Get hour data for system memory usage (sysmem; graph14)
