@@ -23,15 +23,15 @@ MRPOS = 0.73
 RMARG = 0.94
 
 # network data is recorded in bytes per 1 minute
-# hourly data is queried in 2 minute intervals. So, data is bytes/minute
+# hourly data is queried in 1 minute intervals and post-processed to bytes/second
 # convert to bits per second:
-BPSh = 8. / (60. * 2.)
-# daily data is queried in 30 minute intervals (1800s). So, data is bytes/30'
+BPSh = 8.
+# daily data is queried in 30 minute intervals (1800s) and post-processed to bytes/second
 # convert to bits per second:
-BPSd = 8. / (60. * 30.)
-# weekly data is queried in 120 minute intervals (7200s). So, data is bytes/120'
+BPSd = 8.
+# weekly data is queried in 120 minute intervals (7200s) and post-processed to bytes/second
 # convert to bits per second:
-BPSw = 8. / (60. * 120.)
+BPSw = 8.
 
 
 # ************************************************************* Functions ******

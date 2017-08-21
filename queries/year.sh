@@ -62,7 +62,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
              MONTH(sample_time),                  \
              WEEK(sample_time);"                  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13y.csv"
-  ./insertdiff.py "${DATASTORE}/sql13d.csv"
+  ./insertdiff.py "${DATASTORE}/sql13y.csv"
 
   # Get year data for system memory usage (sysmem; graph14)
 	echo -n "14"

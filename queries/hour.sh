@@ -64,7 +64,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
       AND (host = '${HOST}')                      \
     GROUP BY (sample_epoch DIV (${H_DIVIDER}));"  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13h.csv"
-  ./insertdiff.py "${DATASTORE}/sql13d.csv"
+  ./insertdiff.py "${DATASTORE}/sql13h.csv"
 
   # Get hour data for system memory usage (sysmem; graph14)
 	echo -n "14"
