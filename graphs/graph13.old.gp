@@ -26,8 +26,7 @@ BPS = 8. / (60. * 3.)
 
 # ************************************************************* Functions ******
 # determine delta data
-delta(x) = x
-# ( xD = x - old_x, old_x = x, xD <= 0 ? 0.1 : xD)
+delta(x) = ( xD = x - old_x, old_x = x, xD <= 0 ? 0.1 : xD)
 # lg(x)    = ( xL = x, xL == NaN ? NaN : log(xL) )
 old_x = NaN
 

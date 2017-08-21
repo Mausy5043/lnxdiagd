@@ -23,6 +23,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
 
   # Get hour data for system temperature (systemp; graph11)
+	echo -n "11"
   time mysql -h sql --skip-column-names -e            \
   "USE domotica;                                 \
    SELECT MIN(sample_epoch),                     \
@@ -34,6 +35,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql11h.csv"
 
   # Get hour data for system load (sysload; graph12)
+	echo -n "12"
   time mysql -h sql --skip-column-names -e            \
   "USE domotica;                                 \
    SELECT MIN(sample_epoch),                     \
@@ -49,11 +51,12 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql12h.csv"
 
   # Get hour data for system network load (sysnet; graph13)
+	echo -n "13"
   time mysql -h sql --skip-column-names -e            \
   "USE domotica;                                 \
    SELECT MIN(sample_epoch),                     \
-          AVG(etIn),                             \
-          AVG(etOut)                             \
+          MAX(etIn) - MIN(etIn),                 \
+          MAX(etOut) - MIN(etOut)                \
     FROM sysnet                                  \
     WHERE (sample_time >= NOW() - ${H_INTERVAL}) \
       AND (host = '${HOST}')                     \
@@ -61,6 +64,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13h.csv"
 
   # Get hour data for system memory usage (sysmem; graph14)
+	echo -n "14"
   time mysql -h sql --skip-column-names -e            \
   "USE domotica;                                 \
    SELECT MIN(sample_epoch),                     \
@@ -76,6 +80,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql14h.csv"
 
 # Get hour data for system log (syslog; graph15)
+	echo -n "15"
 time mysql -h sql --skip-column-names -e            \
 "USE domotica;                                 \
  SELECT MIN(sample_epoch),                     \
