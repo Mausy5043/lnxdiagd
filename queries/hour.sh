@@ -35,6 +35,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql11h.csv"
 
   # Get hour data for system load (sysload; graph12)
+  # multiply H_DIVIDER by 5 because sampling takes place every 300s (5*60s)
 	echo -n "12"
   time mysql -h sql --skip-column-names -e            \
   "USE domotica;                                 \
@@ -47,7 +48,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
     FROM sysload                                 \
     WHERE (sample_time >= NOW() - ${H_INTERVAL}) \
       AND (host = '${HOST}')                     \
-    GROUP BY (sample_epoch DIV ${H_DIVIDER});"   \
+    GROUP BY (sample_epoch DIV (${H_DIVIDER}*5));"   \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql12h.csv"
 
   # Get hour data for system network load (sysnet; graph13)
@@ -83,6 +84,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql14h.csv"
 
 # Get hour data for system log (syslog; graph15)
+# (multiply H_DIVIDER by 10 because sampling takes place every 600s)
 	echo -n "15"
 time mysql -h sql --skip-column-names -e            \
 "USE domotica;                                 \
@@ -96,7 +98,7 @@ time mysql -h sql --skip-column-names -e            \
         MAX(p6),                               \
         MAX(p7)                                \
   FROM syslog                                  \
-  WHERE (sample_time >= NOW() - ${H_INTERVAL}) \
+  WHERE (sample_time >= NOW() - (${H_INTERVAL}*10)) \
     AND (host = '${HOST}')                     \
   GROUP BY (sample_epoch DIV ${H_DIVIDER});"   \
 | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql15h.csv"
