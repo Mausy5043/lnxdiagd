@@ -58,7 +58,7 @@ class MyDaemon(Daemon):
   def run(self):
     """Overload definition of run."""
     try:                 # Initialise MySQLdb
-      consql    = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
+      consql    = mdb.connect(host='sql', db='domotica', read_default_file='~/.my.cnf')
       if consql.open:                           # dB initialised successfully
         cursql  = consql.cursor()               # get a cursor on the dB.
         cursql.execute("SELECT VERSION()")
