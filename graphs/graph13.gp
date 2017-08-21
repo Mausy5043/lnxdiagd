@@ -50,7 +50,7 @@ Xh_min = X_min + utc_offset - epoch_compensate
 Xh_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
-stats ifnameh using (speedh($3)) name "Yh" nooutput
+stats ifnameh using (speedh($6)) name "Yh" nooutput
 
 
 # ********************************************************* Statistics (M) *****
@@ -82,7 +82,7 @@ Ymax = (Ymean + Ystd) * 3
 # ********************** Statistics for the bottom graphs **********************
 # ********************************************************* Statistics (R) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnameh using (speedh($2)) name "Ybh" nooutput
+stats ifnameh using (speedh($3)) name "Ybh" nooutput
 
 
 # ********************************************************* Statistics (M) *****
@@ -189,7 +189,7 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($1+utc_offset):(speedh($3)) with lines lc rgb "#cc0000bb" lw 1
+      using ($1+utc_offset):(speedh($6)) with lines lc rgb "#cc0000bb" lw 1
 
 
 ################################################################################
@@ -301,7 +301,7 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($1+utc_offset):(speedh($2)) with lines lc rgb "#ccbb0000" lw 1
+      using ($1+utc_offset):(speedh($3)) with lines lc rgb "#ccbb0000" lw 1
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                                                                 FINALIZING
