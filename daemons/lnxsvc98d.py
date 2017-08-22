@@ -26,7 +26,7 @@ NODE        = os.uname()[1]
 SQLMNT      = rnd(0, 59)
 SQLHR       = rnd(0, 23)
 SQLHRM      = rnd(0, 59)
-SQL_UPDATE_HOUR   = 1   # in minutes
+SQL_UPDATE_HOUR   = 6   # in minutes (shouldn't be shorter than GRAPH_UPDATE)
 SQL_UPDATE_DAY    = 20  # in minutes
 SQL_UPDATE_WEEK   = 4   # in hours
 SQL_UPDATE_YEAR   = 8   # in hours
@@ -62,7 +62,7 @@ class MyDaemon(Daemon):
 
         do_mv_data(flock, home, scriptname)
 
-        waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
+        waittime    = sampletime - (time.time() - starttime)  # - (starttime % sampletime)
         if (waittime > 0):
           mf.syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
           mf.syslog_trace("................................", False, DEBUG)
