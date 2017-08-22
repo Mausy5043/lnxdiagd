@@ -37,9 +37,9 @@ pushd "$HOME/lnxdiagd"
 
   for fname in $DIFFLIST; do
     echo ">   $fname was updated from GIT"
-    f7l4="${fname:0:7}${fname:${#fname}-4}"
-    f6l4="${fname:0:6}${fname:${#fname}-4}"
-    f5l3="${fname:0:6}${fname:${#fname}-4}"
+    f7l4="${fname:0:15}${fname:${#fname}-4}"
+    f6l4="${fname:0:14}${fname:${#fname}-4}"
+    f5l3="${fname:0:14}${fname:${#fname}-4}"
 
     # Detect DIAG changes
     if [[ "$f7l4" == "lnxdiagd.py" ]]; then
