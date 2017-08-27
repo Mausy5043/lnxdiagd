@@ -9,8 +9,8 @@ ifnamew = "/tmp/lnxdiagd/mysql4gnuplot/sql12w.csv"
 set output "/tmp/lnxdiagd/site/img/day12.png"
 
 # ******************************************************* General settings *****
-set terminal png enhanced font "Vera,9" size 1280,320
-set style fill solid 0.25 noborder
+set terminal png truecolor enhanced font "Vera,9" size 1280,320
+set style fill transparent solid 0.25 noborder
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
 set grid front
@@ -89,14 +89,13 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 set style data boxes
-set style fill solid noborder
 
 plot ifnamew \
       using ($1+utc_offset):($5+$6+$7+$8)     title "idle"    fc rgb "#229922" fs solid 1.0 \
   ,'' using ($1+utc_offset):($5+$6+$7)        title "waiting" fc "blue"        fs solid 1.0 \
   ,'' using ($1+utc_offset):($5+$6)           title "system"  fc "yellow"      fs solid 1.0 \
-  ,'' using ($1+utc_offset):5                 title "user"    fc rgb "#ccbb0000" fs solid 1.0 \
-  ,'' using ($1+utc_offset):2:4             notitle with filledcurves lc "black"  \
+  ,'' using ($1+utc_offset):5                 title "user"    fc rgb "#bb0000" fs solid 1.0 \
+  ,'' using ($1+utc_offset):2:4             notitle with filledcurves lc "white" axes x1y2 \
   ,'' using ($1+utc_offset):3                 title "load 5min" with lines lw 0.1 fc "black" axes x1y2
 
 
@@ -132,8 +131,8 @@ plot ifnamed \
       using ($1+utc_offset):($5+$6+$7+$8)     fc rgb "#229922" fs solid 1.0 \
   ,'' using ($1+utc_offset):($5+$6+$7)        fc "blue"        fs solid 1.0 \
   ,'' using ($1+utc_offset):($5+$6)           fc "yellow"      fs solid 1.0 \
-  ,'' using ($1+utc_offset):5                 fc rgb "#ccbb0000" fs solid 1.0 \
-  ,'' using ($1+utc_offset):2:4             notitle with filledcurves lc "black"  \
+  ,'' using ($1+utc_offset):5                 fc rgb "#bb0000" fs solid 1.0 \
+  ,'' using ($1+utc_offset):2:4             notitle with filledcurves lc "white" axes x1y2 \
   ,'' using ($1+utc_offset):3                 with lines lw 0.1 fc "black" axes x1y2
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
