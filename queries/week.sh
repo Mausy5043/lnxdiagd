@@ -107,4 +107,40 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
     GROUP BY (sample_epoch DIV ${W_DIVIDER});"    \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql15w.csv"
 
+  if [ "${HOST}" == "boson" ]; then
+    # Get day data for HDD temperatures (disktemp; graph19)
+    echo -n "19"
+    time mysql -h sql --skip-column-names -e            \
+    "USE domotica;                                    \
+      SELECT                                          \
+        MIN(d1.sample_epoch),                         \
+        AVG(d1.diskt) AS sdd,                         \
+        AVG(d2.diskt) AS hda,                         \
+        AVG(d3.diskt) AS hdb,                         \
+        AVG(d4.diskt) AS hdc,                         \
+        AVG(d5.diskt) AS hdd                          \
+      FROM                                            \
+        disktemp d1,                                  \
+        disktemp d2,                                  \
+        disktemp d3,                                  \
+        disktemp d4,                                  \
+        disktemp d5                                   \
+      WHERE                                           \
+        (d1.sample_time >= NOW() - ${W_INTERVAL})     \
+        AND (d1.sample_time <= NOW() - ${WD_INTERVAL}) \
+        AND (d1.host = '${HOST}')                     \
+      	AND d1.sample_epoch = d2.sample_epoch         \
+      	AND d1.sample_epoch = d3.sample_epoch         \
+      	AND d1.sample_epoch = d4.sample_epoch         \
+      	AND d1.sample_epoch = d5.sample_epoch         \
+      	AND (d1.diskid LIKE '%d6dd5'                  \
+      		AND d2.diskid LIKE '%20fce'                 \
+      		AND d3.diskid LIKE '%043e2'                 \
+      		AND d4.diskid LIKE '%a237b'                 \
+      		AND d5.diskid LIKE '%7b79c'                 \
+      		)                                           \
+      GROUP BY (d1.sample_epoch DIV (${W_DIVIDER}))   \
+      ;"                                              \
+    | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql19w.csv"
+
 popd >/dev/null
