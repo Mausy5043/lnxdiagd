@@ -10,6 +10,7 @@ set output "/tmp/lnxdiagd/site/img/day12.png"
 
 # ******************************************************* General settings *****
 set terminal png enhanced font "Vera,9" size 1280,320
+set style fill solid 0.25 noborder
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
 set grid front
@@ -95,6 +96,7 @@ plot ifnamew \
   ,'' using ($1+utc_offset):($5+$6+$7)        title "waiting" fc "blue"           \
   ,'' using ($1+utc_offset):($5+$6)           title "system"  fc "yellow"         \
   ,'' using ($1+utc_offset):5                 title "user"    fc rgb "#ccbb0000"  \
+  ,'' using ($1+utc_offset):2:4             notitle with filledcurves lc "black"  \
   ,'' using ($1+utc_offset):3                 title "load 5min" with lines lw 0.1 fc "black" axes x1y2
 
 
@@ -131,6 +133,7 @@ plot ifnamed \
   ,'' using ($1+utc_offset):($5+$6+$7)        fc "blue"           \
   ,'' using ($1+utc_offset):($5+$6)           fc "yellow"         \
   ,'' using ($1+utc_offset):5                 fc rgb "#ccbb0000"  \
+  ,'' using ($1+utc_offset):2:4             notitle with filledcurves lc "black"  \
   ,'' using ($1+utc_offset):3                 with lines lw 0.1 fc "black" axes x1y2
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
