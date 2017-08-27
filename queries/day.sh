@@ -143,5 +143,5 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
       GROUP BY (d1.sample_epoch DIV (${D_DIVIDER}))   \
       ;"                                              \
     | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql19d.csv"
-
+  fi
 popd >/dev/null
