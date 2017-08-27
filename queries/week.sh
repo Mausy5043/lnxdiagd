@@ -108,7 +108,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql15w.csv"
 
   if [ "${HOST}" == "boson" ]; then
-    # Get day data for HDD temperatures (disktemp; graph19)
+    # Get week data for HDD temperatures (disktemp; graph19)
     echo -n "19"
     time mysql -h sql --skip-column-names -e            \
     "USE domotica;                                    \
