@@ -22,7 +22,7 @@ MYAPP       = os.path.realpath(__file__).split('/')[-3]
 NODE        = os.uname()[1]
 
 if (NODE == "boson"):
-  from libsmart3 import SmartDisk
+  from mausy5043libs.libsmart3 import SmartDisk
   # BEWARE
   # The disks identified here as `sda`, `sdb` etc. may not necessarily
   # be called `/dev/sda`, `/dev/sdb` etc. on the system!!
