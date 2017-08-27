@@ -172,7 +172,7 @@ plot ifnameh \
       using ($1+utc_offset):($3+$4+$5+$6)     fc rgb "#229922" fs solid 1.0 \
   ,'' using ($1+utc_offset):($3+$4+$5)        fc "blue"        fs solid 1.0 \
   ,'' using ($1+utc_offset):($3+$4)           fc "yellow"      fs solid 1.0 \
-  ,'' using ($1+utc_offset):3                 fc rgb "#ccbb0000" fs solid 1.0 \
+  ,'' using ($1+utc_offset):3                 fc rgb "#bb0000" fs solid 1.0 \
   ,'' using ($1+utc_offset):2                 with lines lw 0.1 fc "black" axes x1y2
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
