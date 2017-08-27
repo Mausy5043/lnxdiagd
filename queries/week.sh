@@ -41,7 +41,9 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   time mysql -h sql --skip-column-names -e             \
   "USE domotica;                                  \
    SELECT MIN(sample_epoch),                      \
+          MIN(load5min),                          \
           AVG(load5min),                          \
+          MAX(load5min),                          \
           AVG(user),                              \
           AVG(system),                            \
           AVG(waiting),                           \
