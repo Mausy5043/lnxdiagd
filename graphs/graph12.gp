@@ -92,10 +92,10 @@ set style data boxes
 set style fill solid noborder
 
 plot ifnamew \
-      using ($1+utc_offset):($5+$6+$7+$8)     title "idle"    fc rgb "#229922"    \
-  ,'' using ($1+utc_offset):($5+$6+$7)        title "waiting" fc "blue"           \
-  ,'' using ($1+utc_offset):($5+$6)           title "system"  fc "yellow"         \
-  ,'' using ($1+utc_offset):5                 title "user"    fc rgb "#ccbb0000"  \
+      using ($1+utc_offset):($5+$6+$7+$8)     title "idle"    fc rgb "#229922" fs solid 1.0 \
+  ,'' using ($1+utc_offset):($5+$6+$7)        title "waiting" fc "blue"        fs solid 1.0 \
+  ,'' using ($1+utc_offset):($5+$6)           title "system"  fc "yellow"      fs solid 1.0 \
+  ,'' using ($1+utc_offset):5                 title "user"    fc rgb "#ccbb0000" fs solid 1.0 \
   ,'' using ($1+utc_offset):2:4             notitle with filledcurves lc "black"  \
   ,'' using ($1+utc_offset):3                 title "load 5min" with lines lw 0.1 fc "black" axes x1y2
 
@@ -129,10 +129,10 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($1+utc_offset):($5+$6+$7+$8)     fc rgb "#229922"    \
-  ,'' using ($1+utc_offset):($5+$6+$7)        fc "blue"           \
-  ,'' using ($1+utc_offset):($5+$6)           fc "yellow"         \
-  ,'' using ($1+utc_offset):5                 fc rgb "#ccbb0000"  \
+      using ($1+utc_offset):($5+$6+$7+$8)     fc rgb "#229922" fs solid 1.0 \
+  ,'' using ($1+utc_offset):($5+$6+$7)        fc "blue"        fs solid 1.0 \
+  ,'' using ($1+utc_offset):($5+$6)           fc "yellow"      fs solid 1.0 \
+  ,'' using ($1+utc_offset):5                 fc rgb "#ccbb0000" fs solid 1.0 \
   ,'' using ($1+utc_offset):2:4             notitle with filledcurves lc "black"  \
   ,'' using ($1+utc_offset):3                 with lines lw 0.1 fc "black" axes x1y2
 
@@ -170,10 +170,10 @@ set rmargin at screen RMARG
 
 # ***** PLOT *****
 plot ifnameh \
-      using ($1+utc_offset):($3+$4+$5+$6)     fc rgb "#229922"    \
-  ,'' using ($1+utc_offset):($3+$4+$5)        fc "blue"           \
-  ,'' using ($1+utc_offset):($3+$4)           fc "yellow"         \
-  ,'' using ($1+utc_offset):3                 fc rgb "#ccbb0000"  \
+      using ($1+utc_offset):($3+$4+$5+$6)     fc rgb "#229922" fs solid 1.0 \
+  ,'' using ($1+utc_offset):($3+$4+$5)        fc "blue"        fs solid 1.0 \
+  ,'' using ($1+utc_offset):($3+$4)           fc "yellow"      fs solid 1.0 \
+  ,'' using ($1+utc_offset):3                 fc rgb "#ccbb0000" fs solid 1.0 \
   ,'' using ($1+utc_offset):2                 with lines lw 0.1 fc "black" axes x1y2
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
