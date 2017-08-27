@@ -97,7 +97,7 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($1+utc_offset):2:4 notitle with filledcurves \
+      using ($1+utc_offset):2:4 notitle with filledcurves lc rgb "#ccbb0000" \
   ,'' using ($1+utc_offset):3 title " Temperature [degC]" with lines lw 0.1 fc rgb "#ccbb0000"
 
 
@@ -129,7 +129,7 @@ set rmargin at screen MRPOS
 
 # ***** PLOT *****
 plot ifnamed \
-      using ($1+utc_offset):2:4 with filledcurves \
+      using ($1+utc_offset):2:4 with filledcurves lc rgb "#ccbb0000" \
   ,'' using ($1+utc_offset):3 with points pt 5 ps 0.2 fc rgb "#ccbb0000"
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
