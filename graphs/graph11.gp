@@ -13,7 +13,7 @@ set terminal png enhanced font "Vera,9" size 1280,320
 set style fill solid 0.25 noborder
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
-set grid
+set grid front
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
 if (GPVAL_VERSION == 4.6) {epoch_compensate = 946684800} else {if (GPVAL_VERSION == 5.0) {epoch_compensate = 0}}
