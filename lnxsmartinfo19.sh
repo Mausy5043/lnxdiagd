@@ -31,8 +31,8 @@ function smart1999 {
   fi
 }
 
-if [[ ! -d /tmp/lnxdiagd ]]; then
-  mkdir -m 777 /tmp/lnxdiagd
+if [[ ! -d /tmp/mausy5043libs ]]; then
+  mkdir -m 777 /tmp/mausy5043libs
 fi
 
 touch "${rf}.lock"
