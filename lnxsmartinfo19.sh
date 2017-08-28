@@ -2,10 +2,10 @@
 
 # This script is executed periodically by a cronjob.
 # It prevents the use of repeated `sudo smartctl...` commands
-# The resulting data is stored in `/tmp/lnxdiagd/*.dat` files that are
+# The resulting data is stored in `/tmp/mausy5043libs/*.dat` files that are
 # subsequently read by `daemons/lnxdiag19d.py`.
 
-rf="/tmp/lnxdiagd/smartinfo"
+rf="/tmp/mausy5043libs/smartinfo"
 
 # BEWARE
 # The disks identified here as `sda`, `sdb` etc. may not necessarily
