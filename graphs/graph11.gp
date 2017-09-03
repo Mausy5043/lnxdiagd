@@ -58,6 +58,12 @@ stats ifnamew using 1 name "X" nooutput
 Xw_min = X_min + utc_offset - epoch_compensate
 Xw_max = X_max + utc_offset - epoch_compensate
 
+# stats for Y-axis
+stats ifnamew using 4 name "Yw" nooutput
+
+Ymax = max(max(Yd_max, Yh_max), Yw_max) +1
+Ymin = min(min(Yd_min, Yh_min), Yw_min) -1
+
 # ********************************************************* Statistics (Y) *****
 # stats to be calculated here of column 2 (UX-epoch)
 stats ifnamey using 1 name "X" nooutput
