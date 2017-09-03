@@ -85,7 +85,7 @@ set rmargin at screen RMARG
 set xlabel "past week"       # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
-set format x "%a %d"            # Display time in 24 hour notation on the X axis
+set format x "%b"            # Display time in 24 hour notation on the X axis
 set xrange [ Xy_min : Xy_max ]
 
 # ***************************************************************** Y-axis *****
@@ -100,8 +100,8 @@ set key reverse Left
 # ***************************************************************** Output *****
 # ***** PLOT *****
 plot ifnamey \
-      using ($1+utc_offset):2:4 with filledcurves lc rgb "#bb0000" \
-  ,'' using ($1+utc_offset):3 with points pt 5 ps 0.2 fc rgb "#bb0000"
+      using ($1+utc_offset):2:4 notitle with filledcurves lc rgb "#bb0000" \
+  ,'' using ($1+utc_offset):3   title " Temperature [degC]" with points pt 5 ps 0.2 fc rgb "#bb0000"
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -127,9 +127,7 @@ set ylabel "Temperature [degC]"
 set yrange [ Ymin : Ymax ]
 
 # ***************************************************************** Legend *****
-set key inside top left horizontal box
-set key samplen 1
-set key reverse Left
+unset key
 
 # ***************************************************************** Output *****
 # set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
@@ -146,10 +144,8 @@ set rmargin at screen LMPOS
 
 # ***** PLOT *****
 plot ifnamew \
-      using ($1+utc_offset):2:4 notitle with filledcurves lc rgb "#bb0000" \
-  ,'' using ($1+utc_offset):3 title " Temperature [degC]" with lines lw 0.1 fc rgb "#bb0000"
-
-
+      using ($1+utc_offset):2:4 with filledcurves lc rgb "#bb0000" \
+  ,'' using ($1+utc_offset):3 with lines lw 0.1 fc rgb "#bb0000"
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
