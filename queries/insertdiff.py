@@ -21,21 +21,22 @@ def process_file(fname):
     tsecs = data[0] - data0[0]
     if (tsecs > 0):
       newline = [0] * (len(data)+2)
-      newline[0] = data[0]
-      newline[1] = data[1]
+      newline[0] = data[0]                            # sample_epoch
+      newline[1] = data[1]                            # MIN(etIn)
       # calculate bitrate download in BPS
       if (data[2] > data0[2]):
-        newline[2] = (data[2] - data0[2]) / tsecs
+        # use MIN[x] - MIN[x-1]
+        newline[2] = (data[2] - data0[2]) / tsecs     # AVG(etIn)
       else:
         newline[2] = 0
-      newline[3] = data[2]
-      newline[4] = data[3]
+      newline[3] = data[2]                            # MAX(etIn)
+      newline[4] = data[3]                            # MIN(etOut)
       # calculate bitrate upload in BPS
       if (data[4] > data0[4]):
-        newline[5] = (data[4] - data0[4]) / tsecs
+        newline[5] = (data[4] - data0[4]) / tsecs     # AVG(etOut)
       else:
         newline[5] = 0
-      newline[6] = data[4]
+      newline[6] = data[4]                            # MAX(etOut)
       newsrc.append(';'.join(map(str, newline)))
     # remember current sample for next loop
     data0 = data
