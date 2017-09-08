@@ -22,7 +22,6 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (sample_time <= NOW() - ${W_INTERVAL})  \
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
-             MONTH(sample_time),                  \
              WEEK(sample_time);"                  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql11y.csv"
 
@@ -41,7 +40,6 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (sample_time <= NOW() - ${W_INTERVAL})  \
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
-             MONTH(sample_time),                  \
              WEEK(sample_time);"                  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql12y.csv"
 
@@ -59,7 +57,6 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (sample_time <= NOW() - ${W_INTERVAL})  \
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
-             MONTH(sample_time),                  \
              WEEK(sample_time);"                  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13y.csv"
   ./insertdiff.py "${DATASTORE}/sql13y.csv"
@@ -79,7 +76,6 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (sample_time <= NOW() - ${W_INTERVAL})  \
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
-             MONTH(sample_time),                  \
              WEEK(sample_time);"                  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql14y.csv"
 
@@ -101,7 +97,6 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (sample_time <= NOW() - ${W_INTERVAL}) \
       AND (host = '${HOST}')                     \
     GROUP BY YEAR(sample_time),                  \
-             MONTH(sample_time),                 \
              WEEK(sample_time);"                 \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql15y.csv"
 popd >/dev/null
