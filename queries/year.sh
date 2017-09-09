@@ -23,7 +23,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
              WEEK(sample_time, 3);"                  \
-  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql11y.csv"
+  | sed 's/\t/;/g;s/\n//g' | sort -t ";" -k 1 > "${DATASTORE}/sql11y.csv"
 
   # Get year data for system load (sysload; graph12)
 	echo -n "12"
@@ -41,7 +41,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
              WEEK(sample_time, 3);"                  \
-  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql12y.csv"
+  | sed 's/\t/;/g;s/\n//g' | sort -t ";" -k 1 > "${DATASTORE}/sql12y.csv"
 
   # Get year data for system network load (sysnet; graph13)
 	echo -n "13"
@@ -58,7 +58,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
              WEEK(sample_time, 3);"                  \
-  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13y.csv"
+  | sed 's/\t/;/g;s/\n//g' | sort -t ";" -k 1 > "${DATASTORE}/sql13y.csv"
   ./insertdiff.py "${DATASTORE}/sql13y.csv"
 
   # Get year data for system memory usage (sysmem; graph14)
@@ -77,7 +77,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
              WEEK(sample_time, 3);"                  \
-  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql14y.csv"
+  | sed 's/\t/;/g;s/\n//g' | sort -t ";" -k 1 > "${DATASTORE}/sql14y.csv"
 
   # Get year data for system log (syslog; graph15)
 	echo -n "15"
@@ -98,5 +98,5 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (host = '${HOST}')                     \
     GROUP BY YEAR(sample_time),                  \
              WEEK(sample_time, 3);"              \
-  | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql15y.csv"
+  | sed 's/\t/;/g;s/\n//g' | sort -t ";" -k 1 > "${DATASTORE}/sql15y.csv"
 popd >/dev/null
