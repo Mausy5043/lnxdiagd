@@ -22,7 +22,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (sample_time <= NOW() - ${W_INTERVAL})  \
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
-             WEEK(sample_time, 1);"                  \
+             WEEK(sample_time, 3);"                  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql11y.csv"
 
   # Get year data for system load (sysload; graph12)
@@ -40,7 +40,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (sample_time <= NOW() - ${W_INTERVAL})  \
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
-             WEEK(sample_time, 1);"                  \
+             WEEK(sample_time, 3);"                  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql12y.csv"
 
   # Get year data for system network load (sysnet; graph13)
@@ -57,7 +57,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (sample_time <= NOW() - ${W_INTERVAL})  \
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
-             WEEK(sample_time, 1);"                  \
+             WEEK(sample_time, 3);"                  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13y.csv"
   ./insertdiff.py "${DATASTORE}/sql13y.csv"
 
@@ -76,7 +76,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (sample_time <= NOW() - ${W_INTERVAL})  \
       AND (host = '${HOST}')                      \
     GROUP BY YEAR(sample_time),                   \
-             WEEK(sample_time, 1);"                  \
+             WEEK(sample_time, 3);"                  \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql14y.csv"
 
   # Get year data for system log (syslog; graph15)
@@ -97,6 +97,6 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
       AND (sample_time <= NOW() - ${W_INTERVAL}) \
       AND (host = '${HOST}')                     \
     GROUP BY YEAR(sample_time),                  \
-             WEEK(sample_time, 1);"              \
+             WEEK(sample_time, 3);"              \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql15y.csv"
 popd >/dev/null
