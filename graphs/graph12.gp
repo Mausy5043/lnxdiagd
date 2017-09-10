@@ -92,7 +92,7 @@ set key maxcols 4
 # ***** PLOT *****
 set style data boxes
 
-plot ifnamew \
+plot ifnamey \
       using ($1+utc_offset):($5+$6+$7+$8)     title "idle"    fc rgb "#229922" fs solid 1.0 \
   ,'' using ($1+utc_offset):($5+$6+$7)        title "waiting" fc "blue"        fs solid 1.0 \
   ,'' using ($1+utc_offset):($5+$6)           title "system"  fc "yellow"      fs solid 1.0 \
