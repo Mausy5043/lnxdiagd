@@ -119,7 +119,8 @@ set ylabel "Usage [%]"
 set yrange [ 0 : 100 ]
 
 # **************************************************************** Y2-axis *****
-set y2label "Load"
+set y2label " "
+set y2tics format " "
 set y2tics border
 set y2range [ 0 : 2 ]
 
@@ -208,7 +209,6 @@ set yrange [ 0 : 100 ]
 
 # **************************************************************** Y2-axis *****
 set y2label "Load"
-#set autoscale y2
 set y2range [0:2]
 set y2tics border
 
