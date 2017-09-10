@@ -22,6 +22,10 @@ LMARG = 0.06
 LMPOS = 0.40
 MRPOS = 0.73
 RMARG = 0.94
+TTPOS = 0.95
+TBPOS = 0.55
+BTPOS = 0.48
+BBPOS = 0.08
 
 min(x,y) = (x < y) ? x : y
 max(x,y) = (x > y) ? x : y
