@@ -83,7 +83,7 @@ set yrange [ 0 : 100 ]
 set y2range [ 0 : 2 ]
 
 # ***************************************************************** Legend *****
-set key inside top left horizontal box
+set key inside top left horizontal opaque box
 set key samplen 0.1
 set key reverse horizontal Left
 set key maxcols 4
