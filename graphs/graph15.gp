@@ -92,6 +92,8 @@ set key maxcols 6
 #set object 2 rect from graph 0,0 to graph 1,1 behind
 #set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
 
+set tmargin at screen BTPOS
+set bmargin at screen BBPOS
 set lmargin at screen LMARG
 set rmargin at screen LMPOS
 

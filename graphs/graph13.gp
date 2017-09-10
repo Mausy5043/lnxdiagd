@@ -131,6 +131,8 @@ set key reverse Left
 
 # ***************************************************************** Output *****
 
+set tmargin at screen BTPOS
+set bmargin at screen BBPOS
 set lmargin at screen LMARG
 set rmargin at screen LMPOS
 
