@@ -77,7 +77,6 @@ Xw_max = X_max + utc_offset - epoch_compensate
 # stats to be calculated here of column 7 (Upload bytes per minute)
 stats ifnamew using (speedw($6)) name "Yw" nooutput
 
-
 Ymax = max(max(Yd_max, Yh_max), Yw_max)
 Ymin = 1024
 Ystd = max(max(Yd_stddev, Yh_stddev), Yw_stddev)
