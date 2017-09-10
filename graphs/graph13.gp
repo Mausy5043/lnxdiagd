@@ -6,6 +6,7 @@
 ifnameh = "/tmp/lnxdiagd/mysql4gnuplot/sql13h.csv"
 ifnamed = "/tmp/lnxdiagd/mysql4gnuplot/sql13d.csv"
 ifnamew = "/tmp/lnxdiagd/mysql4gnuplot/sql13w.csv"
+ifnamey = "/tmp/lnxdiagd/mysql4gnuplot/sql13y.csv"
 set output "/tmp/lnxdiagd/site/img/day13.png"
 
 # ******************************************************* General settings *****
