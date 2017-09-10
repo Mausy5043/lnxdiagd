@@ -71,7 +71,7 @@ set lmargin at screen LMARG
 set rmargin at screen RMARG
 
 # ***************************************************************** X-axis *****
-set xlabel "past year"       # X-axis label
+unset xlabel                 # X-axis label
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%b"            # Display time in 24 hour notation on the X axis
