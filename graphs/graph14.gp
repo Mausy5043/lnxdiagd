@@ -60,8 +60,52 @@ stats ifnamew using 6 name "Yw" nooutput
 
 Ymax = max(max(Yd_max, Yh_max), Yw_max) * -1
 
-set multiplot layout 1, 3 title "Memory Usage ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
+# ********************************************************* Statistics (Y) *****
+# stats to be calculated here of column 2 (UX-epoch)
+stats ifnamey using 1 name "X" nooutput
+Xy_min = X_min + utc_offset - epoch_compensate
+Xy_max = X_max + utc_offset - epoch_compensate
 
+set multiplot layout 2, 3 title "Memory Usage ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                                                  UPPER ROW
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+set tmargin at screen TTPOS
+set bmargin at screen TBPOS
+set lmargin at screen LMARG
+set rmargin at screen RMARG
+
+# ***************************************************************** X-axis *****
+unset xlabel                 # X-axis label
+set xdata time               # Data on X-axis should be interpreted as time
+set timefmt "%s"             # Time in log-file is given in Unix format
+set format x "%b"            # Display time in 24 hour notation on the X axis
+set xrange [ Xy_min : Xy_max ]
+
+# ***************************************************************** Y-axis *****
+set ylabel "Usage [%]"
+set yrange [ Ymax : ]
+set format y "%4.0s%c"
+
+# ***************************************************************** Legend *****
+set key inside top left horizontal opaque box
+set key samplen 0.1
+set key reverse horizontal Left
+set key maxcols 4
+
+# ***************************************************************** Output *****
+# ***** PLOT *****
+set style data boxes
+set style fill solid noborder
+
+plot ifnamey \
+      using ($1+utc_offset):($2+$3+$4+$5) title "free"    fc rgb "#229922"  \
+  ,'' using ($1+utc_offset):($2+$3+$4)    title "cached"  fc "yellow"       \
+  ,'' using ($1+utc_offset):($2+$3)       title "buffers" fc "blue"         \
+  ,'' using ($1+utc_offset):2             title "used"    fc rgb "#bb0000"  \
+  ,'' using ($1+utc_offset):($6*-1)       title "swap"    fc rgb "#ee0000"
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -83,10 +127,7 @@ set yrange [ Ymax : ]
 set format y "%4.0s%c"
 
 # ***************************************************************** Legend *****
-set key opaque box inside top left
-set key samplen 0.1
-set key reverse horizontal Left
-set key maxcols 4
+unset key
 
 # ***************************************************************** Output *****
 # set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
