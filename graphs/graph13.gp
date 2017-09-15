@@ -120,8 +120,6 @@ set xrange [ Xw_min : Xw_max ]
 set ylabel "Network load [bits/sec]"
 set yrange [ Ymin : Ymax ]
 set format y "%3.0s%c"
-# set autoscale y
-set bmargin 0
 
 # ***************************************************************** Legend *****
 set key inside top left horizontal box
@@ -130,8 +128,9 @@ set key reverse Left
 
 # ***************************************************************** Output *****
 
-set tmargin at screen BTPOS
-set bmargin at screen BBPOS
+set bmargin 0
+#set tmargin at screen BTPOS
+#set bmargin at screen BBPOS
 set lmargin at screen LMARG
 set rmargin at screen LMPOS
 
@@ -230,9 +229,6 @@ set xrange [ Xw_min : Xw_max ]
 set ylabel " "
 set yrange [ Ymax : Ymin ] # reverse
 set format y "%3.0s%c"
-# set autoscale y
-set tmargin 0
-unset bmargin
 
 # ***************************************************************** Legend *****
 set key inside bottom left horizontal box
@@ -241,6 +237,8 @@ set key reverse Left
 
 # ***************************************************************** Output *****
 
+set tmargin 0
+unset bmargin
 set lmargin at screen LMARG
 set rmargin at screen LMPOS
 

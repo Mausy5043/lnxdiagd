@@ -94,14 +94,14 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   time mysql -h sql --skip-column-names -e             \
   "USE domotica;                                  \
    SELECT MIN(sample_epoch),                      \
-          MAX(p0),                                \
-          MAX(p1),                                \
-          MAX(p2),                                \
-          MAX(p3),                                \
-          MAX(p4),                                \
-          MAX(p5),                                \
-          MAX(p6),                                \
-          MAX(p7)                                 \
+          SUM(p0),                               \
+          SUM(p1),                               \
+          SUM(p2),                               \
+          SUM(p3),                               \
+          SUM(p4),                               \
+          SUM(p5),                               \
+          SUM(p6),                               \
+          SUM(p7)                                \
     FROM syslog                                   \
     WHERE (sample_time >= NOW() - ${W_INTERVAL})  \
       AND (sample_time <= NOW() - ${WD_INTERVAL}) \
