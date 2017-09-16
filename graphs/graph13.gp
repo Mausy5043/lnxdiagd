@@ -37,6 +37,9 @@ BPSd = 8.
 # weekly data is queried in 120 minute intervals (7200s) and post-processed to bytes/second
 # convert to bits per second:
 BPSw = 8.
+# yearly data is queried in 1 week intervals (604 800s) and post-processed to bytes/second
+# convert to bits per second:
+BPSy = 8.
 
 
 # ************************************************************* Functions ******
@@ -44,6 +47,7 @@ BPSw = 8.
 speedh(x) = x * BPSh
 speedd(x) = x * BPSd
 speedw(x) = x * BPSw
+speedy(x) = x * BPSy
 
 min(x,y) = (x < y) ? x : y
 max(x,y) = (x > y) ? x : y
@@ -55,7 +59,7 @@ Xh_min = X_min + utc_offset - epoch_compensate
 Xh_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
-stats ifnameh using (speedh($6)) name "Yh" nooutput
+stats ifnameh using 6 name "Yh" nooutput
 
 
 # ********************************************************* Statistics (M) *****
@@ -65,7 +69,7 @@ Xd_min = X_min + utc_offset - epoch_compensate
 Xd_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
-stats ifnamed using (speedd($6)) name "Yd" nooutput
+stats ifnamed using 6 name "Yd" nooutput
 
 
 # ********************************************************* Statistics (L) *****
@@ -75,28 +79,28 @@ Xw_min = X_min + utc_offset - epoch_compensate
 Xw_max = X_max + utc_offset - epoch_compensate
 
 # stats to be calculated here of column 7 (Upload bytes per minute)
-stats ifnamew using (speedw($6)) name "Yw" nooutput
+stats ifnamew using 6 name "Yw" nooutput
 
-Ymax = max(max(Yd_max, Yh_max), Yw_max)
+Ymax = max(max(speedd(Yd_max), speedh(Yh_max)), speedw(Yw_max))
 Ymin = 1024
-Ystd = max(max(Yd_stddev, Yh_stddev), Yw_stddev)
-Ymean = max(max(Yd_mean, Yh_mean), Yw_mean)
-Ymax = (Ymean + Ystd) * 3
+#Ystd = max(max(Yd_stddev, Yh_stddev), Yw_stddev)
+#Ymean = max(max(Yd_mean, Yh_mean), Yw_mean)
+#Ymax = (Ymean + Ystd) * 3
 
 # ********************** Statistics for the bottom graphs **********************
 # ********************************************************* Statistics (R) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnameh using (speedh($3)) name "Ybh" nooutput
+stats ifnameh using 3 name "Ybh" nooutput
 
 
 # ********************************************************* Statistics (M) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnamed using (speedd($3)) name "Ybd" nooutput
+stats ifnamed using 3 name "Ybd" nooutput
 
 
 # ********************************************************* Statistics (L) *****
 # stats to be calculated here of column 6 (Download bytes per minute)
-stats ifnamew using (speedw($3)) name "Ybw" nooutput
+stats ifnamew using 3 name "Ybw" nooutput
 
 
 
@@ -120,6 +124,7 @@ set xrange [ Xw_min : Xw_max ]
 set ylabel "Network load [bits/sec]"
 set yrange [ Ymin : Ymax ]
 set format y "%3.0s%c"
+set logscale y
 
 # ***************************************************************** Legend *****
 set key inside top left horizontal box
@@ -204,12 +209,12 @@ plot ifnameh \
 ################################################################################
 
 
-Ymax = max(max(Ybd_max, Ybh_max), Ybw_max)
+Ymax = max(max(speedd(Ybd_max), speedh(Ybh_max)), speedw(Ybw_max))
 #Ymin = min(min(Ybd_min, Ybh_min), Ybw_min) -1
 Ymin = 1024
-Ystd = max(max(Ybd_stddev, Ybh_stddev), Ybw_stddev)
-Ymean = max(max(Ybd_mean, Ybh_mean), Ybw_mean)
-Ymax = (Ymean + Ystd) * 3
+#Ystd = max(max(Ybd_stddev, Ybh_stddev), Ybw_stddev)
+#Ymean = max(max(Ybd_mean, Ybh_mean), Ybw_mean)
+#Ymax = (Ymean + Ystd) * 3
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
