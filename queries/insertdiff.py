@@ -28,14 +28,14 @@ def process_file(fname):
         # use MIN[x] - MIN[x-1]
         newline[2] = (data[2] - data0[2]) / tsecs     # AVG(etIn)
       else:
-        newline[2] = 0
+        newline[2] = 1                                # 1 iso 0 to allow for logscale
       newline[3] = data[2]                            # MAX(etIn)
       newline[4] = data[3]                            # MIN(etOut)
       # calculate bitrate upload in BPS
       if (data[4] > data0[4]):
         newline[5] = (data[4] - data0[4]) / tsecs     # AVG(etOut)
       else:
-        newline[5] = 0
+        newline[5] = 1                                # 1 iso 0 to allow for logscale
       newline[6] = data[4]                            # MAX(etOut)
       newsrc.append(';'.join(map(str, newline)))
     # remember current sample for next loop
