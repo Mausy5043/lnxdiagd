@@ -102,10 +102,78 @@ stats ifnamed using 3 name "Ybd" nooutput
 # stats to be calculated here of column 6 (Download bytes per minute)
 stats ifnamew using 3 name "Ybw" nooutput
 
-
+# ********************************************************* Statistics (Y) *****
+# stats to be calculated here of column 2 (UX-epoch)
+stats ifnamey using 1 name "X" nooutput
+Xy_min = X_min + utc_offset - epoch_compensate
+Xy_max = X_max + utc_offset - epoch_compensate
 
 set multiplot layout 4, 3 title "Network load ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0)+utc_offset)
 
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                                                  UPPER ROW
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+# ***************************************************************** X-axis *****
+set xdata time               # Data on X-axis should be interpreted as time
+set timefmt "%s"             # Time in log-file is given in Unix format
+set format x ""            # Display time in 24 hour notation on the X axis
+set xrange [ Xy_min : Xy_max ]
+
+# ***************************************************************** Y-axis *****
+set ylabel "Network load [bits/sec]"
+set yrange [ : ]
+set format y "%3.0s%c"
+set logscale y
+
+# ***************************************************************** Legend *****
+set key inside top left horizontal box
+set key samplen 1
+set key reverse Left
+
+# ***************************************************************** Output *****
+
+set bmargin 0
+#set tmargin at screen BTPOS
+#set bmargin at screen BBPOS
+set lmargin at screen LMARG
+set rmargin at screen RMARG
+
+# ***** PLOT *****
+plot ifnamey \
+      using ($1+utc_offset):(speedy($6)) title "Upload (eth0)" with lines lc rgb "#cc0000bb" lw 1
+
+# ***************************************************************** X-axis *****
+set format x "%a %d"            # Display time in 24 hour notation on the X axis
+set xrange [ Xy_min : Xy_max ]
+
+# ***************************************************************** Y-axis *****
+set ylabel " "
+set yrange [ : ] reverse
+set format y "%3.0s%c"
+set logscale y
+
+# ***************************************************************** Legend *****
+unset key
+
+# ***************************************************************** Output *****
+
+set tmargin 0
+unset bmargin
+set lmargin at screen LMARG
+set rmargin at screen RMARG
+
+# ***** PLOT *****
+plot ifnamey \
+      using ($1+utc_offset):(speedy($3)) title "Download (eth0)" with lines lc rgb "#ccbb0000" lw 1
+
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                                                  LOWER ROW
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
