@@ -17,8 +17,8 @@ if [ ! -d /tmp/lnxdiagd/site/img ]; then
   chmod -R 755 /tmp/lnxdiagd
 fi
 # make sure working tree exists
-if [ ! -d /tmp/lnxdiagd/mysql ]; then
-  mkdir -p /tmp/lnxdiagd/mysql
+if [ ! -d /tmp/lnxdiagd/mysql4gnuplot ]; then
+  mkdir -p /tmp/lnxdiagd/mysql4gnuplot
   chmod -R 755 /tmp/lnxdiagd
 fi
 
