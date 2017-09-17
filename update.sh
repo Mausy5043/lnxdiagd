@@ -42,30 +42,15 @@ pushd "$HOME/lnxdiagd"
     f5l3="${fname:0:14}${fname:${#fname}-4}"
 
     # Detect DIAG changes
-    if [[ "$f7l4" == "lnxdiagd.py" ]]; then
+    if [[ "$f7l4" == "daemons/lnxdiagd.py" ]]; then
       echo "  ! Diagnostic daemon changed"
       eval "./$fname stop"
     fi
 
     # Detect SVC changes
-    if [[ "$f6l4" == "lnxsvcd.py" ]]; then
+    if [[ "$f6l4" == "daemons/lnxsvcd.py" ]]; then
       echo "  ! Service daemon changed"
       eval "./$fname stop"
-    fi
-
-    # LIBDAEMON.PY changed
-    if [[ "$fname" == "libdaemon.py" ]]; then
-      echo "  ! Diagnostic library changed"
-      echo "  o Restarting all daemons"
-      for daemon in $diaglist; do
-        echo "  +- Restart DIAG ${daemon}"
-        eval "./daemons/lnxdiag${daemon}d.py restart"
-      done
-      echo "  o Restarting all service daemons"
-      for daemon in $srvclist; do
-        echo "  +- Restart SVC ${daemon}"
-        eval "./lnxsvc${daemon}d.py restart"
-      done
     fi
 
     #CONFIG.INI changed
