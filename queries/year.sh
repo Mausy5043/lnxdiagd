@@ -2,12 +2,10 @@
 
 # Pull YEARLY data from MySQL server.
 
-pushd "$HOME/lnxdiagd/queries/" >/dev/null  || exit 1
+pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   # shellcheck disable=SC1091
   source ./sql-includes || exit
-
-  #sleep $(echo $RANDOM/555 |bc)
 
   # Get year data for system temperature (systemp; graph11)
 	echo -n "11"
