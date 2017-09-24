@@ -119,7 +119,7 @@ set multiplot layout 4, 3 title "Network load ".strftime("( %Y-%m-%dT%H:%M:%S )"
 # ***************************************************************** X-axis *****
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
-set format x ""            # Display time in 24 hour notation on the X axis
+set format x "%b"            # Display time in 24 hour notation on the X axis
 set xrange [ Xy_min : Xy_max ]
 
 # ***************************************************************** Y-axis *****
