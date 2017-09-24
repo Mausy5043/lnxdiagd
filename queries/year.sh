@@ -6,6 +6,8 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   # shellcheck disable=SC1091
   source ./sql-includes || exit
+  echo "Query Yearly Data"
+
 
   # Get year data for system temperature (systemp; graph11)
 	echo -n "11"
