@@ -9,7 +9,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   # Get day data for system temperature (systemp; graph11)
 	echo -n "11"
-  time mysql -h sql --skip-column-names -e             \
+  time mysql -h sql --skip-column-names -e        \
   "USE domotica;                                  \
    SELECT MIN(sample_epoch),                      \
           MIN(temperature),                       \
