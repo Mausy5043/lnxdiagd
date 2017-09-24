@@ -181,7 +181,7 @@ plot ifnamey \
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+if (0) { # commented out block
 # ***************************************************************** X-axis *****
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
@@ -385,3 +385,4 @@ plot ifnameh \
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 unset multiplot
+} # end of commented block
