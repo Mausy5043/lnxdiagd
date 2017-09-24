@@ -192,7 +192,7 @@ set xrange [ Xw_min : Xw_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel "Network load [bits/sec]"
-set yrange [ Ymin : Ymax ]
+set yrange [ Ymin : Ymax ] noreverse
 set format y "%3.0s%c"
 set logscale y
 
