@@ -7,7 +7,7 @@ ifnameh = "/tmp/lnxdiagd/mysql4gnuplot/sql15h.csv"
 ifnamed = "/tmp/lnxdiagd/mysql4gnuplot/sql15d.csv"
 ifnamew = "/tmp/lnxdiagd/mysql4gnuplot/sql15w.csv"
 ifnamey = "/tmp/lnxdiagd/mysql4gnuplot/sql15y.csv"
-set output  "/tmp/lnxdiagd/site/img/day15.png"
+set output "/tmp/lnxdiagd/site/img/day15.png"
 
 # ******************************************************* General settings *****
 set terminal png enhanced font "Vera,9" size 1280,480
