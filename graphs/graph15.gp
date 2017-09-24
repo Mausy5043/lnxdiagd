@@ -54,8 +54,55 @@ stats ifnamew using 1 name "X" nooutput
 Xw_min = X_min + utc_offset - epoch_compensate
 Xw_max = X_max + utc_offset - epoch_compensate
 
+# ********************************************************* Statistics (Y) *****
+# stats to be calculated here of column 2 (UX-epoch)
+stats ifnamey using 1 name "X" nooutput
+Xy_min = X_min + utc_offset - epoch_compensate
+Xy_max = X_max + utc_offset - epoch_compensate
+
 # ****************************************************************** Title *****
-set multiplot layout 1, 3 title "System Logging Linecounts ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0) + utc_offset)
+set multiplot layout 2, 3 title "System Logging Linecounts ".strftime("( %Y-%m-%dT%H:%M:%S )", time(0) + utc_offset)
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                                                  UPPER ROW
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+set tmargin at screen TTPOS
+set bmargin at screen TBPOS
+set lmargin at screen LMARG
+set rmargin at screen RMARG
+
+# ***************************************************************** X-axis *****
+unset xlabel                 # X-axis label
+set xdata time               # Data on X-axis should be interpreted as time
+set timefmt "%s"             # Time in log-file is given in Unix format
+set format x "%b"            # Display time in 24 hour notation on the X axis
+set xrange [ Xy_min : Xy_max ]
+
+# ***************************************************************** Y-axis *****
+set ylabel "Count [#]"
+set format y "%4.0s%c"
+set logscale y 10
+set yrange [ 0.1 : ]
+
+# ***************************************************************** Legend *****
+set key opaque box inside top left
+set key samplen 0.1
+set key reverse horizontal Left
+set key maxcols 6
+
+# ***************************************************************** Output *****
+# ***** PLOT *****
+set style data boxes
+set style fill solid noborder
+
+plot ifnamey \
+      using ($1+utc_offset):(nonull($2+$3+$4+$5+$6+$7)) title "p5" fc "green"  \
+  ,'' using ($1+utc_offset):(nonull($2+$3+$4+$5+$6))    title "p4" fc "cyan"   \
+  ,'' using ($1+utc_offset):(nonull($2+$3+$4+$5))       title "p3" fc "blue"   \
+  ,'' using ($1+utc_offset):(nonull($2+$3+$4))          title "p2" fc "orange" \
+  ,'' using ($1+utc_offset):(nonull($2+$3))             title "p1" fc "red"    \
+  ,'' using ($1+utc_offset):(nonull($2))                title "p0" fc "black"
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -78,10 +125,11 @@ set logscale y 10
 set yrange [ 0.5 : 1000 ]
 
 # ***************************************************************** Legend *****
-set key opaque box inside top left
-set key samplen 0.1
-set key reverse horizontal Left
-set key maxcols 6
+unset key
+#set key opaque box inside top left
+#set key samplen 0.1
+#set key reverse horizontal Left
+#set key maxcols 6
 
 # ***************************************************************** Output *****
 # set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
