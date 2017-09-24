@@ -10,7 +10,7 @@ ifnamey = "/tmp/lnxdiagd/mysql4gnuplot/sql15y.csv"
 set output "/tmp/lnxdiagd/site/img/day15.png"
 
 # ******************************************************* General settings *****
-set terminal png enhanced font "Vera,9" size 1280,480
+set terminal png truecolor enhanced font "Vera,9" size 1280,480
 set datafile separator ';'
 set datafile missing "NaN"    # Ignore missing values
 set grid front
