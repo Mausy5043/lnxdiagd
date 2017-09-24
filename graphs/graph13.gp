@@ -119,7 +119,7 @@ set multiplot layout 4, 3 title "Network load ".strftime("( %Y-%m-%dT%H:%M:%S )"
 # ***************************************************************** X-axis *****
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
-set format x "%b"            # Display time in 24 hour notation on the X axis
+set format x ""            # Display time in 24 hour notation on the X axis
 set xrange [ Xy_min : Xy_max ]
 
 # ***************************************************************** Y-axis *****
@@ -135,9 +135,9 @@ set key reverse Left
 
 # ***************************************************************** Output *****
 
-set bmargin 0
-#set tmargin at screen BTPOS
-#set bmargin at screen BBPOS
+#set bmargin 0
+set tmargin at screen TTPOS
+set bmargin at screen TTPOS - 0.2
 set lmargin at screen LMARG
 set rmargin at screen RMARG
 
@@ -146,7 +146,7 @@ plot ifnamey \
       using ($1+utc_offset):(speedy($6)) title "Upload (eth0)" with lines lc rgb "#cc0000bb" lw 1
 
 # ***************************************************************** X-axis *****
-set format x "%a %d"            # Display time in 24 hour notation on the X axis
+set format x "%b"            # Display time in 24 hour notation on the X axis
 set xrange [ Xy_min : Xy_max ]
 
 # ***************************************************************** Y-axis *****
@@ -160,8 +160,10 @@ unset key
 
 # ***************************************************************** Output *****
 
-set tmargin 0
-unset bmargin
+#set tmargin 0
+#unset bmargin
+set tmargin at screen TTPOS - 0.2
+set bmargin at screen TBPOS
 set lmargin at screen LMARG
 set rmargin at screen RMARG
 
@@ -181,7 +183,7 @@ plot ifnamey \
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if (0) { # commented out block
+
 # ***************************************************************** X-axis *****
 set xdata time               # Data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
@@ -201,9 +203,8 @@ set key reverse Left
 
 # ***************************************************************** Output *****
 
-set bmargin 0
-#set tmargin at screen BTPOS
-#set bmargin at screen BBPOS
+set tmargin at screen BTPOS
+set bmargin at screen BTPOS - 0.2
 set lmargin at screen LMARG
 set rmargin at screen LMPOS
 
@@ -310,8 +311,8 @@ set key reverse Left
 
 # ***************************************************************** Output *****
 
-set tmargin 0
-unset bmargin
+set tmargin at screen BTPOS - 0.2
+set bmargin at screen BBPOS
 set lmargin at screen LMARG
 set rmargin at screen LMPOS
 
@@ -385,4 +386,3 @@ plot ifnameh \
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 unset multiplot
-} # end of commented block
