@@ -108,6 +108,24 @@ def do_work(interval):
     p5 = wc("/var/log/5notice.log")
     p6 = wc("/var/log/6info.log")
     p7 = wc("/var/log/7debug.log")
+
+  if p0 < 0:
+    p0 = 0
+  if p1 < 0:
+    p1 = 0
+  if p2 < 0:
+    p2 = 0
+  if p3 < 0:
+    p3 = 0
+  if p4 < 0:
+    p4 = 0
+  if p5 < 0:
+    p5 = 0
+  if p6 < 0:
+    p6 = 0
+  if p7 < 0:
+    p7 = 0
+
   return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(p0, p1, p2, p3, p4, p5, p6, p7)
 
 def do_report(result, flock, fdata):
