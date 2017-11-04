@@ -157,13 +157,13 @@ def do_markdown(flock, fdata, hwdevice):
     if (NODE == "boson"):
       f.write('![A GNUplot image should be here: day19.png](img/day19.png)\n')
 
-    # Disk usage
-    f.write('## Disk Usage\n')
-    f.write('```\n')
-    f.write(dfh)      # dfh comes with its own built-in '/n'
-    if (NODE == "boson"):
-      f.write(mds)    # mds comes with its own built-in '/n'
-    f.write('```\n\n')
+    # # Disk usage
+    # f.write('## Disk Usage\n')
+    # f.write('```\n')
+    # f.write(dfh)      # dfh comes with its own built-in '/n'
+    # if (NODE == "boson"):
+    #   f.write(mds)    # mds comes with its own built-in '/n'
+    # f.write('```\n\n')
 
     if (NODE == "boson"):
       rbc_sda = sda.getdata('5')
