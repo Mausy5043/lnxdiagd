@@ -260,17 +260,17 @@ def do_markdown(flock, fdata, hwdevice):
       f.write(' ')
       f.write('```\n\n')
 
-    # Memory usage
-    f.write('## Memory Usage\n')
-    f.write('```\n')
-    f.write(freeh)    # freeh comes with its own built-in '/n'
-    f.write('```\n\n')
+    # # Memory usage
+    # f.write('## Memory Usage\n')
+    # f.write('```\n')
+    # f.write(freeh)    # freeh comes with its own built-in '/n'
+    # f.write('```\n\n')
 
-    # Top 10 processes
-    f.write('## Top 10 processes:\n')
-    f.write('```\n')
-    f.write(psout)    # psout comes with its own built-in '/n'
-    f.write('```\n\n')
+    # # Top 10 processes
+    # f.write('## Top 10 processes:\n')
+    # f.write('```\n')
+    # f.write(psout)    # psout comes with its own built-in '/n'
+    # f.write('```\n\n')
 
   mf.unlock(flock)
 
