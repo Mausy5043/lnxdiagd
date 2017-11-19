@@ -64,7 +64,7 @@ pushd "$HOME/lnxdiagd"
       echo "  o Restarting all service daemons"
       for daemon in $srvclist; do
         echo "  +- Restart SVC ${daemon}"
-        eval "./lnxsvc${daemon}d.py restart"
+        eval "./daemons/lnxsvc${daemon}d.py restart"
       done
     fi
   done
