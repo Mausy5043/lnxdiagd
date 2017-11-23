@@ -26,11 +26,11 @@ NODE        = os.uname()[1]
 SQLMNT      = rnd(0, 59)
 SQLHR       = rnd(0, 23)
 SQLHRM      = rnd(0, 59)
-SQL_UPDATE_HOUR   = 6   # in minutes (shouldn't be shorter than GRAPH_UPDATE)
-SQL_UPDATE_DAY    = 20  # in minutes
+SQL_UPDATE_HOUR   = 15   # in minutes (shouldn't be shorter than GRAPH_UPDATE)
+SQL_UPDATE_DAY    = 30  # in minutes
 SQL_UPDATE_WEEK   = 4   # in hours
 SQL_UPDATE_YEAR   = 8   # in hours
-GRAPH_UPDATE      = 6   # in minutes
+GRAPH_UPDATE      = 15   # in minutes
 
 # initialise logging
 syslog.openlog(ident=MYAPP, facility=syslog.LOG_LOCAL0)
