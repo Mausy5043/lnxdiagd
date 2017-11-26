@@ -12,7 +12,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   source ./sql-includes || exit
   echo "Query Hourly Data"
 
-  if [[ find "${DATASTORE}/sql11h.csv" -mmin +$AGE ]]; then
+  if [[ $(find "${DATASTORE}/sql11h.csv" -mmin +$AGE) ]]; then
     # Get hour data for system temperature (systemp; graph11)
   	echo -n "11"
     time mysql -h sql --skip-column-names -e            \
@@ -28,7 +28,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   # Get hour data for system load (sysload; graph12)
   # multiply H_DIVIDER by 5 because sampling takes place every 300s (5*60s)
-  if [[ find "${DATASTORE}/sql12h.csv" -mmin +$AGE ]]; then
+  if [[ $(find "${DATASTORE}/sql12h.csv" -mmin +$AGE) ]]; then
   	echo -n "12"
     time mysql -h sql --skip-column-names -e            \
     "USE domotica;                                 \
@@ -46,7 +46,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   fi
 
   # Get hour data for system network load (sysnet; graph13)
-  if [[ find "${DATASTORE}/sql13h.csv" -mmin +$AGE ]]; then
+  if [[ $(find "${DATASTORE}/sql13h.csv" -mmin +$AGE) ]]; then
   	echo -n "13"
     time mysql -h sql --skip-column-names -e            \
     "USE domotica;                                  \
@@ -64,7 +64,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   fi
 
   # Get hour data for system memory usage (sysmem; graph14)
-  if [[ find "${DATASTORE}/sql14h.csv" -mmin +$AGE ]]; then
+  if [[ $(find "${DATASTORE}/sql14h.csv" -mmin +$AGE) ]]; then
   	echo -n "14"
     time mysql -h sql --skip-column-names -e            \
     "USE domotica;                                 \
@@ -83,7 +83,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   # Get hour data for system log (syslog; graph15)
   # (multiply H_DIVIDER by 10 because sampling takes place every 600s)
-  if [[ find "${DATASTORE}/sql15h.csv" -mmin +$AGE ]]; then
+  if [[ $(find "${DATASTORE}/sql15h.csv" -mmin +$AGE) ]]; then
     echo -n "15"
     time mysql -h sql --skip-column-names -e            \
     "USE domotica;                                 \
@@ -106,7 +106,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   if [ "${HOST}" == "boson" ]; then
     # Get hour data for HDD temperatures (disktemp; graph19)
     # multiply H_DIVIDER by 5 because sampling takes place every 300s (5*60s)
-    if [[ find "${DATASTORE}/sql19h.csv" -mmin +$AGE ]]; then
+    if [[ $(find "${DATASTORE}/sql19h.csv" -mmin +$AGE) ]]; then
       echo -n "19"
       time mysql -h sql --skip-column-names -e            \
       "USE domotica;                                    \
