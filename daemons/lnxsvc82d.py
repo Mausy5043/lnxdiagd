@@ -162,8 +162,9 @@ def do_markdown(flock, fdata, hwdevice):
     # f.write('```\n')
     # f.write(dfh)      # dfh comes with its own built-in '/n'
     if (NODE == "boson"):
+     f.write('```\n')
      f.write(mds)    # mds comes with its own built-in '/n'
-    f.write('```\n\n')
+     f.write('```\n\n')
 
     if (NODE == "boson"):
       rbc_sda = sda.getdata('5')
