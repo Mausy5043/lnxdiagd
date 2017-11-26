@@ -120,7 +120,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   if [ "${HOST}" == "boson" ]; then
     # Get week data for HDD temperatures (disktemp; graph19)
-    if [[ $(find "${DATASTORE}/sql11w.csv" -mmin +$AGE) ]]; then
+    if [[ $(find "${DATASTORE}/sql19w.csv" -mmin +$AGE) ]]; then
       echo -n "19"
       time mysql -h sql --skip-column-names -e            \
       "USE domotica;                                    \
