@@ -13,7 +13,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   source ./sql-includes || exit
   echo "Query Daily Data"
 
-  if [[ $(find "${DATASTORE}/sql11d.csv" -mmin +$AGE) ]]; then
+  if [[ $(find "${DATASTORE}/sql11d.csv" -mmin +$AGE)  || ! -f "${DATASTORE}/sql11d.csv" ]]; then
     # Get day data for system temperature (systemp; graph11)
   	echo -n "11"
     time mysql -h sql --skip-column-names -e        \
@@ -31,7 +31,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   fi
 
   # Get day data for system load (sysload; graph12)
-  if [[ $(find "${DATASTORE}/sql12d.csv" -mmin +$AGE) ]]; then
+  if [[ $(find "${DATASTORE}/sql12d.csv" -mmin +$AGE) || ! -f "${DATASTORE}/sql12d.csv" ]]; then
     echo -n "12"
     time mysql -h sql --skip-column-names -e             \
     "USE domotica;                                  \
@@ -52,7 +52,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   fi
 
   # Get day data for system network load (sysnet; graph13)
-  if [[ $(find "${DATASTORE}/sql13d.csv" -mmin +$AGE) ]]; then
+  if [[ $(find "${DATASTORE}/sql13d.csv" -mmin +$AGE) || ! -f "${DATASTORE}/sql13d.csv" ]]; then
   	echo -n "13"
     time mysql -h sql --skip-column-names -e             \
     "USE domotica;                                  \
@@ -71,7 +71,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   fi
 
   # Get day data for system memory usage (sysmem; graph14)
-  if [[ $(find "${DATASTORE}/sql14d.csv" -mmin +$AGE) ]]; then
+  if [[ $(find "${DATASTORE}/sql14d.csv" -mmin +$AGE) || ! -f "${DATASTORE}/sql14d.csv" ]]; then
     echo -n "14"
     time mysql -h sql --skip-column-names -e             \
     "USE domotica;                                  \
@@ -90,7 +90,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   fi
 
   # Get day data for system log (syslog; graph15)
-  if [[ $(find "${DATASTORE}/sql15d.csv" -mmin +$AGE) ]]; then
+  if [[ $(find "${DATASTORE}/sql15d.csv" -mmin +$AGE) || ! -f "${DATASTORE}/sql15d.csv" ]]; then
   	echo -n "15"
     time mysql -h sql --skip-column-names -e             \
     "USE domotica;                                  \
@@ -113,7 +113,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
   if [ "${HOST}" == "boson" ]; then
     # Get day data for HDD temperatures (disktemp; graph19)
-    if [[ $(find "${DATASTORE}/sql19d.csv" -mmin +$AGE) ]]; then
+    if [[ $(find "${DATASTORE}/sql19d.csv" -mmin +$AGE) || ! -f "${DATASTORE}/sql19d.csv" ]]; then
       echo -n "19"
       time mysql -h sql --skip-column-names -e            \
       "USE domotica;                                    \

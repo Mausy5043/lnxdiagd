@@ -15,7 +15,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
 
 
   # Get year data for system temperature (systemp; graph11)
-  if [[ $(find "${DATASTORE}/sql11y.csv" -mmin +$AGE) ]]; then
+  if [[ $(find "${DATASTORE}/sql11y.csv" -mmin +$AGE) || ! -f "${DATASTORE}/sql11y.csv" ]]; then
   	echo -n "11"
     time mysql -h sql --skip-column-names -e             \
     "USE domotica;                                  \
@@ -33,7 +33,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   fi
 
   # Get year data for system load (sysload; graph12)
-  if [[ $(find "${DATASTORE}/sql12y.csv" -mmin +$AGE) ]]; then
+  if [[ $(find "${DATASTORE}/sql12y.csv" -mmin +$AGE) || ! -f "${DATASTORE}/sql12y.csv" ]]; then
   	echo -n "12"
     time mysql -h sql --skip-column-names -e             \
     "USE domotica;                                  \
@@ -55,7 +55,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   fi
 
   # Get year data for system network load (sysnet; graph13)
-  if [[ $(find "${DATASTORE}/sql13y.csv" -mmin +$AGE) ]]; then
+  if [[ $(find "${DATASTORE}/sql13y.csv" -mmin +$AGE) || ! -f "${DATASTORE}/sql13y.csv" ]]; then
   	echo -n "13"
     time mysql -h sql --skip-column-names -e             \
     "USE domotica;                                  \
@@ -75,7 +75,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   fi
 
   # Get year data for system memory usage (sysmem; graph14)
-  if [[ $(find "${DATASTORE}/sql14y.csv" -mmin +$AGE) ]]; then
+  if [[ $(find "${DATASTORE}/sql14y.csv" -mmin +$AGE) || ! -f "${DATASTORE}/sql14y.csv" ]]; then
   	echo -n "14"
     time mysql -h sql --skip-column-names -e             \
     "USE domotica;                                  \
@@ -95,7 +95,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
   fi
 
   # Get year data for system log (syslog; graph15)
-  if [[ $(find "${DATASTORE}/sql15y.csv" -mmin +$AGE) ]]; then
+  if [[ $(find "${DATASTORE}/sql15y.csv" -mmin +$AGE) || ! -f "${DATASTORE}/sql15y.csv" ]]; then
   	echo -n "15"
     time mysql -h sql --skip-column-names -e             \
     "USE domotica;                                 \
