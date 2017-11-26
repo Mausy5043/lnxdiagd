@@ -26,11 +26,11 @@ NODE        = os.uname()[1]
 SQLMNT      = rnd(0, 59)
 SQLHR       = rnd(0, 23)
 SQLHRM      = rnd(0, 59)
-SQL_UPDATE_HOUR   = 15   # in minutes (shouldn't be shorter than GRAPH_UPDATE)
+SQL_UPDATE_HOUR   = 10  # in minutes (shouldn't be shorter than GRAPH_UPDATE)
 SQL_UPDATE_DAY    = 30  # in minutes
 SQL_UPDATE_WEEK   = 4   # in hours
 SQL_UPDATE_YEAR   = 8   # in hours
-GRAPH_UPDATE      = 15   # in minutes
+GRAPH_UPDATE      = 10  # in minutes
 
 # initialise logging
 syslog.openlog(ident=MYAPP, facility=syslog.LOG_LOCAL0)
@@ -125,13 +125,13 @@ def getsqldata(homedir, minit, nowur, nu):
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last week is updated every <SQL_UPDATE_WEEK> hours
   # if ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)) or nu:
-  cmnd = [homedir + '/' + MYAPP + '/queries/week.sh', '{0}'.format(SQL_UPDATE_WEEK)]
+  cmnd = [homedir + '/' + MYAPP + '/queries/week.sh', '{0}'.format(SQL_UPDATE_WEEK * 60)]
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   cmnd = subprocess.call(cmnd)
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last year is updated at 01:xx
   # if (nowur == SQL_UPDATE_YEAR and minit == SQL_UPDATE_DAY) or nu:
-  cmnd = [homedir + '/' + MYAPP + '/queries/year.sh', '{0}'.format(SQL_UPDATE_YEAR)]
+  cmnd = [homedir + '/' + MYAPP + '/queries/year.sh', '{0}'.format(SQL_UPDATE_YEAR * 60)]
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   cmnd = subprocess.call(cmnd)
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
