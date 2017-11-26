@@ -112,29 +112,29 @@ def getsqldata(homedir, minit, nowur, nu):
   # minit = int(time.strftime('%M'))
   # nowur = int(time.strftime('%H'))
   # data of last hour is updated every <SQL_UPDATE_HOUR> minutes
-  if ((minit % SQL_UPDATE_HOUR) == 0) or nu:
-    cmnd = homedir + '/' + MYAPP + '/queries/hour.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # if ((minit % SQL_UPDATE_HOUR) == 0) or nu:
+  cmnd = [homedir + '/' + MYAPP + '/queries/hour.sh', SQL_UPDATE_HOUR]
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  cmnd = subprocess.call(cmnd)
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last day is updated every <SQL_UPDATE_DAY> minutes
-  if ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)) or nu:
-    cmnd = homedir + '/' + MYAPP + '/queries/day.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # if ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)) or nu:
+  cmnd = [homedir + '/' + MYAPP + '/queries/day.sh', SQL_UPDATE_DAY]
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  cmnd = subprocess.call(cmnd)
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last week is updated every <SQL_UPDATE_WEEK> hours
-  if ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)) or nu:
-    cmnd = homedir + '/' + MYAPP + '/queries/week.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # if ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)) or nu:
+  cmnd = [homedir + '/' + MYAPP + '/queries/week.sh', SQL_UPDATE_WEEK]
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  cmnd = subprocess.call(cmnd)
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last year is updated at 01:xx
-  if (nowur == SQL_UPDATE_YEAR and minit == SQL_UPDATE_DAY) or nu:
-    cmnd = homedir + '/' + MYAPP + '/queries/year.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # if (nowur == SQL_UPDATE_YEAR and minit == SQL_UPDATE_DAY) or nu:
+  cmnd = [homedir + '/' + MYAPP + '/queries/year.sh', SQL_UPDATE_YEAR]
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  cmnd = subprocess.call(cmnd)
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
 
 def write_lftp(script):
   with open(script, 'w') as f:
