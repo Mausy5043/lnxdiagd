@@ -83,7 +83,7 @@ def do_mv_data(flock, homedir, script):
   getsqldata(homedir, minit, nowur, False)
 
   # Create the graphs based on the MySQL data every 3rd minute
-  #if ((minit % GRAPH_UPDATE) == 0):
+  # if ((minit % GRAPH_UPDATE) == 0):
   cmnd = [homedir + '/' + MYAPP + '/mkgraphs.sh', '{0}'.format(GRAPH_UPDATE)]
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   cmnd = subprocess.call(cmnd)
