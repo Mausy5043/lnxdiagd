@@ -15,7 +15,7 @@ UTCOFFSET=$((LOCALSECONDS - UTCSECONDS))
 host=$(hostname)
 
 pushd "$HOME/lnxdiagd" >/dev/null  || exit 1
-  if [[ $(find "/tmp//lnxdiagd/site/img/day12.png" -mmin +$AGE) ]]; then
+  if [[ $(find "/tmp//lnxdiagd/site/img/day12.png" -mmin +$AGE) || ! -f "/tmp//lnxdiagd/site/img/day12.png" ]]; then
     if [ "$(wc -l < /tmp/lnxdiagd/mysql4gnuplot/sql11d.csv)" -gt 5 ]; then
   		echo -n "Graph 11"
       time gnuplot -e "utc_offset='${UTCOFFSET}'" ./graphs/graph11.gp
