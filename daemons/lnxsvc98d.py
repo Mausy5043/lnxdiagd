@@ -84,7 +84,7 @@ def do_mv_data(flock, homedir, script):
 
   # Create the graphs based on the MySQL data every 3rd minute
   #if ((minit % GRAPH_UPDATE) == 0):
-  cmnd = [homedir + '/' + MYAPP + '/mkgraphs.sh', GRAPH_UPDATE]
+  cmnd = [homedir + '/' + MYAPP + '/mkgraphs.sh', '{0}'.format(GRAPH_UPDATE)]
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   cmnd = subprocess.call(cmnd)
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
@@ -113,25 +113,25 @@ def getsqldata(homedir, minit, nowur, nu):
   # nowur = int(time.strftime('%H'))
   # data of last hour is updated every <SQL_UPDATE_HOUR> minutes
   # if ((minit % SQL_UPDATE_HOUR) == 0) or nu:
-  cmnd = [homedir + '/' + MYAPP + '/queries/hour.sh', SQL_UPDATE_HOUR]
+  cmnd = [homedir + '/' + MYAPP + '/queries/hour.sh', '{0}'.format(SQL_UPDATE_HOUR)]
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   cmnd = subprocess.call(cmnd)
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last day is updated every <SQL_UPDATE_DAY> minutes
   # if ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)) or nu:
-  cmnd = [homedir + '/' + MYAPP + '/queries/day.sh', SQL_UPDATE_DAY]
+  cmnd = [homedir + '/' + MYAPP + '/queries/day.sh', '{0}'.format(SQL_UPDATE_DAY)]
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   cmnd = subprocess.call(cmnd)
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last week is updated every <SQL_UPDATE_WEEK> hours
   # if ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)) or nu:
-  cmnd = [homedir + '/' + MYAPP + '/queries/week.sh', SQL_UPDATE_WEEK]
+  cmnd = [homedir + '/' + MYAPP + '/queries/week.sh', '{0}'.format(SQL_UPDATE_WEEK)]
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   cmnd = subprocess.call(cmnd)
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last year is updated at 01:xx
   # if (nowur == SQL_UPDATE_YEAR and minit == SQL_UPDATE_DAY) or nu:
-  cmnd = [homedir + '/' + MYAPP + '/queries/year.sh', SQL_UPDATE_YEAR]
+  cmnd = [homedir + '/' + MYAPP + '/queries/year.sh', '{0}'.format(SQL_UPDATE_YEAR)]
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   cmnd = subprocess.call(cmnd)
   mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
