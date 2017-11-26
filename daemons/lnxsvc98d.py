@@ -26,11 +26,11 @@ NODE        = os.uname()[1]
 SQLMNT      = rnd(0, 59)
 SQLHR       = rnd(0, 23)
 SQLHRM      = rnd(0, 59)
-SQL_UPDATE_HOUR   = 15   # in minutes (shouldn't be shorter than GRAPH_UPDATE)
+SQL_UPDATE_HOUR   = 10  # in minutes (shouldn't be shorter than GRAPH_UPDATE)
 SQL_UPDATE_DAY    = 30  # in minutes
 SQL_UPDATE_WEEK   = 4   # in hours
 SQL_UPDATE_YEAR   = 8   # in hours
-GRAPH_UPDATE      = 15   # in minutes
+GRAPH_UPDATE      = 10  # in minutes
 
 # initialise logging
 syslog.openlog(ident=MYAPP, facility=syslog.LOG_LOCAL0)
@@ -83,11 +83,11 @@ def do_mv_data(flock, homedir, script):
   getsqldata(homedir, minit, nowur, False)
 
   # Create the graphs based on the MySQL data every 3rd minute
-  if ((minit % GRAPH_UPDATE) == 0):
-    cmnd = homedir + '/' + MYAPP + '/mkgraphs.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # if ((minit % GRAPH_UPDATE) == 0):
+  cmnd = [homedir + '/' + MYAPP + '/mkgraphs.sh', '{0}'.format(GRAPH_UPDATE)]
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  cmnd = subprocess.call(cmnd)
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
 
   try:
     # Upload the webpage and graphs
@@ -112,29 +112,29 @@ def getsqldata(homedir, minit, nowur, nu):
   # minit = int(time.strftime('%M'))
   # nowur = int(time.strftime('%H'))
   # data of last hour is updated every <SQL_UPDATE_HOUR> minutes
-  if ((minit % SQL_UPDATE_HOUR) == 0) or nu:
-    cmnd = homedir + '/' + MYAPP + '/queries/hour.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # if ((minit % SQL_UPDATE_HOUR) == 0) or nu:
+  cmnd = [homedir + '/' + MYAPP + '/queries/hour.sh', '{0}'.format(SQL_UPDATE_HOUR)]
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  cmnd = subprocess.call(cmnd)
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last day is updated every <SQL_UPDATE_DAY> minutes
-  if ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)) or nu:
-    cmnd = homedir + '/' + MYAPP + '/queries/day.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # if ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)) or nu:
+  cmnd = [homedir + '/' + MYAPP + '/queries/day.sh', '{0}'.format(SQL_UPDATE_DAY)]
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  cmnd = subprocess.call(cmnd)
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last week is updated every <SQL_UPDATE_WEEK> hours
-  if ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)) or nu:
-    cmnd = homedir + '/' + MYAPP + '/queries/week.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # if ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)) or nu:
+  cmnd = [homedir + '/' + MYAPP + '/queries/week.sh', '{0}'.format(SQL_UPDATE_WEEK * 60)]
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  cmnd = subprocess.call(cmnd)
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
   # data of the last year is updated at 01:xx
-  if (nowur == SQL_UPDATE_YEAR and minit == SQL_UPDATE_DAY) or nu:
-    cmnd = homedir + '/' + MYAPP + '/queries/year.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  # if (nowur == SQL_UPDATE_YEAR and minit == SQL_UPDATE_DAY) or nu:
+  cmnd = [homedir + '/' + MYAPP + '/queries/year.sh', '{0}'.format(SQL_UPDATE_YEAR * 60)]
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  cmnd = subprocess.call(cmnd)
+  mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
 
 def write_lftp(script):
   with open(script, 'w') as f:
