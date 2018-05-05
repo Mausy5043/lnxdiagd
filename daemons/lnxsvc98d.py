@@ -26,11 +26,11 @@ NODE        = os.uname()[1]
 SQLMNT      = rnd(0, 59)
 SQLHR       = rnd(0, 23)
 SQLHRM      = rnd(0, 59)
-SQL_UPDATE_HOUR   = 15   # in minutes (shouldn't be shorter than GRAPH_UPDATE)
+GRAPH_UPDATE      = 15   # in minutes
+SQL_UPDATE_HOUR   = GRAPH_UPDATE  # in minutes (shouldn't be shorter than GRAPH_UPDATE)
 SQL_UPDATE_DAY    = 30  # in minutes
 SQL_UPDATE_WEEK   = 4   # in hours
 SQL_UPDATE_YEAR   = 8   # in hours
-GRAPH_UPDATE      = 15   # in minutes
 
 # initialise logging
 syslog.openlog(ident=MYAPP, facility=syslog.LOG_LOCAL0)
@@ -45,8 +45,6 @@ class MyDaemon(Daemon):
     s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
     mf.syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     mf.syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
-    mf.syslog_trace("queries/day.sh  runs every 30 minutes starting at minute {0}".format(SQLMNT), syslog.LOG_DEBUG, DEBUG)
-    mf.syslog_trace("queries/week.sh runs every 4th hour  starting  at hour   {0}:{1}".format(SQLHR, SQLHRM), syslog.LOG_DEBUG, DEBUG)
     reporttime      = iniconf.getint(inisection, "reporttime")
     samplespercycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
@@ -55,14 +53,13 @@ class MyDaemon(Daemon):
 
     sampletime      = reporttime/samplespercycle         # time [s] between samples
 
-    getsqldata(home, 0, 0, True)
     while True:
       try:
         starttime   = time.time()
 
         do_stuff(flock, home, scriptname)
 
-        waittime    = sampletime # - (time.time() - starttime)  # - (starttime % sampletime)
+        waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
         if (waittime > 0):
           mf.syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
           mf.syslog_trace("................................", False, DEBUG)
