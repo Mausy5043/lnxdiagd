@@ -138,11 +138,15 @@ class Graph(object):
     super(Graph, self).__init__()
     self.home = os.environ['HOME']
     self.updatetime = updatetime
-    self.command = self.home + '/' + MYAPP + '/mkgraphs.sh'
+    self.timer      = time.time() + rnd(60, self.updatetime)
+    self.command    = self.home + '/' + MYAPP + '/mkgraphs.sh'
 
   def make(self):
-    if ((int(time.strftime('%M')) % self.updatetime) == 0):
+    t0 = time.time()
+    if t0 >= self.timer:
       mf.syslog_trace("...:  {0}".format(self.command), False, DEBUG)
+      t1 = time.time()
+      self.timer = t1 + self.updatetime + rnd(-60, 60)
       return subprocess.call(self.command)
     return 1
 
@@ -154,7 +158,7 @@ def do_stuff(flock, homedir, script):
   result = sqldata.fetch()
   mf.syslog_trace("...datafetch:  {0}".format(result), False, DEBUG)
 
-  # Create the graphs based on the MySQL data every 3rd minute
+  # Create the graphs based on the MySQL data
   result = trendgraph.make()
   mf.syslog_trace("...trendgrph:  {0}".format(result), False, DEBUG)
   if (result == 0):
