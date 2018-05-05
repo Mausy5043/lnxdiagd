@@ -61,6 +61,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
     GROUP BY YEAR(sample_time),                   \
              WEEK(sample_time, 3);"                  \
   | sed 's/\t/;/g;s/\n//g' | sort -t ";" -k 1 > "${DATASTORE}/sql13y.csv"
+  cp "${DATASTORE}/sql13h.csv" "${DATASTORE}/sql13h.bak"
   ./insertdiff.py "${DATASTORE}/sql13y.csv"
 
   # Get year data for system memory usage (sysmem; graph14)

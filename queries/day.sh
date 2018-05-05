@@ -57,6 +57,7 @@ pushd "$HOME/lnxdiagd/queries/" >/dev/null || exit 1
       AND (host = '${HOST}')                      \
     GROUP BY (sample_epoch DIV ${D_DIVIDER});"    \
   | sed 's/\t/;/g;s/\n//g' > "${DATASTORE}/sql13d.csv"
+  cp "${DATASTORE}/sql13h.csv" "${DATASTORE}/sql13h.bak"
   ./insertdiff.py "${DATASTORE}/sql13d.csv"
 
   # Get day data for system memory usage (sysmem; graph14)
