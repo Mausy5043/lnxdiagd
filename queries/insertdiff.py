@@ -13,10 +13,10 @@ def process_file(fname):
   newsrc = []
   # store first sample
   line0 = src[0]
-  data0 = list(map(int, line0.split()))
+  data0 = list(map(int, map(float, line0.split())))
 
   for line in src[1:-1]:
-    data = list(map(int, line.split()))
+    data = list(map(int, map(float, line.split())))
     # determine temporal displacement between this sample and the previous one
     tsecs = data[0] - data0[0]
     if (tsecs > 0):
