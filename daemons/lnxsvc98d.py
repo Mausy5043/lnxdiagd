@@ -23,9 +23,6 @@ IS_JOURNALD = os.path.isfile('/bin/journalctl')
 MYID        = "".join(list(filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])))
 MYAPP       = os.path.realpath(__file__).split('/')[-3]
 NODE        = os.uname()[1]
-SQLMNT      = rnd(0, 59)
-SQLHR       = rnd(0, 23)
-SQLHRM      = rnd(0, 59)
 GRAPH_UPDATE      = 15   # in minutes
 SQL_UPDATE_HOUR   = GRAPH_UPDATE  # in minutes (shouldn't be shorter than GRAPH_UPDATE)
 SQL_UPDATE_DAY    = 30  # in minutes
@@ -48,11 +45,13 @@ class MyDaemon(Daemon):
     reporttime      = iniconf.getint(inisection, "reporttime")
     samplespercycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
-
     scriptname      = iniconf.get(inisection, "lftpscript")
 
     sampletime      = reporttime/samplespercycle         # time [s] between samples
-
+    sqldata.get(sqldata.h_cmd)
+    sqldata.get(sqldata.d_cmd)
+    sqldata.get(sqldata.w_cmd)
+    sqldata.get(sqldata.y_cmd)
     while True:
       try:
         starttime   = time.time()
@@ -77,9 +76,6 @@ class SqlDataFetch(object):
   def __init__(self, h_time, d_time, w_time, y_time):
     super(SqlDataFetch, self).__init__()
     self.home           = os.environ['HOME']
-    self.sqlmnt         = rnd(0, 59)
-    self.sqlhr          = rnd(0, 23)
-    self.sqlhrm         = rnd(0, 59)
     self.h_dataisstale  = True
     self.h_cmd          = self.home + '/' + MYAPP + '/queries/hour.sh'
     self.h_updatetime   = h_time * 60
