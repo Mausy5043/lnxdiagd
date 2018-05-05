@@ -72,6 +72,20 @@ class MyDaemon(Daemon):
         mf.syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
 
+class Graph(object):
+  """docstring for Graph."""
+  def __init__(self, updatetime):
+    super(Graph, self).__init__()
+    self.home = os.environ['HOME']
+    self.updatetime = updatetime
+    self.command = self.home + '/' + MYAPP + '/mkgraphs.sh'
+
+  def make(self):
+    if ((int(time.strftime('%M')) % self.updatetime) == 0):
+      mf.syslog_trace("...:  {0}".format(self.command), False, DEBUG)
+      return subprocess.call(self.command)
+    return 1
+
 def do_mv_data(flock, homedir, script):
   # wait 4 seconds for processes to finish
   # unlock(flock)  # remove stale lock
@@ -154,6 +168,8 @@ def write_lftp(script):
 
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + MYAPP + '/' + MYID + '.pid')
+  trendgraph = Graph(GRAPH_UPDATE)
+  sqldata = SqlDataFetch(SQL_UPDATE_HOUR, SQL_UPDATE_DAY, SQL_UPDATE_WEEK, SQL_UPDATE_YEAR)
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()
