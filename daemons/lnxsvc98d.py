@@ -60,7 +60,7 @@ class MyDaemon(Daemon):
       try:
         starttime   = time.time()
 
-        do_mv_data(flock, home, scriptname)
+        do_stuff(flock, home, scriptname)
 
         waittime    = sampletime # - (time.time() - starttime)  # - (starttime % sampletime)
         if (waittime > 0):
@@ -86,7 +86,7 @@ class Graph(object):
       return subprocess.call(self.command)
     return 1
 
-def do_mv_data(flock, homedir, script):
+def do_stuff(flock, homedir, script):
   # wait 4 seconds for processes to finish
   # unlock(flock)  # remove stale lock
   time.sleep(4)
@@ -97,12 +97,12 @@ def do_mv_data(flock, homedir, script):
   getsqldata(homedir, minit, nowur, False)
 
   # Create the graphs based on the MySQL data every 3rd minute
-  if ((minit % GRAPH_UPDATE) == 0):
-    cmnd = homedir + '/' + MYAPP + '/mkgraphs.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+  result = trendgraph.make()
+  mf.syslog_trace("...trendgrph:  {0}".format(result), False, DEBUG)
+  if (result == 0):
+    upload_page(script)
 
+def upload_page(script):
   try:
     # Upload the webpage and graphs
     if os.path.isfile('/tmp/' + MYAPP + '/site/text.md'):
@@ -110,7 +110,7 @@ def do_mv_data(flock, homedir, script):
       cmnd = ['lftp', '-f', script]
       mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
       cmnd = subprocess.check_output(cmnd, timeout=20)
-      mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+      mf.syslog_trace("...uploadpag:  {0}".format(cmnd), False, DEBUG)
   except subprocess.TimeoutExpired:
     mf.syslog_trace("***TIMEOUT***:  {0}".format(cmnd), syslog.LOG_ERR, DEBUG)
     time.sleep(17*60)             # wait 17 minutes for the router to restart.
@@ -120,7 +120,6 @@ def do_mv_data(flock, homedir, script):
     time.sleep(17*60)             # wait 17 minutes for the router to restart.
     pass
 
-  return
 
 def getsqldata(homedir, minit, nowur, nu):
   # minit = int(time.strftime('%M'))
