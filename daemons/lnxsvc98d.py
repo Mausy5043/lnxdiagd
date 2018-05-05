@@ -155,13 +155,11 @@ class Graph(object):
 
 def do_stuff(flock, homedir, script):
   # wait 4 seconds for processes to finish
-  # unlock(flock)  # remove stale lock
   time.sleep(4)
-  minit = int(time.strftime('%M'))
-  nowur = int(time.strftime('%H'))
 
   # Retrieve data from MySQL database
-  getsqldata(homedir, minit, nowur, False)
+  result = sqldata.fetch()
+  mf.syslog_trace("...datafetch:  {0}".format(result), False, DEBUG)
 
   # Create the graphs based on the MySQL data every 3rd minute
   result = trendgraph.make()
@@ -186,35 +184,6 @@ def upload_page(script):
     mf.syslog_trace("***ERROR***:    {0}".format(cmnd), syslog.LOG_ERR, DEBUG)
     time.sleep(17*60)             # wait 17 minutes for the router to restart.
     pass
-
-
-def getsqldata(homedir, minit, nowur, nu):
-  # minit = int(time.strftime('%M'))
-  # nowur = int(time.strftime('%H'))
-  # data of last hour is updated every <SQL_UPDATE_HOUR> minutes
-  if ((minit % SQL_UPDATE_HOUR) == 0) or nu:
-    cmnd = homedir + '/' + MYAPP + '/queries/hour.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-  # data of the last day is updated every <SQL_UPDATE_DAY> minutes
-  if ((minit % SQL_UPDATE_DAY) == (SQLMNT % SQL_UPDATE_DAY)) or nu:
-    cmnd = homedir + '/' + MYAPP + '/queries/day.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-  # data of the last week is updated every <SQL_UPDATE_WEEK> hours
-  if ((nowur % SQL_UPDATE_WEEK) == (SQLHR % SQL_UPDATE_WEEK) and (minit == SQLHRM)) or nu:
-    cmnd = homedir + '/' + MYAPP + '/queries/week.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-  # data of the last year is updated at 01:xx
-  if (nowur == SQL_UPDATE_YEAR and minit == SQL_UPDATE_DAY) or nu:
-    cmnd = homedir + '/' + MYAPP + '/queries/year.sh'
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    cmnd = subprocess.call(cmnd)
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
 
 def write_lftp(script):
   with open(script, 'w') as f:
