@@ -143,14 +143,19 @@ class Graph(object):
     self.timer      = time.time() + rnd(60, self.updatetime)
     self.command    = self.home + '/' + MYAPP + '/mkgraphs.sh'
 
+  def draw(self, cmnd):
+    """Draw the graphs"""
+    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
+    return subprocess.call(cmnd)
+
   def make(self):
     t0 = time.time()
+    result = 1
     if t0 >= self.timer:
-      mf.syslog_trace("...:  {0}".format(self.command), False, DEBUG)
+      result = self.draw(self.command)
       t1 = time.time()
       self.timer = t1 + self.updatetime + rnd(-60, 60)
-      return subprocess.call(self.command)
-    return 1
+    return result
 
 def do_stuff(flock, homedir, script):
   # wait 4 seconds for processes to finish
