@@ -52,6 +52,8 @@ class MyDaemon(Daemon):
     sqldata.get(sqldata.d_cmd)
     sqldata.get(sqldata.w_cmd)
     sqldata.get(sqldata.y_cmd)
+    if (trendgraph.make() == 0):
+      upload_page(scriptname)
     while True:
       try:
         starttime   = time.time()
