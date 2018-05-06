@@ -82,7 +82,7 @@ set ylabel "Usage [%]"
 set yrange [ 0 : 100 ]
 set y2label "Load"
 set y2range [ 0 : 2 ]
-set y2tics format '%.0f'
+set y2tics format '%.1f'
 
 # ***************************************************************** Legend *****
 set key inside top left horizontal opaque box
@@ -217,7 +217,7 @@ set yrange [ 0 : 100 ]
 
 # **************************************************************** Y2-axis *****
 set y2label "Load"
-set y2tics format '%.0f'
+set y2tics format '%.1f'
 set y2range [0:2]
 set y2tics border
 
