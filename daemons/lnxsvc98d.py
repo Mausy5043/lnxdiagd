@@ -59,8 +59,8 @@ class MyDaemon(Daemon):
         starttime   = time.time()
 
         do_stuff(flock, home, scriptname)
-
-        waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
+        # not syncing to top of the minute
+        waittime    = sampletime  # - (time.time() - starttime) - (starttime % sampletime)
         if (waittime > 0):
           mf.syslog_trace("Waiting  : {0}s".format(waittime), False, DEBUG)
           mf.syslog_trace("................................", False, DEBUG)
