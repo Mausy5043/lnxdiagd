@@ -162,8 +162,11 @@ def do_stuff(flock, homedir, script):
   time.sleep(4)
 
   # Retrieve data from MySQL database
+  # CLAIM
+  # CHECK
   result = sqldata.fetch()
   mf.syslog_trace("...datafetch:  {0}".format(result), False, DEBUG)
+  # RELEASE
 
   # Create the graphs based on the MySQL data
   result = trendgraph.make()
