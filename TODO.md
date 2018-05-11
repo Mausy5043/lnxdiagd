@@ -11,10 +11,10 @@
   3. GNUplot is not re-iterable. `matplotlib` is?
 
 ## Timing of graphs
-  - [ ] Hourly graph from  `now()`               to `now() - 70 minutes`;       resolution:  1 minute (60s)
-  - [ ] Daily graph from   `now() - 70 minutes`  to `now() - 30 hours`(\*);     resolution: 30 minutes (1800s)
-  - [ ] Weekly graph from  `now() - 24 hours`    to `now() - 8 days`(\*\*);     resolution:  4 hours (14400s)
-  - [ ] Yearly graph from  `now() - 8 days`      to `now() - 370 days`(\*\*\*)  resolution:  1 day (or 1 week depending on resulting load on the server) 
+  - [x] Hourly graph from  `now()`               to `now() - 70 minutes`;       resolution:  1 minute (60s)
+  - [x] Daily graph from   `now() - 70 minutes`  to `now() - 30 hours`(\*);     resolution: 30 minutes (1800s)
+  - [x] Weekly graph from  `now() - 24 hours`    to `now() - 8 days`(\*\*);     resolution:  4 hours (14400s)
+  - [x] Yearly graph from  `now() - 8 days`      to `now() - 370 days`(\*\*\*)  resolution:  1 day (or 1 week depending on resulting load on the server) 
 
 (\*) = rounded to MOD :30 minutes   
 (\*\*) = rounded to MOD 4 hours  
