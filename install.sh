@@ -4,8 +4,8 @@
 # a `*boot` repo.
 
 ME=$(whoami)
-required_commonlibversion="0.4.2"
-commonlibbranch="v0_4"
+required_commonlibversion="0.5.0"
+commonlibbranch="v0_5"
 
 echo -n "Started installing LNXDIAGD on "; date
 
