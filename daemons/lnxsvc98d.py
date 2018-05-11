@@ -53,7 +53,7 @@ class MyDaemon(Daemon):
     sqldata.get(1)
     sqldata.get(2)
     sqldata.get(3)
-    if (trendgraph.draw(trendgraph.command) == 0):
+    if (trendgraph.draw() == 0):
       upload_page(scriptname)
     while True:
       try:
