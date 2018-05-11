@@ -24,6 +24,7 @@ IS_JOURNALD = os.path.isfile('/bin/journalctl')
 MYID        = "".join(list(filter(str.isdigit, os.path.realpath(__file__).split('/')[-1])))
 MYAPP       = os.path.realpath(__file__).split('/')[-3]
 NODE        = os.uname()[1]
+HOME        = os.environ['HOME']
 GRAPH_UPDATE      = 10   # in minutes
 SQL_UPDATE_HOUR   = GRAPH_UPDATE  # in minutes (shouldn't be shorter than GRAPH_UPDATE)
 SQL_UPDATE_DAY    = 27  # in minutes
@@ -39,8 +40,7 @@ class MyDaemon(Daemon):
   def run():
     iniconf         = configparser.ConfigParser()
     inisection      = MYID
-    home            = os.path.expanduser('~')
-    s               = iniconf.read(home + '/' + MYAPP + '/config.ini')
+    s               = iniconf.read(HOME + '/' + MYAPP + '/config.ini')
     mf.syslog_trace("Config file   : {0}".format(s), False, DEBUG)
     mf.syslog_trace("Options       : {0}".format(iniconf.items(inisection)), False, DEBUG)
     reporttime      = iniconf.getint(inisection, "reporttime")
@@ -59,7 +59,7 @@ class MyDaemon(Daemon):
       try:
         # starttime   = time.time()
 
-        do_stuff(flock, home, scriptname)
+        do_stuff(flock, HOME, scriptname)
         # not syncing to top of the minute
         waittime    = sampletime  # - (time.time() - starttime) - (starttime % sampletime)
         if (waittime > 0):
@@ -124,8 +124,8 @@ def write_lftp(script):
 
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/' + MYAPP + '/' + MYID + '.pid')
-  trendgraph = Graph(GRAPH_UPDATE)
-  sqldata = SqlDataFetch(SQL_UPDATE_HOUR, SQL_UPDATE_DAY, SQL_UPDATE_WEEK, SQL_UPDATE_YEAR)
+  trendgraph = Graph(HOME + '/' + MYAPP + '/mkgraphs.sh', GRAPH_UPDATE)
+  sqldata = SqlDataFetch(HOME + '/' + MYAPP + '/queries', '/srv/semaphores', SQL_UPDATE_HOUR, SQL_UPDATE_DAY, SQL_UPDATE_WEEK, SQL_UPDATE_YEAR)
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()
