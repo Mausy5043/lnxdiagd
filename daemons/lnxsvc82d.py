@@ -108,15 +108,15 @@ def do_markdown(flock, fdata, hwdevice):
   if os.path.isfile("/proc/mdstat"):
     mds               = "-\n" + str(subprocess.check_output(["cat", "/proc/mdstat"]), 'utf-8')
   uptime            = str(subprocess.check_output(["uptime"]), 'utf-8')
-  dfh               = str(subprocess.check_output(["df", "-h"]), 'utf-8')
-  freeh             = str(subprocess.check_output(["free", "-h"]), 'utf-8')
-  p1                = subprocess.Popen(["ps", "-e", "-o", "pcpu,args"],           stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  p2                = subprocess.Popen(["cut", "-c", "-132"],   stdin=p1.stdout,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  p3                = subprocess.Popen(["awk", "NR>2"],         stdin=p2.stdout,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  p4                = subprocess.Popen(["sort", "-nr"],         stdin=p3.stdout,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  p5                = subprocess.Popen(["head", "-10"],         stdin=p4.stdout,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  ps,err            = p5.communicate()
-  psout             = str(ps, 'utf-8')
+  # dfh               = str(subprocess.check_output(["df", "-h"]), 'utf-8')
+  # freeh             = str(subprocess.check_output(["free", "-h"]), 'utf-8')
+  # p1                = subprocess.Popen(["ps", "-e", "-o", "pcpu,args"],           stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  # p2                = subprocess.Popen(["cut", "-c", "-132"],   stdin=p1.stdout,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  # p3                = subprocess.Popen(["awk", "NR>2"],         stdin=p2.stdout,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  # p4                = subprocess.Popen(["sort", "-nr"],         stdin=p3.stdout,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  # p5                = subprocess.Popen(["head", "-10"],         stdin=p4.stdout,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  # ps, err            = p5.communicate()
+  # psout             = str(ps, 'utf-8')
 
   mf.lock(flock)
 
@@ -162,9 +162,9 @@ def do_markdown(flock, fdata, hwdevice):
     # f.write('## Disk Usage\n')
     # f.write('```\n')
     # f.write(dfh)      # dfh comes with its own built-in '/n'
-    # if (NODE == "boson"):
-    #   f.write(mds)    # mds comes with its own built-in '/n'
-    # f.write('```\n\n')
+    if (NODE == "boson"):
+      f.write(mds)    # mds comes with its own built-in '/n'
+    f.write('```\n\n')
 
     if (NODE == "boson"):
       rbc_sda = sda.getdata('5')
