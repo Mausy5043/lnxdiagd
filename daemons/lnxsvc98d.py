@@ -49,11 +49,8 @@ class MyDaemon(Daemon):
     scriptname      = iniconf.get(inisection, "lftpscript")
 
     sampletime      = reporttime/samplespercycle         # time [s] between samples
-    sqldata.get(0)
-    sqldata.get(1)
-    sqldata.get(2)
-    sqldata.get(3)
-    if (trendgraph.draw() == 0):
+    sqldata.fetch()
+    if (trendgraph.make() == 0):
       upload_page(scriptname)
     while True:
       try:
