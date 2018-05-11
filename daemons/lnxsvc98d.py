@@ -56,7 +56,7 @@ class MyDaemon(Daemon):
       upload_page(scriptname)
     while True:
       try:
-        starttime   = time.time()
+        # starttime   = time.time()
 
         do_stuff(flock, home, scriptname)
         # not syncing to top of the minute
