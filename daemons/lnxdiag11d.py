@@ -118,7 +118,7 @@ if __name__ == "__main__":
       daemon.stop()
     elif 'restart' == sys.argv[1]:
       daemon.restart()
-    elif 'foreground' == sys.argv[1]:
+    elif 'debug' == sys.argv[1]:
       # assist with debugging.
       print("Debug-mode started. Use <Ctrl>+C to stop.")
       DEBUG = True
@@ -129,5 +129,5 @@ if __name__ == "__main__":
       sys.exit(2)
     sys.exit(0)
   else:
-    print("usage: {0!s} start|stop|restart|foreground".format(sys.argv[0]))
+    print("usage: {0!s} start|stop|restart|debug".format(sys.argv[0]))
     sys.exit(2)
