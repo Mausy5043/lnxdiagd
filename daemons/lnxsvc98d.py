@@ -14,8 +14,9 @@ import time
 import traceback
 
 from mausy5043libs.libdaemon3 import Daemon
+from mausy5043libs.libgraph3 import Graph
+from mausy5043libs.libsqldata3 import SqlDataFetch
 import mausy5043funcs.fileops3 as mf
-from random import randrange as rnd
 
 # constants
 DEBUG       = False
@@ -69,93 +70,6 @@ class MyDaemon(Daemon):
         mf.syslog_trace("Unexpected error in run()", syslog.LOG_CRIT, DEBUG)
         mf.syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
-
-class SqlDataFetch(object):
-  """
-  SqlDataFetch:
-  Manages retrieval of data from the MySQL server
-  """
-  def __init__(self, h_time, d_time, w_time, y_time):
-    super(SqlDataFetch, self).__init__()
-    self.home           = os.environ['HOME']
-    self.h_dataisstale  = True
-    self.h_cmd          = self.home + '/' + MYAPP + '/queries/hour.sh'
-    self.h_updatetime   = h_time * 60
-    self.h_timer        = time.time() + rnd(60, self.h_updatetime)
-    self.d_dataisstale  = True
-    self.d_cmd          = self.home + '/' + MYAPP + '/queries/day.sh'
-    self.d_updatetime   = d_time * 60
-    self.d_timer        = time.time() + rnd(60, self.d_updatetime)
-    self.w_dataisstale  = True
-    self.w_cmd          = self.home + '/' + MYAPP + '/queries/week.sh'
-    self.w_updatetime   = w_time * 3600
-    self.w_timer        = time.time() + rnd(60, self.w_updatetime)
-    self.y_dataisstale  = True
-    self.y_cmd          = self.home + '/' + MYAPP + '/queries/year.sh'
-    self.y_updatetime   = y_time * 3600
-    self.y_timer        = time.time() + rnd(60, self.y_updatetime)
-
-  def get(self, cmnd):
-    """
-    Get the requested data.
-    """
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    result = subprocess.call(cmnd)
-    return not (result == 0)  # return False if successful == data nolonger stale
-
-  def fetch(self):
-    """
-    Manage staleness of the data and get it when needed.
-    """
-    ts = time.time()
-    t0 = ts
-    if t0 >= self.h_timer:
-      self.h_dataisstale = self.get(self.h_cmd)
-      t1 = time.time()
-      self.h_timer = t1 + self.h_updatetime + rnd(-60, 60)
-      # dt = t1 - t0  # determine query duration
-      t0 = t1
-    if t0 >= self.d_timer:
-      self.d_dataisstale = self.get(self.d_cmd)
-      t1 = time.time()
-      self.d_timer = t1 + self.d_updatetime + rnd(-60, 60)
-      # dt = t1 - t0  # determine query duration
-      t0 = t1
-    if t0 >= self.w_timer:
-      self.w_dataisstale = self.get(self.w_cmd)
-      t1 = time.time()
-      self.w_timer = t1 + self.w_updatetime + rnd(-60, 60)
-      # dt = t1 - t0  # determine query duration
-      t0 = t1
-    if t0 >= self.y_timer:
-      self.y_dataisstale = self.get(self.y_cmd)
-      t1 = time.time()
-      self.y_timer = t1 + self.y_updatetime + rnd(-60, 60)
-      # dt = t1 - t0  # determine query duration
-    return time.time() - ts
-
-class Graph(object):
-  """docstring for Graph."""
-  def __init__(self, updatetime):
-    super(Graph, self).__init__()
-    self.home = os.environ['HOME']
-    self.updatetime = updatetime * 60
-    self.timer      = time.time() + rnd(60, self.updatetime)
-    self.command    = self.home + '/' + MYAPP + '/mkgraphs.sh'
-
-  def draw(self, cmnd):
-    """Draw the graphs"""
-    mf.syslog_trace("...:  {0}".format(cmnd), False, DEBUG)
-    return subprocess.call(cmnd)
-
-  def make(self):
-    t0 = time.time()
-    result = 1
-    if t0 >= self.timer:
-      result = self.draw(self.command)
-      t1 = time.time()
-      self.timer = t1 + self.updatetime + rnd(-60, 60)
-    return result
 
 def do_stuff(flock, homedir, script):
   # wait 4 seconds for processes to finish
