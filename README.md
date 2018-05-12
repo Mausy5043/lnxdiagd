@@ -1,7 +1,7 @@
 # lnxdiagd
 Platform independent system diagnostics gatherer
 
-This sub-branch (v4.**g**) is used to further develop the use of GNUplot for making the graphs.
+This sub-branch (v5.**g**) is used to further develop the use of GNUplot for making the graphs.
 
 # Installing
 
