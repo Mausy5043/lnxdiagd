@@ -1,5 +1,5 @@
 # lnxdiagd
-Platform independent system diagnostics gatherer
+Debian based system diagnostics gatherer
 
 This sub-branch (v5.**g**) is used to further develop the use of GNUplot for making the graphs.
 
