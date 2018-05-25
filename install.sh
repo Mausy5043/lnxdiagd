@@ -4,6 +4,7 @@
 # a `*boot` repo.
 
 ME=$(whoami)
+VERSION="v5.g"
 required_commonlibversion="0.5.4"
 commonlibbranch="v0_5"
 
@@ -80,7 +81,7 @@ pushd "$HOME/lnxdiagd" || exit 1
   git config core.fileMode false
   # set the branch
   if [ ! -e "$HOME/.lnxdiagd.branch" ]; then
-    echo "v5.g" > "$HOME/.lnxdiagd.branch"
+    echo "${VERSION}" > "$HOME/.lnxdiagd.branch"
   fi
 
   # Create the /etc/cron.d directory if it doesn't exist
