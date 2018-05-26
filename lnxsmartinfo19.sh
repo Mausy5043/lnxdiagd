@@ -32,7 +32,7 @@ function smart1999 {
     smartctl -A "${p}" |awk 'NR>7' > "${rf}-${b}-A.dat"
     smartctl -H "${p}" |grep 'test result' > "${rf}-${b}-H.dat"
     smartctl -l selftest "${p}" |grep '\# 1' > "${rf}-${b}-l.dat"
-    chmod 744 "${rf}-${b}-*"
+    #chmod 744 ${rf}-${b}-*
   fi
 }
 
