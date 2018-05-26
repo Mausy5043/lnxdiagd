@@ -23,7 +23,7 @@ function smart1999 {
   # p is the path into the /dev tree
   p="${1}"
   # b is the device id
-  b=basename "${p}"
+  b="$(basename ${p})"
   if [[ -e "${p}" ]]; then
     if [[ ! -e "${rf}-${b}-i.dat" ]]; then
       # this is static info, therefore only get it if it's not there.
