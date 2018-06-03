@@ -61,7 +61,6 @@ class MyDaemon(Daemon):
         starttime = time.time()
 
         result        = do_work(sdx)
-        result        = result.split(',')
         mf.syslog_trace("Result   : {0}".format(result), False, DEBUG)
 
         data.append(list(map(float, result)))
@@ -77,7 +76,7 @@ class MyDaemon(Daemon):
           averages    = [format(sm / len(data), '.3f') for sm in somma]
           # Report the last measurement for these parameters:
           mf.syslog_trace("Averages : {0}".format(averages),  False, DEBUG)
-          do_report(averages, flock, fdata)
+          do_report(averages, flock, fdata, sdx)
 
         waittime    = sampletime - (time.time() - starttime) - (starttime % sampletime)
         if (waittime > 0):
@@ -103,7 +102,7 @@ def do_work(devicelist):
     mf.syslog_trace("T(disk) : {0} degC".format(disktemperature[-1]), False, DEBUG)
   return disktemperature
 
-def do_report(result, flock, fdata):
+def do_report(result, flock, fdata, devicelist):
   time.sleep(1)   # sometimes the function is called a sec too soon.
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate       = time.strftime('%Y-%m-%dT%H:%M:%S')
@@ -113,11 +112,10 @@ def do_report(result, flock, fdata):
   # ident            = NODE + '@' + str(outEpoch)
   mf.lock(flock)
   with open(fdata, 'a') as f:
-    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sda.id, result[0], sda.id + '@' + str(outEpoch)))
-    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sdb.id, result[1], sdb.id + '@' + str(outEpoch)))
-    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sdc.id, result[2], sdc.id + '@' + str(outEpoch)))
-    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sdd.id, result[3], sdd.id + '@' + str(outEpoch)))
-    f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, sde.id, result[4], sde.id + '@' + str(outEpoch)))
+    cnt = 0
+    for disk in devicelist:
+      f.write('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, disk.id, result[cnt], disk.id + '@' + str(outEpoch)))
+      mf.syslog_trace('{0}, {1}, {2}, {3}, {4}, {5}\n'.format(outDate, outEpoch, NODE, disk.id, result[cnt], disk.id + '@' + str(outEpoch)), False, DEBUG)
   mf.unlock(flock)
 
 
