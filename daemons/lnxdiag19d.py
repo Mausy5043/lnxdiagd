@@ -20,18 +20,6 @@ MYID        = "".join(list(filter(str.isdigit, os.path.realpath(__file__).split(
 MYAPP       = os.path.realpath(__file__).split('/')[-3]
 NODE        = os.uname()[1]
 
-# BEWARE
-# The disks identified here as `sda`, `sdb` etc. may not necessarily
-# be called `/dev/sda`, `/dev/sdb` etc. on the system!!
-
-sda = SmartDisk("wwn-0x50026b723c0d6dd5")  # SSD 50026B723C0D6DD5
-sdb = SmartDisk("wwn-0x50014ee261020fce")  # WD-WCC4N5PF96KD
-sdc = SmartDisk("wwn-0x50014ee605a043e2")  # WD-WMC4N0K01249
-sdd = SmartDisk("wwn-0x50014ee6055a237b")  # WD-WMC4N0J6Y6LW
-sde = SmartDisk("wwn-0x50014ee60507b79c")  # WD-WMC4N0E24DVU
-# sdf = wwn-0x50014ee262ed6df5
-# sdg =
-
 DEBUG = False
 leaf = os.path.realpath(__file__).split('/')[-2]
 
@@ -53,17 +41,26 @@ class MyDaemon(Daemon):
     samplespercycle = iniconf.getint(inisection, "samplespercycle")
     flock           = iniconf.get(inisection, "lockfile")
     fdata           = iniconf.get(inisection, "resultfile")
+    fsmart          = iniconf.get(inisection, "diskfile")
 
     samples         = samplespercycle * cycles      # total number of samples averaged
     sampletime      = reporttime/samplespercycle    # time [s] between samples
 
     data            = []                            # array for holding sampledata
 
+    with open(fsmart) as fp:
+      ids = fp.readlines()
+    ids = [x.strip() for x in ids]
+    sdx = []
+    for id in ids:
+      mf.syslog_trace("new ID  : {0}".format(ids[id]), False, DEBUG)
+      sdx.append(SmartDisk(ids[id]))
+
     while True:
       try:
         starttime = time.time()
 
-        result        = do_work()
+        result        = do_work(ids)
         result        = result.split(',')
         mf.syslog_trace("Result   : {0}".format(result), False, DEBUG)
 
@@ -96,25 +93,15 @@ class MyDaemon(Daemon):
         mf.syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
 
-def do_work():
+def do_work(i):
   # 5 datapoints gathered here
   #
-  sda.smart()
-  sdb.smart()
-  sdc.smart()
-  sdd.smart()
-  sde.smart()
-  # sdf.smart()
-  # sdg.smart()
-
-  # disktemperature
-  Tsda = sda.getdata('194')
-  Tsdb = sdb.getdata('194')
-  Tsdc = sdc.getdata('194')
-  Tsdd = sdd.getdata('194')
-  Tsde = sde.getdata('194')
-  # Tsdf = 0
-  # Tsdg = 0
+  disktemperature = []
+  for id in i:
+    mf.syslog_trace("ID      : {0}".format(i[id]), False, DEBUG)
+    sdx[id].smart()
+    disktemperature.append(sdx[id].getdata('194'))
+    mf.syslog_trace("T(disk) : {0} degC".format(disktemperature[id]), False, DEBUG)
 
   mf.syslog_trace('{0}, {1}, {2}, {3}, {4}'.format(Tsda, Tsdb, Tsdc, Tsdd, Tsde), False, DEBUG)
   return '{0}, {1}, {2}, {3}, {4}'.format(Tsda, Tsdb, Tsdc, Tsdd, Tsde)
