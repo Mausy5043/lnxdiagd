@@ -50,7 +50,7 @@ class MyDaemon(Daemon):
 
     with open(fsmart) as fp:
       ids = fp.readlines()
-    ids = [x.strip() for x in ids]
+    ids = [x.split('/')[-1].strip() for x in ids]
     sdx = []
     for id in ids:
       mf.syslog_trace("new ID  : {0}".format(id), False, DEBUG)
