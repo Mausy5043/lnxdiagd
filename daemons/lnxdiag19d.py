@@ -53,14 +53,14 @@ class MyDaemon(Daemon):
     ids = [x.strip() for x in ids]
     sdx = []
     for id in ids:
-      mf.syslog_trace("new ID  : {0}".format(ids[id]), False, DEBUG)
-      sdx.append(SmartDisk(ids[id]))
+      mf.syslog_trace("new ID  : {0}".format(id), False, DEBUG)
+      sdx.append(SmartDisk(id))
 
     while True:
       try:
         starttime = time.time()
 
-        result        = do_work(ids)
+        result        = do_work(sdx)
         result        = result.split(',')
         mf.syslog_trace("Result   : {0}".format(result), False, DEBUG)
 
@@ -93,18 +93,15 @@ class MyDaemon(Daemon):
         mf.syslog_trace(traceback.format_exc(), syslog.LOG_CRIT, DEBUG)
         raise
 
-def do_work(i):
+def do_work(devicelist):
   # 5 datapoints gathered here
   #
   disktemperature = []
-  for id in i:
-    mf.syslog_trace("ID      : {0}".format(i[id]), False, DEBUG)
-    sdx[id].smart()
-    disktemperature.append(sdx[id].getdata('194'))
-    mf.syslog_trace("T(disk) : {0} degC".format(disktemperature[id]), False, DEBUG)
-
-  mf.syslog_trace('{0}, {1}, {2}, {3}, {4}'.format(Tsda, Tsdb, Tsdc, Tsdd, Tsde), False, DEBUG)
-  return '{0}, {1}, {2}, {3}, {4}'.format(Tsda, Tsdb, Tsdc, Tsdd, Tsde)
+  for disk in devicelist:
+    disk.smart()
+    disktemperature.append(disk.getdata('194'))
+    mf.syslog_trace("T(disk) : {0} degC".format(disktemperature[-1]), False, DEBUG)
+  return disktemperature
 
 def do_report(result, flock, fdata):
   time.sleep(1)   # sometimes the function is called a sec too soon.
