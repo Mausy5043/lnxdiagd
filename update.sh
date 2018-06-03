@@ -117,6 +117,8 @@ pushd "$HOME/lnxdiagd"
               ;;
     rbian )   echo "Raspberry testbench"
               ;;
+    rbtor3 )  echo "Raspb3rry torclient"
+              ;;
     osmc )    echo "OSMC Media Center"
               ;;
     boson )   echo "BOSON"
