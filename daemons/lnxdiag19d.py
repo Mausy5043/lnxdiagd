@@ -56,7 +56,6 @@ class MyDaemon(Daemon):
       mf.syslog_trace("new ID  : {0}".format(id), False, DEBUG)
       sdx.append(SmartDisk(id))
 
-
     while True:
       try:
         starttime = time.time()
